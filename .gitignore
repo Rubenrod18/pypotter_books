@@ -27,9 +27,7 @@ pip-log.txt
 # Mr Developer
 .env
 *.pyc
-*.db*
-*.xlsx
-*.pdf
+*.db
 uwsgi.ini
 supervisord.conf
 

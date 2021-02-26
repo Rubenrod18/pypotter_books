@@ -1,0 +1,39 @@
+import os
+
+from dotenv import load_dotenv
+
+from app import create_app
+
+load_dotenv()
+
+app = create_app(os.getenv('FLASK_CONFIG'))
+
+
+@app.shell_context_processor
+def make_shell_context() -> dict:
+    """Returns the shell context for an interactive shell for this application.
+    This runs all the registered shell context processors.
+
+    To explore the data in your application, you can start an interactive Python
+    shell with the shell command. An application context will be active,
+    and the app instance will be imported.
+
+    How to usage::
+
+        source venv/bin/activate
+        flask shell
+
+    .. _shell_context_processor:
+        https://flask.palletsprojects.com/en/1.1.x/cli/#open-a-shell
+
+    Returns
+    -------
+    dict
+        Imports available in Python shell.
+
+    """
+    return {'app': app}
+
+
+if __name__ == '__main__':
+    app.run()

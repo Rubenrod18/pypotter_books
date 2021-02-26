@@ -1,0 +1,28 @@
+#
+# Prerequisites macOS packages:
+#    brew install mysql-client
+#    echo 'export PATH="/usr/local/opt/mysql-client/bin:$PATH"' >> ~/.zshrc
+#
+# You can replace ".zshrc" to ".bash_profile" if you're using bash by default
+#    echo 'export PATH="/usr/local/opt/mysql-client/bin:$PATH"' >> ~/.bash_profile
+#
+
+# Add .env support to your django/flask apps in development and deployments
+python-dotenv
+
+# Database
+mysqlclient
+mysql-connector-python  # required by flask-migrate
+sqlalchemy
+factory_boy
+
+# Framework and extensions
+flask
+flask-mail
+flask-marshmallow
+flask-migrate
+flask-restx
+flask-security-too
+flask-sqlalchemy
+
+marshmallow-sqlalchemy  # Required by flask-sqlalchemy
