@@ -1,9 +1,9 @@
-from flask import Flask, g
+from flask import Flask
 from flask_mail import Mail
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask_restx import Api
-from flask_security import Security, SQLAlchemyUserDatastore
+from flask_security import Security
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -25,8 +25,6 @@ def init_app(app: Flask):
 
 
 def _init_flask_security_too_app(flask_app: Flask):
-    from app.blueprints.role.model import Role
-    from app.blueprints.user.model import User
-    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    from app.blueprints.user.model import user_datastore
     security.init_app(flask_app, datastore=user_datastore,
                       register_blueprint=False)
