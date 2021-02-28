@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 
 from app import create_app
+from app.extensions import db
 
 load_dotenv()
 
@@ -18,13 +19,14 @@ def make_shell_context() -> dict:
     shell with the shell command. An application context will be active,
     and the app instance will be imported.
 
-    How to usage::
+    Example
+    -------
+    >>> source venv/bin/activate
+    >>> flask shell
 
-        source venv/bin/activate
-        flask shell
-
-    .. _shell_context_processor:
-        https://flask.palletsprojects.com/en/1.1.x/cli/#open-a-shell
+    References
+    ----------
+    Open a Shell: https://flask.palletsprojects.com/en/1.1.x/cli/#open-a-shell
 
     Returns
     -------
@@ -32,7 +34,7 @@ def make_shell_context() -> dict:
         Imports available in Python shell.
 
     """
-    return {'app': app}
+    return {'app': app, 'db': db}
 
 
 if __name__ == '__main__':

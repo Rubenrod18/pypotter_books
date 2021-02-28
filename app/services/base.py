@@ -14,9 +14,7 @@ class BaseService(object):
 
     def save(self, record_id: int, **kwargs):
         self.manager.save(record_id, **kwargs)
-
-        args = (self.manager.model.deleted_at.is_null(),)
-        return self.manager.find(record_id, *args)
+        return self.manager.find(record_id, **{'deleted_at': None})
 
     def get(self, **kwargs):
         # TODO: pending to define
