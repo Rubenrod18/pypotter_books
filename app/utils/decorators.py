@@ -1,5 +1,6 @@
 import functools
 import re
+import time
 
 from flask import current_app, request
 from flask_security.passwordless import login_token_status
@@ -35,3 +36,24 @@ def token_required(fnc):
             raise Unauthorized('Unauthorized')
 
     return decorator
+
+
+def seed_actions(fnc):
+    @functools.wraps(fnc)
+    def message(*args, **kwargs):
+        is_test_env = current_app.config['TESTING'] is True
+        seeder = args[0]
+
+        if not is_test_env:
+            print(' Seeding: %s' % seeder.name)
+        exec_time = 0
+        try:
+            start = time.time()
+            res = fnc(*args, **kwargs)
+            exec_time = round((time.time() - start), 2)
+        finally:
+            if not is_test_env:
+                print(' Seeded:  %s ( %s seconds )' % (seeder.name, exec_time))
+        return res
+
+    return message
