@@ -3,11 +3,18 @@ import os
 from dotenv import load_dotenv
 
 from app import create_app
+from app.blueprints.base.test.seed import init_seed
 from app.extensions import db
 
 load_dotenv()
 
 app = create_app(os.getenv('FLASK_CONFIG'))
+
+
+@app.cli.command('seed', help='Fill database with fake data.')
+def seeds() -> None:
+    """Command line script for filling database with fake data."""
+    init_seed()
 
 
 @app.shell_context_processor
