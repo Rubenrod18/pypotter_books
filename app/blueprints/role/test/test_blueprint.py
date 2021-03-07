@@ -69,7 +69,7 @@ class TestBlueprint(BaseTest):
 
             self.assertEqual(200, response.status_code)
             self.assertEqual(role.id, json_data.get('id'))
-            self.assertEqual(role.label.lower().replace(' ', '-'),
+            self.assertEqual(role.label.lower().replace(' ', '_'),
                              json_data.get('name'))
             self.assertEqual(role.label, json_data.get('label'))
             self.assertEqual(role.created_at.strftime('%Y-%m-%d %H:%M:%S'),
