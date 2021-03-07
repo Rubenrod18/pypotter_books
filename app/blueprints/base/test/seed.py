@@ -3,6 +3,7 @@ import logging
 from flask import current_app
 
 from app.blueprints.role.test.seed import RoleSeeder
+from app.blueprints.user.tests.seed import UserSeeder
 from app.extensions import db
 
 logger = logging.getLogger(__name__)
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 def _get_seeders() -> list:
     return [
         RoleSeeder,
+        UserSeeder,
     ]
 
 

@@ -56,12 +56,15 @@ class User(db.Model, BaseMixin, UserMixin):
     """
     __tablename__ = 'users'
 
+    # TODO: rename created_it to created_by
     created_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     created_by = relationship('User', remote_side='User.id')
+
     roles = relationship('Role', secondary='user_roles',
                          backref=backref('users', lazy='dynamic'))
 
     fs_uniquifier = Column(String(255), unique=True, nullable=False)
+
     name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False)
