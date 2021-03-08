@@ -25,6 +25,6 @@ def init_app(app: Flask):
 
 
 def _init_flask_security_too_app(flask_app: Flask):
-    from app.blueprints.user.model import user_datastore
+    from app.blueprints.user.models import user_datastore
     security.init_app(flask_app, datastore=user_datastore,
                       register_blueprint=False)

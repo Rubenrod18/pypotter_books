@@ -2,10 +2,9 @@ import unittest
 
 from flask import Flask
 
-from app import create_app
 from app.extensions import db
 from .custom_flask_client import CustomFlaskClient
-from .seed import init_seed
+from .seeders import init_seed
 
 
 class BaseTest(unittest.TestCase):
@@ -28,6 +27,7 @@ class BaseTest(unittest.TestCase):
     @staticmethod
     def __create_app():
         """Create an app with testing environment."""
+        from app import create_app
         return create_app('config.TestConfig')
 
     @staticmethod

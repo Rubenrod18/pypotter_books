@@ -5,8 +5,8 @@ from sqlalchemy import (Enum, Column, String, Boolean, Date, Integer,
                         ForeignKey)
 from sqlalchemy.orm import relationship, backref
 
-from app.blueprints.base.model import BaseMixin
-from app.blueprints.role.model import Role as RoleModel
+from app.blueprints.base.models import BaseMixin
+from app.blueprints.role.models import Role as RoleModel
 from app.extensions import db
 
 

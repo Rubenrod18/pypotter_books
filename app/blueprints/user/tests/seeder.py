@@ -1,12 +1,10 @@
 import os
 
 from app.utils.decorators import seed_actions
-from .factories import UserFactory
-from ..model import User
-from ...role.model import Role
+from .factory import Role, User, UserFactory
 
 
-class UserSeeder:
+class Seeder:
     name = 'UserSeeder'
 
     @staticmethod

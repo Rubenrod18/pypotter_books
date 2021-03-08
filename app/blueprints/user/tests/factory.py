@@ -4,14 +4,12 @@ from random import randint, choice
 import factory
 from faker import Faker
 from faker.providers import person, date_time
-from flask import current_app
-from flask_security import hash_password
 from sqlalchemy import func
 
 from app.extensions import db
 from .. import UserManager
-from ..model import User
-from ...role.model import Role
+from ..models import User
+from ...role.models import Role
 
 user_manager = UserManager()
 

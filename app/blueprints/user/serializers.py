@@ -5,11 +5,11 @@ from marshmallow import fields, validate, validates, post_load
 from werkzeug.exceptions import BadRequest, NotFound
 
 from app.blueprints.role import RoleManager
-from app.blueprints.role.serializer import RoleSerializer
+from app.blueprints.role.serializers import RoleSerializer
 from app.extensions import ma
 from config import Config
-from .manager import UserManager, UserModel
-from .model import Genre
+from .manager import UserManager, User
+from .models import Genre
 
 logger = logging.getLogger(__name__)
 user_manager = UserManager()
@@ -30,7 +30,7 @@ class _VerifyRoleId(fields.Field):
 
 class UserSerializer(ma.SQLAlchemySchema):
     class Meta:
-        model = UserModel
+        model = User
         ordered = True
 
     id = ma.auto_field()

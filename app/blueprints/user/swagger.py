@@ -1,7 +1,7 @@
 from flask_restx import fields
 
 from app.blueprints.base import creator_sw_model, record_monitoring_sw_model
-from app.blueprints.user.model import Genre
+from app.blueprints.user.models import Genre
 from app.extensions import api
 
 user_input_sw_model = api.model('UserInput', {

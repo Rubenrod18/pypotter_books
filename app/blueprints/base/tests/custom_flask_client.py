@@ -8,46 +8,46 @@ logger = logging.getLogger(__name__)
 
 class CustomFlaskClient(FlaskClient):
     @staticmethod
-    def before_request(*args, **kwargs):
+    def __before_request(*args, **kwargs):
         logger.info(f'args: {args}')
         logger.info(f'kwargs: {kwargs}')
 
     @staticmethod
-    def after_request(response: Response):
-        def log_request_data():
-            if response.mimetype == 'application/json':
-                response_data = response.get_json()
-            else:
-                response_data = response.data
-            logger.info(f'response data: {response_data}')
+    def __log_request_data(response: Response):
+        if response.mimetype == 'application/json':
+            response_data = response.get_json()
+        else:
+            response_data = response.data
+        logger.info(f'response data: {response_data}')
 
+    def __after_request(self, response: Response):
         logger.info(f'response status code: {response.status_code}')
         logger.info(f'response mime type: {response.mimetype}')
-        log_request_data()
+        self.__log_request_data(response)
 
-    def make_request(self, method: str, *args, **kwargs):
+    def __make_request(self, method: str, *args, **kwargs):
         logger.info('< === START REQUEST === >')
-        self.before_request(*args, **kwargs)
+        self.__before_request(*args, **kwargs)
 
         kwargs['method'] = method
         response = self.open(*args, **kwargs)
 
-        self.after_request(response)
+        self.__after_request(response)
         logger.info('< === END REQUEST === >')
         return response
 
     def get(self, *args, **kwargs):
         """Like open but method is enforced to GET."""
-        return self.make_request('GET', *args, **kwargs)
+        return self.__make_request('GET', *args, **kwargs)
 
     def post(self, *args, **kwargs):
         """Like open but method is enforced to POST."""
-        return self.make_request('POST', *args, **kwargs)
+        return self.__make_request('POST', *args, **kwargs)
 
     def put(self, *args, **kwargs):
         """Like open but method is enforced to PUT."""
-        return self.make_request('PUT', *args, **kwargs)
+        return self.__make_request('PUT', *args, **kwargs)
 
     def delete(self, *args, **kwargs):
         """Like open but method is enforced to DELETE."""
-        return self.make_request('DELETE', *args, **kwargs)
+        return self.__make_request('DELETE', *args, **kwargs)

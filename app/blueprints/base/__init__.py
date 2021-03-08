@@ -1,5 +1,7 @@
 from .blueprint import BaseResource
 from .manager import BaseManager
-from .model import BaseMixin
-from .serializer import TimestampField
+from .models import BaseMixin
+from .serializers import TimestampField
 from .swagger import (creator_sw_model, record_monitoring_sw_model)
+from .tests.common import BaseTest
+from .tests.seeders import init_seed

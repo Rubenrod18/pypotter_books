@@ -1,9 +1,8 @@
-from app.blueprints.role.model import Role
-from app.blueprints.role.test.factories import RoleFactory
 from app.utils.decorators import seed_actions
+from .factory import Role, RoleFactory
 
 
-class RoleSeeder:
+class Seeder:
     name = 'RoleSeeder'
 
     @staticmethod

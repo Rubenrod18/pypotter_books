@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 from app import create_app
-from app.blueprints.base.test.seed import init_seed
+from app.blueprints.base import init_seed
 from app.extensions import db
 
 load_dotenv()

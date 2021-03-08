@@ -5,7 +5,7 @@ from app.extensions import api as root_api
 from app.utils.decorators import token_required
 from app.blueprints.base import BaseResource
 from app.services.role_service import RoleService
-from .serializer import role_serializer, roles_serializer
+from .serializers import role_serializer, roles_serializer
 from .swagger import (role_input_sw_model, role_sw_model,
                       role_search_output_sw_model)
 

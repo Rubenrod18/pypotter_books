@@ -3,7 +3,7 @@ import unicodedata
 import factory
 
 from app.extensions import db
-from ..model import Role
+from ..models import Role
 
 
 def _slugify(role):
