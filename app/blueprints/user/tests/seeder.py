@@ -26,6 +26,6 @@ class Seeder:
             UserFactory.create(**params)
 
     @seed_actions
-    def __init__(self, rows: int = 30):
+    def __init__(self, rows: int = 10):
         self.__create_admin_user()
         UserFactory.create_batch(rows)
