@@ -1,24 +1,17 @@
-from sqlalchemy import func
-
-from app.blueprints.base import BaseTest
-from app.blueprints.role import Role
+from ._base_integration_test import _RoleBaseIntegrationTest
 
 
-class TestDeleteRole(BaseTest):
-
-    def setUp(self, *args, **kwargs):
-        super(TestDeleteRole, self).setUp()
-        self.base_path = '/api/roles'
+class TestDeleteRole(_RoleBaseIntegrationTest):
 
     def test_delete_role(self):
         with self.app.app_context():
-            role_id = (Role.query.filter_by(deleted_at=None)
-                       .order_by(func.rand())
-                       .first()
-                       .id)
+            role_id = self.get_rand_role().id
 
+            admin_user = self.get_rand_admin_user()
+            auth_header = self.build_auth_header(admin_user.email)
             response = self.client.delete(f'{self.base_path}/{role_id}',
-                                          json={})
+                                          json={},
+                                          headers=auth_header)
             json_response = response.get_json()
             json_data = json_response.get('data')
 

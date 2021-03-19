@@ -17,7 +17,6 @@ class Seeder:
 
             params = {
                 'email': test_user_email,
-                'password': os.getenv('TEST_USER_PASSWORD'),
                 'deleted_at': None,
                 'active': True,
                 'created_by': None,

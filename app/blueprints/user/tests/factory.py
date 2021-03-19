@@ -1,9 +1,11 @@
+import os
 from datetime import timedelta
 from random import randint, choice
 
 import factory
 from faker import Faker
 from faker.providers import person, date_time
+from flask_security import hash_password
 from sqlalchemy import func
 
 from app.extensions import db
@@ -28,12 +30,15 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
     name = factory.Faker('name')
     last_name = factory.Faker('last_name')
     email = factory.Faker('email')
-    password = factory.Faker('password', length=50)
     # TODO: use Genre model
     genre = factory.Iterator(['m', 'f'])
     birth_date = (fake.date_time_between(start_date='-30y', end_date='-5y')
                   .strftime('%Y-%m-%d'))
     active = factory.Faker('boolean')
+
+    @factory.lazy_attribute
+    def password(self):
+        return hash_password(os.getenv('TEST_USER_PASSWORD'))
 
     @factory.lazy_attribute
     def created_id(self):

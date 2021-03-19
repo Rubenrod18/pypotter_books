@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from flask_security import roles_accepted
 
 from app.blueprints.base import BaseResource
 from app.blueprints.user import (user_serializer, user_sw_model,
@@ -6,6 +7,7 @@ from app.blueprints.user import (user_serializer, user_sw_model,
                                  user_search_output_sw_model, users_serializer)
 from app.extensions import api as root_api
 from app.services import UserService
+from app.utils.decorators import token_required
 
 _API_DESCRIPTION = ('Users with role admin or team_leader can manage '
                     'these endpoints.')
@@ -29,8 +31,8 @@ class NewUserResource(UserBaseResource):
              security='auth_token')
     @api.expect(user_input_sw_model)
     @api.marshal_with(user_sw_model, envelope='data', code=201)
-    #@token_required
-    #@roles_accepted('admin', 'team_leader')
+    @token_required
+    @roles_accepted('admin')
     def post(self) -> tuple:
         user = self.user_service.create(request.get_json())
         user_data = self.user_serializer.dump(user)
@@ -45,8 +47,8 @@ class UserResource(UserBaseResource):
                         422: 'Unprocessable Entity'},
              security='auth_token')
     @api.marshal_with(user_sw_model, envelope='data')
-    #@token_required
-    # @roles_accepted('admin', 'team_leader')
+    @token_required
+    @roles_accepted('admin')
     def get(self, user_id: int) -> tuple:
         user = self.user_service.find(user_id)
         return self.user_serializer.dump(user), 200
@@ -56,8 +58,8 @@ class UserResource(UserBaseResource):
              security='auth_token')
     @api.expect(user_input_sw_model)
     @api.marshal_with(user_sw_model, envelope='data')
-    #@token_required
-    #@roles_accepted('admin', 'team_leader')
+    @token_required
+    @roles_accepted('admin')
     def put(self, user_id: int) -> tuple:
         user = self.user_service.save(user_id, **request.get_json())
         return self.user_serializer.dump(user), 200
@@ -66,8 +68,8 @@ class UserResource(UserBaseResource):
                         403: 'Forbidden', 422: 'Unprocessable Entity'},
              security='auth_token')
     @api.marshal_with(user_sw_model, envelope='data')
-    #@token_required
-    #@roles_accepted('admin', 'team_leader')
+    @token_required
+    @roles_accepted('admin')
     def delete(self, user_id: int) -> tuple:
         user = self.user_service.delete(user_id)
         return self.user_serializer.dump(user), 200
@@ -81,8 +83,8 @@ class UsersSearchResource(UserBaseResource):
     # TODO: Pending to define
     # @api.expect(search_input_sw_model)
     @api.marshal_with(user_search_output_sw_model)
-    #@token_required
-    #@roles_accepted('admin', 'team_leader')
+    @token_required
+    @roles_accepted('admin')
     def post(self) -> tuple:
         payload = request.get_json() or {}
         user_data = self.user_service.get(**payload)

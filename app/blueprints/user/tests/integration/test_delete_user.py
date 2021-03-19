@@ -1,24 +1,17 @@
-from sqlalchemy import func
-
-from app.blueprints.base import BaseTest
-from app.blueprints.user import User
+from ._base_integration_test import _UserBaseIntegrationTest
 
 
-class TestDeleteUser(BaseTest):
-
-    def setUp(self, *args, **kwargs):
-        super(TestDeleteUser, self).setUp()
-        self.base_path = '/api/users'
+class TestDeleteUser(_UserBaseIntegrationTest):
 
     def test_delete_user_is_sending_valid_request_is_deleted(self):
         with self.app.app_context():
-            user_id = (User.query.filter_by(deleted_at=None)
-                       .order_by(func.random())
-                       .first()
-                       .id)
+            user_id = self.get_rand_user().id
 
+            admin_user = self.get_rand_admin_user()
+            auth_header = self.build_auth_header(admin_user.email)
             response = self.client.delete(f'{self.base_path}/{user_id}',
-                                          json={})
+                                          json={},
+                                          headers=auth_header)
             json_response = response.get_json()
             json_data = json_response.get('data')
 

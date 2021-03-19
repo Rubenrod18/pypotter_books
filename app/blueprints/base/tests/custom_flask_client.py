@@ -14,7 +14,7 @@ class CustomFlaskClient(FlaskClient):
 
     @staticmethod
     def __log_request_data(response: Response):
-        if response.mimetype == 'application/json':
+        if response.mimetype == 'application/json' and response.data:
             response_data = response.get_json()
         else:
             response_data = response.data

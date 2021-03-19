@@ -1,29 +1,24 @@
 import factory
-from sqlalchemy import func
 
-from app.blueprints.base import BaseTest
-from app.blueprints.role import RoleFactory, Role
+from app.blueprints.role import RoleFactory
 from app.utils import ignore_keys
+from ._base_integration_test import _RoleBaseIntegrationTest
 
 
-class TestUpdateRole(BaseTest):
-
-    def setUp(self, *args, **kwargs):
-        super(TestUpdateRole, self).setUp()
-        self.base_path = '/api/roles'
+class TestUpdateRole(_RoleBaseIntegrationTest):
 
     def test_update_role(self):
         with self.app.app_context():
-            role_id = (Role.query.filter_by(deleted_at=None)
-                       .order_by(func.rand())
-                       .first()
-                       .id)
+            role_id = self.get_rand_role().id
 
             exclude = ['name']
             data = ignore_keys(factory.build(dict, FACTORY_CLASS=RoleFactory),
                                exclude)
 
-            response = self.client.put(f'{self.base_path}/{role_id}', json=data)
+            admin_user = self.get_rand_admin_user()
+            auth_header = self.build_auth_header(admin_user.email)
+            response = self.client.put(f'{self.base_path}/{role_id}', json=data,
+                                       headers=auth_header)
             json_response = response.get_json()
             json_data = json_response.get('data')
 

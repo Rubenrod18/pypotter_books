@@ -1,23 +1,17 @@
-from sqlalchemy import func
-
-from app.blueprints.base import BaseTest
-from app.blueprints.user import User
+from ._base_integration_test import _UserBaseIntegrationTest
 
 
-class TestGetUser(BaseTest):
-
-    def setUp(self, *args, **kwargs):
-        super(TestGetUser, self).setUp()
-        self.base_path = '/api/users'
+class TestGetUser(_UserBaseIntegrationTest):
 
     def test_get_user_is_sending_valid_request_is_obtained(self):
         with self.app.app_context():
-            user = (User.query.filter_by(deleted_at=None)
-                    .order_by(func.random())
-                    .first())
+            user = self.get_rand_user()
             role = user.roles[0]
 
-            response = self.client.get(f'{self.base_path}/{user.id}', json={})
+            admin_user = self.get_rand_admin_user()
+            auth_header = self.build_auth_header(admin_user.email)
+            response = self.client.get(f'{self.base_path}/{user.id}', json={},
+                                       headers=auth_header)
             json_response = response.get_json()
             json_data = json_response.get('data')
 

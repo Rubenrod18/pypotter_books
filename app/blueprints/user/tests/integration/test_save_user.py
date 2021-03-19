@@ -2,35 +2,32 @@ import os
 from random import choice
 
 import factory
-from sqlalchemy import func
 
-from app.blueprints.base import BaseTest
-from app.blueprints.role import Role
 from app.blueprints.user import UserFactory
 from app.utils import ignore_keys
+from ._base_integration_test import _UserBaseIntegrationTest
 
 
-class TestSaveUser(BaseTest):
-
-    def setUp(self, *args, **kwargs):
-        super(TestSaveUser, self).setUp()
-        self.base_path = '/api/users'
+class TestSaveUser(_UserBaseIntegrationTest):
 
     def test_save_user_is_sending_valid_request_is_created(self):
         with self.app.app_context():
-            role = (Role.query.filter_by(deleted_at=None)
-                    .order_by(func.random())
-                    .first())
+            role = self.get_rand_role()
 
             exclude = ['active', 'created_at', 'updated_at', 'deleted_at',
                        'created_id', 'fs_uniquifier', 'roles', 'genre']
             data = ignore_keys(factory.build(dict, FACTORY_CLASS=UserFactory),
                                exclude)
-            data['genre'] = choice(['male', 'female'])
-            data['password'] = os.getenv('TEST_USER_PASSWORD')
-            data['role_id'] = role.id
+            data.update({
+                'genre': choice(['male', 'female']),
+                'password': os.getenv('TEST_USER_PASSWORD'),
+                'role_id': role.id,
+            })
 
-            response = self.client.post(self.base_path, json=data)
+            admin_user = self.get_rand_admin_user()
+            auth_header = self.build_auth_header(admin_user.email)
+            response = self.client.post(self.base_path, json=data,
+                                        headers=auth_header)
             json_response = response.get_json()
             json_data = json_response.get('data')
 

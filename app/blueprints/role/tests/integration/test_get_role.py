@@ -1,22 +1,16 @@
-from sqlalchemy import func
-
-from app.blueprints.base import BaseTest
-from app.blueprints.role import Role
+from ._base_integration_test import _RoleBaseIntegrationTest
 
 
-class TestGetRole(BaseTest):
-
-    def setUp(self, *args, **kwargs):
-        super(TestGetRole, self).setUp()
-        self.base_path = '/api/roles'
+class TestGetRole(_RoleBaseIntegrationTest):
 
     def test_get_role(self):
         with self.app.app_context():
-            role = (Role.query.filter_by(deleted_at=None)
-                    .order_by(func.rand())
-                    .first())
+            role = self.get_rand_role()
 
-            response = self.client.get(f'{self.base_path}/{role.id}', json={})
+            admin_user = self.get_rand_admin_user()
+            auth_header = self.build_auth_header(admin_user.email)
+            response = self.client.get(f'{self.base_path}/{role.id}', json={},
+                                       headers=auth_header)
             json_response = response.get_json()
             json_data = json_response.get('data')
 

@@ -1,15 +1,11 @@
 import factory
 
-from app.blueprints.base import BaseTest
 from app.blueprints.role import RoleFactory
 from app.utils import ignore_keys
+from ._base_integration_test import _RoleBaseIntegrationTest
 
 
-class TestSaveRole(BaseTest):
-
-    def setUp(self, *args, **kwargs):
-        super(TestSaveRole, self).setUp()
-        self.base_path = '/api/roles'
+class TestSaveRole(_RoleBaseIntegrationTest):
 
     def test_save_role(self):
         with self.app.app_context():
@@ -17,7 +13,10 @@ class TestSaveRole(BaseTest):
             data = ignore_keys(factory.build(dict, FACTORY_CLASS=RoleFactory),
                                exclude)
 
-            response = self.client.post(self.base_path, json=data)
+            admin_user = self.get_rand_admin_user()
+            auth_header = self.build_auth_header(admin_user.email)
+            response = self.client.post(self.base_path, json=data,
+                                        headers=auth_header)
             json_response = response.get_json()
             json_data = json_response.get('data')
 

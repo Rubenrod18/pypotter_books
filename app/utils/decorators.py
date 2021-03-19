@@ -12,9 +12,6 @@ from app.utils.constants import TOKEN_REGEX
 def token_required(fnc):
     @functools.wraps(fnc)
     def decorator(*args, **kwargs):
-        # TODO: delete when user auth is enabled
-        return fnc(*args, **kwargs)
-
         key = current_app.config.get('SECURITY_TOKEN_AUTHENTICATION_HEADER')
         token = request.headers.get(key, '')
 
