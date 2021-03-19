@@ -14,7 +14,7 @@ python-dotenv
 mysqlclient
 mysql-connector-python  # required by flask-migrate
 sqlalchemy
-factory_boy
+factory-boy
 
 # Framework and extensions
 flask

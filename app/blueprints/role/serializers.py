@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest, NotFound
 
 from app.blueprints.base import TimestampField
 from app.extensions import ma
-from .manager import RoleModel, RoleManager
+from .manager import Role, RoleManager
 
 logger = logging.getLogger(__name__)
 role_manager = RoleManager()
@@ -13,7 +13,7 @@ role_manager = RoleManager()
 
 class RoleSerializer(ma.SQLAlchemySchema):
     class Meta:
-        model = RoleModel
+        model = Role
         ordered = True
 
     id = ma.auto_field()

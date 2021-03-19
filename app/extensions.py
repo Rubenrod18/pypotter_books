@@ -6,12 +6,23 @@ from flask_restx import Api
 from flask_security import Security
 from flask_sqlalchemy import SQLAlchemy
 
+from config import Config
+
 db = SQLAlchemy()
 migrate = Migrate()
 security = Security()
 mail = Mail()
 ma = Marshmallow()
-api = Api(prefix='/api', title='Flask Api Alchemy')
+
+authorizations = {
+    'auth_token': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': Config.SECURITY_TOKEN_AUTHENTICATION_HEADER,
+    },
+}
+api = Api(prefix='/api', title='Flask Api Alchemy',
+          authorizations=authorizations)
 
 
 def init_app(app: Flask):
@@ -25,6 +36,6 @@ def init_app(app: Flask):
 
 
 def _init_flask_security_too_app(flask_app: Flask):
-    from app.blueprints.user.model import user_datastore
+    from app.blueprints.user.models import user_datastore
     security.init_app(flask_app, datastore=user_datastore,
                       register_blueprint=False)

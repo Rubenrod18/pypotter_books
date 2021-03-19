@@ -4,7 +4,7 @@ from marshmallow import EXCLUDE
 
 from app.blueprints.role import RoleManager
 from app.blueprints.user import UserManager, user_serializer
-from app.blueprints.user.model import user_datastore
+from app.blueprints.user.models import user_datastore
 from app.extensions import db
 from app.services.base import BaseService
 
@@ -49,16 +49,17 @@ class UserService(BaseService):
 
     def save(self, user_id: int, **kwargs):
         kwargs['id'] = user_id
-        data = self.user_serializer.load(kwargs, unknown=EXCLUDE)
+        deserialized_data = self.user_serializer.load(kwargs, unknown=EXCLUDE)
 
         user = self.manager.find(user_id)
         try:
-            self.manager.save(user_id, **data)
-
-            if 'role_id' in data:
+            if 'role_id' in deserialized_data:
                 user_datastore.remove_role_from_user(user, user.roles[0])
-                role = self.role_manager.find(data['role_id'])
+                role = self.role_manager.find(deserialized_data['role_id'])
                 user_datastore.add_role_to_user(user, role)
+                deserialized_data.pop('role_id')
+
+            self.manager.save(user_id, **deserialized_data)
             db.session.commit()
         except Exception as e:
             logger.debug(e)

@@ -5,8 +5,8 @@ from sqlalchemy import (Enum, Column, String, Boolean, Date, Integer,
                         ForeignKey)
 from sqlalchemy.orm import relationship, backref
 
-from app.blueprints.base.model import BaseMixin
-from app.blueprints.role.model import Role as RoleModel
+from app.blueprints.base.models import BaseMixin
+from app.blueprints.role.models import Role as RoleModel
 from app.extensions import db
 
 
@@ -56,12 +56,15 @@ class User(db.Model, BaseMixin, UserMixin):
     """
     __tablename__ = 'users'
 
+    # TODO: rename created_it to created_by
     created_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     created_by = relationship('User', remote_side='User.id')
+
     roles = relationship('Role', secondary='user_roles',
                          backref=backref('users', lazy='dynamic'))
 
     fs_uniquifier = Column(String(255), unique=True, nullable=False)
+
     name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False)

@@ -1,7 +1,7 @@
 from flask_security import RoleMixin
 from sqlalchemy import Column, String, Text
 
-from app.blueprints.base.model import BaseMixin
+from app.blueprints.base.models import BaseMixin
 from app.extensions import db
 
 

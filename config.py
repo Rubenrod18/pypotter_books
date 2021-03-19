@@ -20,9 +20,7 @@ class Config:
     LOGIN_DISABLED = False
 
     # Flask-Security-Too
-    # generated using: secrets.token_urlsafe()
     SECRET_KEY = os.getenv('SECRET_KEY')
-    # generated using: secrets.SystemRandom().getrandbits(128)
     SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT')
     SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
     SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Authorization'
@@ -77,3 +75,6 @@ class TestConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     TESTING = True
+
+    # Flask SQLAlchemy
+    SQLALCHEMY_DATABASE_URI = f'{Config.SQLALCHEMY_DATABASE_URI}_test'

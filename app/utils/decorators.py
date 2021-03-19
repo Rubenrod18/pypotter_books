@@ -1,5 +1,6 @@
 import functools
 import re
+import time
 
 from flask import current_app, request
 from flask_security.passwordless import login_token_status
@@ -11,9 +12,6 @@ from app.utils.constants import TOKEN_REGEX
 def token_required(fnc):
     @functools.wraps(fnc)
     def decorator(*args, **kwargs):
-        # TODO: delete when user auth is enabled
-        return fnc(*args, **kwargs)
-
         key = current_app.config.get('SECURITY_TOKEN_AUTHENTICATION_HEADER')
         token = request.headers.get(key, '')
 
@@ -35,3 +33,24 @@ def token_required(fnc):
             raise Unauthorized('Unauthorized')
 
     return decorator
+
+
+def seed_actions(fnc):
+    @functools.wraps(fnc)
+    def message(*args, **kwargs):
+        is_test_env = current_app.config['TESTING'] is True
+        seeder = args[0]
+
+        if not is_test_env:
+            print(' Seeding: %s' % seeder.name)
+        exec_time = 0
+        try:
+            start = time.time()
+            res = fnc(*args, **kwargs)
+            exec_time = round((time.time() - start), 2)
+        finally:
+            if not is_test_env:
+                print(' Seeded:  %s ( %s seconds )' % (seeder.name, exec_time))
+        return res
+
+    return message

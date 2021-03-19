@@ -1,12 +1,12 @@
 from app.blueprints.base import BaseManager
-from .model import User as UserModel
+from .models import User
 
 
 class UserManager(BaseManager):
 
     def __init__(self):
         super(BaseManager, self).__init__()
-        self.model = UserModel
+        self.model = User
 
     def find_by_email(self, email: str, **kwargs):
         query = {'email': email}

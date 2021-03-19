@@ -1,9 +1,9 @@
 from app.blueprints.base import BaseManager
-from .model import Role as RoleModel
+from .models import Role
 
 
 class RoleManager(BaseManager):
 
     def __init__(self):
         super(BaseManager, self).__init__()
-        self.model = RoleModel
+        self.model = Role
