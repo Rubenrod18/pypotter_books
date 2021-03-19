@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file. See [standa
 ## [0.1.0](https://github.com/Rubenrod18/flask_api_alchemy/compare/v0.0.1...v0.1.0) (2021-03-19)
 
 
-### Features
+## Features
 
 * **db:** add command for filling fake data in database ([7b53fc6](https://github.com/Rubenrod18/flask_api_alchemy/commit/7b53fc62343e34c10b0cb58227883f7e5eb53b9a))
 * **security:** users need to login before to use api ([98de276](https://github.com/Rubenrod18/flask_api_alchemy/commit/98de2768fa96f50e24bf30015cb9c8a4ccaddfac))
