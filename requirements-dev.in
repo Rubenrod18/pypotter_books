@@ -1,5 +1,8 @@
 -r requirements.txt
 
+# Linter
+flake8
+
 # Manage python packages
 pip-tools
 
