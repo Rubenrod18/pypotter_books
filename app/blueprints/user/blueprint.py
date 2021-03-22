@@ -88,8 +88,9 @@ class UsersSearchResource(UserBaseResource):
     def post(self) -> tuple:
         payload = request.get_json() or {}
         user_data = self.user_service.get(**payload)
+        user_data_lst = list(user_data['query'])
         return {
-                   'data': self.users_serializer.dump(list(user_data['query'])),
+                   'data': self.users_serializer.dump(user_data_lst),
                    'records_total': user_data['records_total'],
                    'records_filtered': user_data['records_filtered'],
                }, 200

@@ -17,7 +17,8 @@ class TestUpdateRole(_RoleBaseIntegrationTest):
 
             admin_user = self.get_rand_admin_user()
             auth_header = self.build_auth_header(admin_user.email)
-            response = self.client.put(f'{self.base_path}/{role_id}', json=data,
+            response = self.client.put(f'{self.base_path}/{role_id}',
+                                       json=data,
                                        headers=auth_header)
             json_response = response.get_json()
             json_data = json_response.get('data')

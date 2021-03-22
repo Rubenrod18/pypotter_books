@@ -34,7 +34,8 @@ class NewRoleResource(RoleBaseResource):
 
 @api.route('/<int:role_id>')
 class RoleResource(RoleBaseResource):
-    @api.doc(responses={401: 'Unauthorized', 403: 'Forbidden', 404: 'Not found'},
+    @api.doc(responses={401: 'Unauthorized', 403: 'Forbidden',
+                        404: 'Not found'},
              security='auth_token')
     @api.marshal_with(role_sw_model, envelope='data')
     @token_required
