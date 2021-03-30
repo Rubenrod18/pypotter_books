@@ -75,6 +75,3 @@ class TestConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     TESTING = True
-
-    # Flask SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = f'{Config.SQLALCHEMY_DATABASE_URI}_test'

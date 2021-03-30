@@ -8,3 +8,4 @@ pip-tools
 
 # Test
 coverage
+nose
