@@ -22,8 +22,8 @@ def make_shell_context() -> dict:
     """Returns the shell context for an interactive shell for this application.
     This runs all the registered shell context processors.
 
-    To explore the data in your application, you can start an interactive Python
-    shell with the shell command. An application context will be active,
+    To explore the data in your application, you can start an interactive
+    Python shell with the shell command. An application context will be active,
     and the app instance will be imported.
 
     Example

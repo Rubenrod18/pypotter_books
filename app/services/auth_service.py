@@ -13,7 +13,8 @@ class AuthService(object):
         user = auth_user_login_serializer.load(data)
 
         token = generate_login_token(user)
-        # TODO: Pending to testing whats happen if add a new field in user model when a user is logged
+        # TODO: Pending to testing whats happen if add a new field in user
+        # model when a user is logged
         flask_security.login_user(user)
         return token
 
