@@ -17,7 +17,7 @@ class _UserBaseIntegrationTest(BaseTest):
         return (db.session.query(User)
                 .join(UserRoles)
                 .join(Role)
-                .filter(User.deleted_at == None,
+                .filter(User.deleted_at._is(None),
                         User.active == 1,
                         Role.name == 'admin')
                 .first())
