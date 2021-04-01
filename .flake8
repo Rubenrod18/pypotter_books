@@ -1,0 +1,15 @@
+[flake8]
+per-file-ignores =
+    # Imported but unused
+    __init__.py: F401
+exclude =
+    # This contains our built documentation
+    coverage_html_report,
+    # Log files directory
+    log,
+    # Database migrations
+    migrations,
+    # Node packages directory
+    node_modules,
+    # Virtual environment
+    venv
