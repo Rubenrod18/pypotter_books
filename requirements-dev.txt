@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements-dev.in
 #
-alembic==1.5.7
+alembic==1.5.8
     # via
     #   -r requirements.txt
     #   flask-migrate
@@ -23,6 +23,7 @@ blinker==1.4
     #   -r requirements.txt
     #   flask-mail
     #   flask-principal
+    #   flask-security-too
 cfgv==3.2.0
     # via pre-commit
 click==7.1.2
@@ -44,14 +45,12 @@ email-validator==1.1.2
     #   flask-security-too
 factory-boy==3.2.0
     # via -r requirements.txt
-faker==6.6.2
+faker==8.0.0
     # via
     #   -r requirements.txt
     #   factory-boy
 filelock==3.0.12
     # via virtualenv
-flake8==3.9.0
-    # via -r requirements-dev.in
 flask-login==0.5.0
     # via
     #   -r requirements.txt
@@ -66,9 +65,9 @@ flask-principal==0.4.0
     # via
     #   -r requirements.txt
     #   flask-security-too
-flask-restx==0.2.0
+flask-restx==0.3.0
     # via -r requirements.txt
-flask-security-too==4.0.0
+flask-security-too==4.0.1
     # via -r requirements.txt
 flask-sqlalchemy==2.5.1
     # via
@@ -126,13 +125,11 @@ markupsafe==1.1.1
     #   wtforms
 marshmallow-sqlalchemy==0.24.2
     # via -r requirements.txt
-marshmallow==3.10.0
+marshmallow==3.11.1
     # via
     #   -r requirements.txt
     #   flask-marshmallow
     #   marshmallow-sqlalchemy
-mccabe==0.6.1
-    # via flake8
 mysql-connector-python==8.0.23
     # via -r requirements.txt
 mysqlclient==2.0.3
@@ -151,14 +148,10 @@ pip-tools==6.0.1
     # via -r requirements-dev.in
 pre-commit==2.12.0
     # via -r requirements-dev.in
-protobuf==3.15.6
+protobuf==3.15.8
     # via
     #   -r requirements.txt
     #   mysql-connector-python
-pycodestyle==2.7.0
-    # via flake8
-pyflakes==2.3.0
-    # via flake8
 pyrsistent==0.17.3
     # via
     #   -r requirements.txt
@@ -168,7 +161,7 @@ python-dateutil==2.8.1
     #   -r requirements.txt
     #   alembic
     #   faker
-python-dotenv==0.15.0
+python-dotenv==0.17.0
     # via -r requirements.txt
 python-editor==1.0.4
     # via
@@ -189,7 +182,7 @@ six==1.15.0
     #   protobuf
     #   python-dateutil
     #   virtualenv
-sqlalchemy==1.4.2
+sqlalchemy==1.4.7
     # via
     #   -r requirements.txt
     #   alembic
