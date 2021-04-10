@@ -16,7 +16,7 @@ migrate-rollback:  ## Revert to a previous database migration
 	$(VENV)/bin/flask db downgrade
 
 linter:  ## Analyzes code and detects various errors
-	$(VENV)/bin/flake8
+	pre-commit run flake8 --all-files
 
 coverage: ## Report coverage statistics on modules
 	$(VENV)/bin/coverage report -m
