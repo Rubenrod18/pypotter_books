@@ -9,3 +9,6 @@ pip-tools
 # Test
 coverage
 nose
+
+# Git hooks
+pre-commit
