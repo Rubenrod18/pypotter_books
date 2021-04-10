@@ -43,7 +43,7 @@ class Config:
     )
 
     # Flask Restful
-    ERROR_404_HELP = False
+    RESTX_ERROR_404_HELP = False
     FLASK_RESTFUL_PREFIX = '/api'
     RESTX_MASK_SWAGGER = False
 
