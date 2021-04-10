@@ -2,8 +2,8 @@ import unicodedata
 
 import factory
 
-from app.extensions import db
 from ..models import Role
+from app.extensions import db
 
 
 def _slugify(role):
@@ -23,7 +23,9 @@ class RoleFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     @factory.lazy_attribute
     def label(self):
-        clean_name = (unicodedata.normalize('NFKD', self.name)
-                      .encode('ascii', 'ignore')
-                      .decode('utf8'))
+        clean_name = (
+            unicodedata.normalize('NFKD', self.name)
+            .encode('ascii', 'ignore')
+            .decode('utf8')
+        )
         return clean_name.capitalize().replace('_', ' ')

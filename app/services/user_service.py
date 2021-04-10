@@ -3,7 +3,8 @@ import logging
 from marshmallow import EXCLUDE
 
 from app.blueprints.role import RoleManager
-from app.blueprints.user import UserManager, user_serializer
+from app.blueprints.user import user_serializer
+from app.blueprints.user import UserManager
 from app.blueprints.user.models import user_datastore
 from app.extensions import db
 from app.services.base_service import BaseService
@@ -12,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 
 class UserService(BaseService):
-
     def __init__(self, *args, **kwargs):
         super(UserService, self).__init__(*args, **kwargs)
         self.manager = UserManager()
@@ -31,9 +31,13 @@ class UserService(BaseService):
 
             # FIXME: comment next line when auth is enabled
             # deserialized_data.update({'created_by': current_user.id,
-            deserialized_data.update({'created_by': None,
-                                      'roles': [role],
-                                      'fs_uniquifier': fs_uniquifier})
+            deserialized_data.update(
+                {
+                    'created_by': None,
+                    'roles': [role],
+                    'fs_uniquifier': fs_uniquifier,
+                }
+            )
             user = user_datastore.create_user(**deserialized_data)
             db.session.commit()
         except Exception as e:

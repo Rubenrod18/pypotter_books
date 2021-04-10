@@ -1,10 +1,10 @@
-from app.blueprints.role import RoleManager, role_serializer
+from app.blueprints.role import role_serializer
+from app.blueprints.role import RoleManager
 from app.extensions import db
 from app.services.base_service import BaseService
 
 
 class RoleService(BaseService):
-
     def __init__(self):
         super(RoleService, self).__init__()
         self.manager = RoleManager()

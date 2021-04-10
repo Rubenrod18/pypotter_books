@@ -2,7 +2,6 @@ from app.blueprints.base import BaseManager
 
 
 class BaseService(object):
-
     def __init__(self, *args, **kwargs):
         self.manager = BaseManager()
 

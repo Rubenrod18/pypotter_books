@@ -1,5 +1,5 @@
-from flask_restx import Resource
 from flask import Blueprint
+from flask_restx import Resource
 
 from app.extensions import api as root_api
 
@@ -13,6 +13,10 @@ class BaseResource(Resource):
 
 @api.route('/welcome')
 class WelcomeResource(Resource):
-    @api.doc(responses={200: 'Welcome to flask_api!'})
+    @api.doc(
+        responses={
+            200: 'Welcome to flask_api!',
+        },
+    )
     def get(self) -> tuple:
         return 'Welcome to flask_api!', 200

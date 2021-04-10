@@ -1,11 +1,14 @@
 import logging
 
-from marshmallow import post_load, validates
-from werkzeug.exceptions import BadRequest, NotFound
+from marshmallow import post_load
+from marshmallow import validates
+from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import NotFound
 
+from .manager import Role
+from .manager import RoleManager
 from app.blueprints.base import TimestampField
 from app.extensions import ma
-from .manager import Role, RoleManager
 
 logger = logging.getLogger(__name__)
 role_manager = RoleManager()

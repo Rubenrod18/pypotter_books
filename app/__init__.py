@@ -10,7 +10,8 @@ import os
 import flask
 from flask import Flask
 
-from app import extensions, cli
+from app import cli
+from app import extensions
 from app.blueprints import BLUEPRINTS
 
 

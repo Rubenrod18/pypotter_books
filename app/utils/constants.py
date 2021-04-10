@@ -1,7 +1,9 @@
 # Regex
-BIRTH_DATE_REGEX = (r'^(19[0-9]{2}|2[0-9]{3})'  # Year
-                    r'-(0[1-9]|1[012])'  # Month
-                    r'-([123]0|[012][1-9]|31)$')  # Day
+BIRTH_DATE_REGEX = (
+    r'^(19[0-9]{2}|2[0-9]{3})'  # Year
+    r'-(0[1-9]|1[012])'  # Month
+    r'-([123]0|[012][1-9]|31)$'
+)  # Day
 EMAIL_REGEX = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
 
 # Auth
@@ -9,10 +11,13 @@ TOKEN_REGEX = r'^Bearer\s(\S+)$'
 
 # Files
 PDF_MIME_TYPE = 'application/pdf'
-MS_WORD_MIME_TYPE = ('application/vnd.openxmlformats-'
-                     'officedocument.wordprocessingml.document')
-MS_EXCEL_MIME_TYPE = ('application/vnd.openxmlformats-'
-                      'officedocument.spreadsheetml.sheet')
+MS_WORD_MIME_TYPE = (
+    'application/vnd.openxmlformats-'
+    'officedocument.wordprocessingml.document'
+)
+MS_EXCEL_MIME_TYPE = (
+    'application/vnd.openxmlformats-' 'officedocument.spreadsheetml.sheet'
+)
 
 # Request query operator
 """
@@ -27,15 +32,22 @@ MS_EXCEL_MIME_TYPE = ('application/vnd.openxmlformats-'
 """
 REQUEST_QUERY_DELIMITER = ';'
 STRING_QUERY_OPERATORS = [
-    'eq', 'ne',
-    'contains', 'ncontains',
-    'startswith', 'endswith',
+    'eq',
+    'ne',
+    'contains',
+    'ncontains',
+    'startswith',
+    'endswith',
 ]
 # http://docs.peewee-orm.com/en/latest/peewee/query_operators.html
 QUERY_OPERATORS = [
-    'eq', 'ne',
-    'lt', 'lte',
-    'gt', 'gte',
-    'in', 'nin',
+    'eq',
+    'ne',
+    'lt',
+    'lte',
+    'gt',
+    'gte',
+    'in',
+    'nin',
     'between',
 ]

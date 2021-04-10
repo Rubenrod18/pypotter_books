@@ -2,7 +2,6 @@ from datetime import datetime
 
 
 class BaseManager(object):
-
     def __init__(self, *args, **kwargs):
         self.model = None
 
@@ -10,9 +9,7 @@ class BaseManager(object):
         return self.model(**kwargs)
 
     def save(self, record_id: int, **kwargs):
-        return (self.model.query
-                .filter_by(id=record_id)
-                .update(kwargs))
+        return self.model.query.filter_by(id=record_id).update(kwargs)
 
     def get(self, **kwargs):
         # TODO: pending to define search

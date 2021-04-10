@@ -10,8 +10,9 @@ class TimestampField(fields.Field):
     def _serialize(self, value, attr, obj, **kwargs):
         if not isinstance(value, datetime):
             return None
-        return (datetime.fromtimestamp(value.timestamp())
-                .strftime('%Y-%m-%d %H:%M:%S'))
+        return datetime.fromtimestamp(value.timestamp()).strftime(
+            '%Y-%m-%d %H:%M:%S'
+        )
 
     def _deserialize(self, value, attr, data, **kwargs):
         return datetime.timestamp(value)

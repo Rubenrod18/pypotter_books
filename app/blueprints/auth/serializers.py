@@ -1,7 +1,10 @@
 import logging
 
 from flask_security import verify_password
-from marshmallow import validate, fields, validates, post_load
+from marshmallow import fields
+from marshmallow import post_load
+from marshmallow import validate
+from marshmallow import validates
 from werkzeug.exceptions import Unauthorized
 
 from app.blueprints.user import UserManager
@@ -17,8 +20,9 @@ class AuthUserLoginSerializer(ma.Schema):
     password = fields.Str(
         load_only=True,
         required=True,
-        validate=validate.Length(min=Config.SECURITY_PASSWORD_LENGTH_MIN,
-                                 max=50),
+        validate=validate.Length(
+            min=Config.SECURITY_PASSWORD_LENGTH_MIN, max=50
+        ),
     )
     __user = None
 
@@ -42,8 +46,9 @@ class AuthUserLoginSerializer(ma.Schema):
     @validates('password')
     def validate_password(self, password):
         if not verify_password(password, self.__user.password):
-            logger.debug(f'User "{self.__user.email}" password '
-                         f'does not match.')
+            logger.debug(
+                f'User "{self.__user.email}" password ' f'does not match.'
+            )
             raise Unauthorized('Credentials invalid')
 
     @post_load

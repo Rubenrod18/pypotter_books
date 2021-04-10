@@ -9,8 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 class FileStorage:
-    def save_bytes(self, file_content: bytes, filename: str,
-                   override: bool = False):
+    def save_bytes(
+        self, file_content: bytes, filename: str, override: bool = False
+    ):
         try:
             if not override and os.path.exists(filename):
                 raise FileExistsError(f'The file {filename} already exists!')

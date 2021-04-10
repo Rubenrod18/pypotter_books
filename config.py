@@ -12,6 +12,7 @@ load_dotenv()
 
 class Config:
     """Default configuration options."""
+
     # Flask
     DEVELOPMENT = False
     DEBUG = False
@@ -59,11 +60,13 @@ class Config:
 
 class ProdConfig(Config):
     """Production configuration options."""
+
     pass
 
 
 class DevConfig(Config):
     """Development configuration options."""
+
     # Flask
     DEVELOPMENT = True
     DEBUG = True
@@ -71,6 +74,7 @@ class DevConfig(Config):
 
 class TestConfig(Config):
     """Testing configuration options."""
+
     # Flask
     DEVELOPMENT = True
     DEBUG = True

@@ -1,8 +1,8 @@
-import os
-import sys
-import subprocess
-import re
 import logging
+import os
+import re
+import subprocess
+import sys
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +27,13 @@ def convert_to(folder: str, source: str) -> str:
         source,
     ]
 
-    process = subprocess.run(args, stdout=subprocess.PIPE,
-                             env={'$HOME': os.getenv('HOME')})
+    process = subprocess.run(
+        args, stdout=subprocess.PIPE, env={'$HOME': os.getenv('HOME')}
+    )
     logger.debug(process)
-    filename = re.search('-> (.*?) using filter',
-                         process.stdout.decode('utf-8'))
+    filename = re.search(
+        '-> (.*?) using filter', process.stdout.decode('utf-8')
+    )
 
     if filename is None:
         raise LibreOfficeError(process.stdout.decode('utf-8'))

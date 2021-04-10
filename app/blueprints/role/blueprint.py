@@ -1,13 +1,16 @@
-from flask import Blueprint, request
+from flask import Blueprint
+from flask import request
 from flask_security import roles_required
 
-from app.extensions import api as root_api
-from app.utils.decorators import token_required
+from .serializers import role_serializer
+from .serializers import roles_serializer
+from .swagger import role_input_sw_model
+from .swagger import role_search_output_sw_model
+from .swagger import role_sw_model
 from app.blueprints.base import BaseResource
+from app.extensions import api as root_api
 from app.services.role_service import RoleService
-from .serializers import role_serializer, roles_serializer
-from .swagger import (role_input_sw_model, role_sw_model,
-                      role_search_output_sw_model)
+from app.utils.decorators import token_required
 
 _API_DESCRIPTION = 'Users with role admin can manage these endpoints.'
 blueprint = Blueprint('roles', __name__)
@@ -20,9 +23,14 @@ class RoleBaseResource(BaseResource):
 
 @api.route('')
 class NewRoleResource(RoleBaseResource):
-    @api.doc(responses={401: 'Unauthorized', 403: 'Forbidden',
-                        422: 'Unprocessable Entity'},
-             security='auth_token')
+    @api.doc(
+        responses={
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            422: 'Unprocessable Entity',
+        },
+        security='auth_token',
+    )
     @api.expect(role_input_sw_model)
     @api.marshal_with(role_sw_model, envelope='data', code=201)
     @token_required
@@ -34,9 +42,14 @@ class NewRoleResource(RoleBaseResource):
 
 @api.route('/<int:role_id>')
 class RoleResource(RoleBaseResource):
-    @api.doc(responses={401: 'Unauthorized', 403: 'Forbidden',
-                        404: 'Not found'},
-             security='auth_token')
+    @api.doc(
+        responses={
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            404: 'Not found',
+        },
+        security='auth_token',
+    )
     @api.marshal_with(role_sw_model, envelope='data')
     @token_required
     @roles_required('admin')
@@ -44,9 +57,15 @@ class RoleResource(RoleBaseResource):
         role = self.role_service.find(role_id)
         return role_serializer.dump(role), 200
 
-    @api.doc(responses={400: 'Bad Request', 401: 'Unauthorized',
-                        403: 'Forbidden', 422: 'Unprocessable Entity'},
-             security='auth_token')
+    @api.doc(
+        responses={
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            422: 'Unprocessable Entity',
+        },
+        security='auth_token',
+    )
     @api.expect(role_input_sw_model)
     @api.marshal_with(role_sw_model, envelope='data')
     @token_required
@@ -55,9 +74,14 @@ class RoleResource(RoleBaseResource):
         role = self.role_service.save(role_id, **request.get_json())
         return role_serializer.dump(role), 200
 
-    @api.doc(responses={400: 'Bad Request', 401: 'Unauthorized',
-                        403: 'Forbidden'},
-             security='auth_token')
+    @api.doc(
+        responses={
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+        },
+        security='auth_token',
+    )
     @api.marshal_with(role_sw_model, envelope='data')
     @token_required
     @roles_required('admin')
@@ -68,9 +92,15 @@ class RoleResource(RoleBaseResource):
 
 @api.route('/search')
 class RolesSearchResource(RoleBaseResource):
-    @api.doc(responses={200: 'Success', 401: 'Unauthorized', 403: 'Forbidden',
-                        422: 'Unprocessable Entity'},
-             security='auth_token')
+    @api.doc(
+        responses={
+            200: 'Success',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            422: 'Unprocessable Entity',
+        },
+        security='auth_token',
+    )
     # TODO: Pending to define
     # @api.expect(search_input_sw_model)
     @api.marshal_with(role_search_output_sw_model)
@@ -80,7 +110,7 @@ class RolesSearchResource(RoleBaseResource):
         payload = request.get_json() or {}
         role_data = self.role_service.get(**payload)
         return {
-                   'data': roles_serializer.dump(list(role_data['query'])),
-                   'records_total': role_data['records_total'],
-                   'records_filtered': role_data['records_filtered'],
-               }, 200
+            'data': roles_serializer.dump(list(role_data['query'])),
+            'records_total': role_data['records_total'],
+            'records_filtered': role_data['records_filtered'],
+        }, 200

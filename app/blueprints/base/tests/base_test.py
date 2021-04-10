@@ -5,13 +5,12 @@ from random import randint
 
 from flask import Flask
 
-from app.extensions import db
 from .custom_flask_client import CustomFlaskClient
 from .seeders import init_seed
+from app.extensions import db
 
 
 class BaseTest(unittest.TestCase):
-
     def setUp(self):
         self.app = self.__create_app()
         self.client = self.__create_test_client(self.app)
@@ -34,6 +33,7 @@ class BaseTest(unittest.TestCase):
     def __create_app():
         """Create an app with testing environment."""
         from app import create_app
+
         return create_app('config.TestConfig')
 
     @staticmethod
@@ -43,8 +43,9 @@ class BaseTest(unittest.TestCase):
         return app.test_client()
 
     def __config_database_uri(self) -> None:
-        database_uri_lst = (self.app.config['SQLALCHEMY_DATABASE_URI']
-                            .split('/'))
+        database_uri_lst = self.app.config['SQLALCHEMY_DATABASE_URI'].split(
+            '/'
+        )
         database_uri_lst[1] = '//'
         tmp = ''.join(database_uri_lst[0:-1])
         test_db_uri = f'{tmp}/{self.__database_name}'
@@ -77,8 +78,7 @@ class BaseTest(unittest.TestCase):
             'password': os.getenv('TEST_USER_PASSWORD'),
         }
 
-        response = self.client.post('/api/auth/login',
-                                    json=data)
+        response = self.client.post('/api/auth/login', json=data)
         json_response = response.get_json()
 
         assert 200 == response.status_code
