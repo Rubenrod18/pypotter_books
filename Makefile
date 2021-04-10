@@ -6,6 +6,9 @@ help:
 run:  ## Run web server
 	$(VENV)/bin/python3 manage.py runserver
 
+shell:  ## Shell context for an interactive shell for this application
+	$(VENV)/bin/flask shell
+
 migrate:  ## Upgrade to a later database migration
 	$(VENV)/bin/flask db upgrade
 
