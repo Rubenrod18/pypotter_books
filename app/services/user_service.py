@@ -6,7 +6,7 @@ from app.blueprints.role import RoleManager
 from app.blueprints.user import UserManager, user_serializer
 from app.blueprints.user.models import user_datastore
 from app.extensions import db
-from app.services.base import BaseService
+from app.services.base_service import BaseService
 
 logger = logging.getLogger(__name__)
 

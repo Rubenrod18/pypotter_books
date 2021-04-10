@@ -1,6 +1,6 @@
 from app.blueprints.role import RoleManager, role_serializer
 from app.extensions import db
-from app.services.base import BaseService
+from app.services.base_service import BaseService
 
 
 class RoleService(BaseService):
