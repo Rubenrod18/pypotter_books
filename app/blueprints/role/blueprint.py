@@ -8,6 +8,7 @@ from .swagger import role_input_sw_model
 from .swagger import role_search_output_sw_model
 from .swagger import role_sw_model
 from app.blueprints.base import BaseResource
+from app.blueprints.base import search_input_sw_model
 from app.extensions import api as root_api
 from app.services.role_service import RoleService
 from app.utils.decorators import token_required
@@ -101,8 +102,7 @@ class RolesSearchResource(RoleBaseResource):
         },
         security='auth_token',
     )
-    # TODO: Pending to define
-    # @api.expect(search_input_sw_model)
+    @api.expect(search_input_sw_model)
     @api.marshal_with(role_search_output_sw_model)
     @token_required
     @roles_required('admin')
@@ -110,7 +110,7 @@ class RolesSearchResource(RoleBaseResource):
         payload = request.get_json() or {}
         role_data = self.role_service.get(**payload)
         return {
-            'data': roles_serializer.dump(list(role_data['query'])),
+            'data': roles_serializer.dump(role_data['query'].items),
             'records_total': role_data['records_total'],
             'records_filtered': role_data['records_filtered'],
         }, 200
