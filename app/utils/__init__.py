@@ -75,43 +75,8 @@ def exists_attr_in_module(module: str, attr: str) -> bool:
     return exists
 
 
-def to_readable(obj: object) -> object:
-    if obj is None or obj == '':
-        return 'N/D'
-    elif isinstance(obj, datetime):
-        return obj.strftime('%Y/%m/%d %H:%M:%S')
-    elif isinstance(obj, date):
-        return obj.__str__()
-    else:
-        return obj
-
-
-def pos_to_char(pos: int) -> str:
-    return chr(pos + 97)
-
-
-def find_longest_word(word_list: list) -> str:
-    str_list = [str(item) for item in word_list]
-    longest_word = max(str_list, key=len)
-    return str(longest_word)
-
-
 def ignore_keys(data: dict, exclude: list) -> dict:
     return dict({item: data[item] for item in data if item not in exclude})
-
-
-def get_request_file(field_name: str = None) -> dict:
-    field_name = 'document' if field_name is None else field_name
-    file = {}
-    request_file = request.files.to_dict().get(field_name)
-
-    if request_file:
-        file = {
-            'mime_type': request_file.mimetype,
-            'filename': request_file.filename,
-            'file_data': request_file.read(),
-        }
-    return file
 
 
 def filter_by_keys(data: dict, keys: list) -> dict:
