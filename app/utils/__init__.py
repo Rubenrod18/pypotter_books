@@ -1,10 +1,6 @@
 """Collection of functions and classes which make common patterns
 shorter and easier."""
 import importlib
-from datetime import date
-from datetime import datetime
-
-from flask import request
 
 
 def get_attr_from_module(module: str, attr: str) -> any:
