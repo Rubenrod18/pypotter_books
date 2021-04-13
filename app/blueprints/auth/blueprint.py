@@ -6,7 +6,7 @@ from .swagger import auth_token_sw_model
 from app.blueprints.base import BaseResource
 from app.extensions import api as root_api
 from app.services import AuthService
-from app.utils.decorators import token_required
+from app.decorators import token_required
 
 blueprint = Blueprint('auth', __name__)
 api = root_api.namespace('auth', description='Authentication endpoints')

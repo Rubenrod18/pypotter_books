@@ -3,7 +3,7 @@ import os
 from .factory import Role
 from .factory import User
 from .factory import UserFactory
-from app.utils.decorators import seed_actions
+from app.decorators import seed_actions
 
 
 class Seeder:

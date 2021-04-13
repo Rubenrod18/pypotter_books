@@ -10,7 +10,7 @@ from app.blueprints.user import user_sw_model
 from app.blueprints.user import users_serializer
 from app.extensions import api as root_api
 from app.services import UserService
-from app.utils.decorators import token_required
+from app.decorators import token_required
 
 _API_DESCRIPTION = (
     'Users with role admin or team_leader can manage ' 'these endpoints.'

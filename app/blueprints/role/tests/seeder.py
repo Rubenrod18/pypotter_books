@@ -1,6 +1,6 @@
 from .factory import Role
 from .factory import RoleFactory
-from app.utils.decorators import seed_actions
+from app.decorators import seed_actions
 
 
 class Seeder:

@@ -11,7 +11,7 @@ from app.blueprints.base import BaseResource
 from app.blueprints.base import search_input_sw_model
 from app.extensions import api as root_api
 from app.services.role_service import RoleService
-from app.utils.decorators import token_required
+from app.decorators import token_required
 
 _API_DESCRIPTION = 'Users with role admin can manage these endpoints.'
 blueprint = Blueprint('roles', __name__)
