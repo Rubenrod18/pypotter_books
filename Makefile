@@ -1,3 +1,4 @@
+.PHONY: run component shell migrate migrate-rollback linter coverage coverage-html test test-parallel
 VENV := venv
 
 help:
@@ -5,6 +6,9 @@ help:
 
 run:  ## Run web server
 	$(VENV)/bin/python3 manage.py runserver
+
+component:  ## Create a component scaffolding
+	$(VENV)/bin/flask component --name ${name}
 
 shell:  ## Shell context for an interactive shell for this application
 	$(VENV)/bin/flask shell

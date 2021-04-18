@@ -53,8 +53,6 @@ class Config:
 
     # Mr Developer
     ROOT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-    STORAGE_DIRECTORY = '%s/storage' % ROOT_DIRECTORY
-    MOCKUP_DIRECTORY = '%s/storage/mockups' % ROOT_DIRECTORY
     LOG_DIRECTORY = '%s/log' % ROOT_DIRECTORY
 
 

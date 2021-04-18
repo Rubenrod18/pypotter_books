@@ -1,14 +1,23 @@
+import click
 from flask import Flask
 
-from app.blueprints.base import init_seed
+from app.cli.component_cli import ComponentCli
+from app.cli.seeder_cli import SeederCli
 from app.extensions import db
 
 
 def init_app(app: Flask):
+    @app.cli.command('component', help='Create a component structure.')
+    @click.option('--name', '-n', help='Component name.')
+    def create_component(name):
+        component_cli = ComponentCli()
+        component_cli.run_command(name)
+
     @app.cli.command('seed', help='Fill database with fake data.')
     def seeds() -> None:
         """Command line script for filling database with fake data."""
-        init_seed()
+        seeder_cli = SeederCli()
+        seeder_cli.run_command()
 
     @app.shell_context_processor
     def make_shell_context() -> dict:

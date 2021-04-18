@@ -6,7 +6,7 @@ from random import randint
 from flask import Flask
 
 from .custom_flask_client import CustomFlaskClient
-from .seeders import init_seed
+from app.cli import SeederCli
 from app.extensions import db
 
 
@@ -22,7 +22,8 @@ class BaseTest(unittest.TestCase):
             self.session = db.session()
 
             db.create_all()
-            init_seed()
+            seeder_cli = SeederCli()
+            seeder_cli.run_command()
 
     def tearDown(self):
         with self.app.app_context():
