@@ -21,8 +21,9 @@ authorizations = {
         'name': Config.SECURITY_TOKEN_AUTHENTICATION_HEADER,
     },
 }
-api = Api(prefix='/api', title='Flask Api Alchemy',
-          authorizations=authorizations)
+api = Api(
+    prefix='/api', title='Flask Api Alchemy', authorizations=authorizations
+)
 
 
 def init_app(app: Flask):
@@ -37,5 +38,7 @@ def init_app(app: Flask):
 
 def _init_flask_security_too_app(flask_app: Flask):
     from app.blueprints.user.models import user_datastore
-    security.init_app(flask_app, datastore=user_datastore,
-                      register_blueprint=False)
+
+    security.init_app(
+        flask_app, datastore=user_datastore, register_blueprint=False
+    )

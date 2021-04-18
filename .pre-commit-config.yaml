@@ -1,0 +1,52 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+#
+# You must run next command first time:
+#     pre-commit install
+#
+default_stages: [commit]
+repos:
+  - repo: https://github.com/ambv/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        args: [--line-length=79, --skip-string-normalization]
+  -   repo: https://gitlab.com/pycqa/flake8
+      rev: 3.9.0
+      hooks:
+      - id: flake8
+        args: [--config=.flake8]
+        exclude: |
+          (
+          ^coverage_html_report/|
+          ^log/|
+          ^migrations/|
+          ^node_modules/|
+          ^venv/
+          )
+  -   repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v1.2.3
+      hooks:
+      -   id: trailing-whitespace
+      -   id: double-quote-string-fixer
+  -   repo: https://github.com/asottile/reorder_python_imports
+      rev: v2.4.0
+      hooks:
+      -   id: reorder-python-imports
+  -   repo: https://github.com/asottile/pyupgrade
+      rev: v2.12.0
+      hooks:
+      -   id: pyupgrade
+  -   repo: https://github.com/commitizen-tools/commitizen
+      rev: v2.17.2
+      hooks:
+      -   id: commitizen
+          stages: [commit-msg]
+# Local hooks
+  -   repo: local
+      hooks:
+      -   id: tests
+          stages: [push]
+          name: Run tests in parallel
+          language: system
+          entry: make test-parallel

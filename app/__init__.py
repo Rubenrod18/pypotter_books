@@ -12,6 +12,7 @@ from flask import Flask
 
 from app import extensions
 from app.blueprints import BLUEPRINTS
+from app.cli import cli
 
 
 def _register_blueprints(app: Flask) -> None:
@@ -58,6 +59,7 @@ def create_app(env_config: str) -> Flask:
     app.config.from_object(env_config)
 
     _init_logging(app)
+    cli.init_app(app)
     extensions.init_app(app)
     _register_blueprints(app)
 

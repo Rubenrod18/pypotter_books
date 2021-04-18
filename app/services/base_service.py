@@ -1,8 +1,8 @@
 from app.blueprints.base import BaseManager
+from app.blueprints.base.serializers import search_serializer
 
 
 class BaseService(object):
-
     def __init__(self, *args, **kwargs):
         self.manager = BaseManager()
 
@@ -17,9 +17,8 @@ class BaseService(object):
         return self.manager.find(record_id, **{'deleted_at': None})
 
     def get(self, **kwargs):
-        # TODO: pending to define
-        # data = SearchSerializer().load(kwargs)
-        return self.manager.get(**kwargs)
+        serialized_data = search_serializer.load(kwargs)
+        return self.manager.get(**serialized_data)
 
     def delete(self, record_id: int):
         return self.manager.delete(record_id)

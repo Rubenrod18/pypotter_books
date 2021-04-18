@@ -1,7 +1,9 @@
 import os
 
-from app.utils.decorators import seed_actions
-from .factory import Role, User, UserFactory
+from .factory import Role
+from .factory import User
+from .factory import UserFactory
+from app.decorators import seed_actions
 
 
 class Seeder:

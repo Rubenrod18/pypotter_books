@@ -2,9 +2,11 @@ import functools
 import re
 import time
 
-from flask import current_app, request
+from flask import current_app
+from flask import request
 from flask_security.passwordless import login_token_status
-from werkzeug.exceptions import Forbidden, Unauthorized
+from werkzeug.exceptions import Forbidden
+from werkzeug.exceptions import Unauthorized
 
 from app.utils.constants import TOKEN_REGEX
 
@@ -50,7 +52,11 @@ def seed_actions(fnc):
             exec_time = round((time.time() - start), 2)
         finally:
             if not is_test_env:
-                print(' Seeded:  %s ( %s seconds )' % (seeder.name, exec_time))
+                print(
+                    ' Seeded:  {} ( {} seconds )'.format(
+                        seeder.name, exec_time
+                    )
+                )
         return res
 
     return message

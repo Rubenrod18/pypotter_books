@@ -1,15 +1,20 @@
 import logging
 
 from flask_security import hash_password
-from marshmallow import fields, validate, validates, post_load
-from werkzeug.exceptions import BadRequest, NotFound
+from marshmallow import fields
+from marshmallow import post_load
+from marshmallow import validate
+from marshmallow import validates
+from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import NotFound
 
+from .manager import User
+from .manager import UserManager
+from .models import Genre
 from app.blueprints.role import RoleManager
 from app.blueprints.role.serializers import RoleSerializer
 from app.extensions import ma
 from config import Config
-from .manager import UserManager, User
-from .models import Genre
 
 logger = logging.getLogger(__name__)
 user_manager = UserManager()
@@ -17,7 +22,6 @@ role_manager = RoleManager()
 
 
 class _VerifyRoleId(fields.Field):
-
     def _deserialize(self, value, *args, **kwargs):
         role = role_manager.find(value)
         if role is None:
@@ -44,9 +48,10 @@ class UserSerializer(ma.SQLAlchemySchema):
 
     # Input fields
     password = ma.auto_field(
-        validate=validate.Length(min=Config.SECURITY_PASSWORD_LENGTH_MIN,
-                                 max=50),
-        load_only=True
+        validate=validate.Length(
+            min=Config.SECURITY_PASSWORD_LENGTH_MIN, max=50
+        ),
+        load_only=True,
     )
     role_id = _VerifyRoleId(load_only=True)
 
@@ -55,8 +60,7 @@ class UserSerializer(ma.SQLAlchemySchema):
     updated_at = ma.auto_field(dump_only=True)
     deleted_at = ma.auto_field(dump_only=True)
     roles = fields.List(
-        fields.Nested(RoleSerializer, only=('name', 'label')),
-        dump_only=True
+        fields.Nested(RoleSerializer, only=('name', 'label')), dump_only=True
     )
 
     @validates('id')

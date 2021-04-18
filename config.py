@@ -12,6 +12,7 @@ load_dotenv()
 
 class Config:
     """Default configuration options."""
+
     # Flask
     DEVELOPMENT = False
     DEBUG = False
@@ -42,7 +43,7 @@ class Config:
     )
 
     # Flask Restful
-    ERROR_404_HELP = False
+    RESTX_ERROR_404_HELP = False
     FLASK_RESTFUL_PREFIX = '/api'
     RESTX_MASK_SWAGGER = False
 
@@ -52,18 +53,18 @@ class Config:
 
     # Mr Developer
     ROOT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-    STORAGE_DIRECTORY = '%s/storage' % ROOT_DIRECTORY
-    MOCKUP_DIRECTORY = '%s/storage/mockups' % ROOT_DIRECTORY
     LOG_DIRECTORY = '%s/log' % ROOT_DIRECTORY
 
 
 class ProdConfig(Config):
     """Production configuration options."""
+
     pass
 
 
 class DevConfig(Config):
     """Development configuration options."""
+
     # Flask
     DEVELOPMENT = True
     DEBUG = True
@@ -71,10 +72,8 @@ class DevConfig(Config):
 
 class TestConfig(Config):
     """Testing configuration options."""
+
     # Flask
     DEVELOPMENT = True
     DEBUG = True
     TESTING = True
-
-    # Flask SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = f'{Config.SQLALCHEMY_DATABASE_URI}_test'

@@ -1,9 +1,16 @@
 import enum
 
-from flask_security import UserMixin, SQLAlchemyUserDatastore
-from sqlalchemy import (Enum, Column, String, Boolean, Date, Integer,
-                        ForeignKey)
-from sqlalchemy.orm import relationship, backref
+from flask_security import SQLAlchemyUserDatastore
+from flask_security import UserMixin
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import Date
+from sqlalchemy import Enum
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy.orm import backref
+from sqlalchemy.orm import relationship
 
 from app.blueprints.base.models import BaseMixin
 from app.blueprints.role.models import Role as RoleModel
@@ -54,14 +61,18 @@ class User(db.Model, BaseMixin, UserMixin):
     https://flask-security-too.readthedocs.io/en/stable/changelog.html#version-4-0-0
 
     """
+
     __tablename__ = 'users'
 
     # TODO: rename created_it to created_by
     created_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     created_by = relationship('User', remote_side='User.id')
 
-    roles = relationship('Role', secondary='user_roles',
-                         backref=backref('users', lazy='dynamic'))
+    roles = relationship(
+        'Role',
+        secondary='user_roles',
+        backref=backref('users', lazy='dynamic'),
+    )
 
     fs_uniquifier = Column(String(255), unique=True, nullable=False)
 
