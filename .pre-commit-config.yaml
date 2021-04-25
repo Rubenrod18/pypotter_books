@@ -42,11 +42,3 @@ repos:
       hooks:
       -   id: commitizen
           stages: [commit-msg]
-# Local hooks
-  -   repo: local
-      hooks:
-      -   id: tests
-          stages: [push]
-          name: Run tests in parallel
-          language: system
-          entry: make test-parallel
