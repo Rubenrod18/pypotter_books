@@ -1,5 +1,6 @@
 import os
 
+from app.utils import exists_attr_in_module
 from app.utils import get_attr_from_module
 
 
@@ -40,7 +41,14 @@ def _get_bp_instances(modules: list) -> list:
     <flask.blueprints.Blueprint object at 0x11043f8e0>]
 
     """
-    return [get_attr_from_module(item, 'blueprint') for item in modules]
+    bp_instances = []
+
+    for module in modules:
+        if exists_attr_in_module(module, 'blueprint'):
+            bp_instance = get_attr_from_module(module, 'blueprint')
+            bp_instances.append(bp_instance)
+
+    return bp_instances
 
 
 def _get_blueprints() -> list:
