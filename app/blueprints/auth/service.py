@@ -1,12 +1,12 @@
 import flask_security
 from flask_security.passwordless import generate_login_token
 
-from app.blueprints.auth import auth_login_sw_model
-from app.blueprints.auth import auth_user_login_serializer
+from .serializers import auth_user_login_serializer
+from .swagger import auth_login_sw_model
 from app.utils import filter_by_keys
 
 
-class AuthService(object):
+class AuthService:
     @staticmethod
     def login_user(**kwargs) -> str:
         data = filter_by_keys(kwargs, auth_login_sw_model.keys())

@@ -2,12 +2,12 @@ import logging
 
 from marshmallow import EXCLUDE
 
+from app.blueprints.base import BaseService
 from app.blueprints.role import RoleManager
 from app.blueprints.user import user_serializer
 from app.blueprints.user import UserManager
 from app.blueprints.user.models import user_datastore
 from app.extensions import db
-from app.services.base_service import BaseService
 
 logger = logging.getLogger(__name__)
 

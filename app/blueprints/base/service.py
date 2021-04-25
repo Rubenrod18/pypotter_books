@@ -2,7 +2,7 @@ from app.blueprints.base import BaseManager
 from app.blueprints.base.serializers import search_serializer
 
 
-class BaseService(object):
+class BaseService:
     def __init__(self, *args, **kwargs):
         self.manager = BaseManager()
 

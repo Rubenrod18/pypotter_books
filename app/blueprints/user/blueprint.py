@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import request
 from flask_security import roles_accepted
 
+from .service import UserService
 from app.blueprints.base import BaseResource
 from app.blueprints.user import user_input_sw_model
 from app.blueprints.user import user_search_output_sw_model
@@ -10,7 +11,6 @@ from app.blueprints.user import user_sw_model
 from app.blueprints.user import users_serializer
 from app.decorators import token_required
 from app.extensions import api as root_api
-from app.services import UserService
 
 _API_DESCRIPTION = (
     'Users with role admin or team_leader can manage ' 'these endpoints.'

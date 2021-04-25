@@ -1,12 +1,12 @@
 from flask import Blueprint
 from flask import request
 
+from .service import AuthService
 from .swagger import auth_login_sw_model
 from .swagger import auth_token_sw_model
 from app.blueprints.base import BaseResource
 from app.decorators import token_required
 from app.extensions import api as root_api
-from app.services import AuthService
 
 blueprint = Blueprint('auth', __name__)
 api = root_api.namespace('auth', description='Authentication endpoints')

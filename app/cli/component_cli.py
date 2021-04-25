@@ -22,18 +22,12 @@ class ComponentCli(_BaseCli, ABC):
         for directory in directories:
             os.mkdir(directory)
 
-        return [component_name] + directories
+        return directories
 
     @staticmethod
-    def __create_modules(
-        component_name, bp_dirname, test_dirname, test_integration_dirname
-    ):
+    def __create_modules(bp_dirname, test_dirname, test_integration_dirname):
         def build_comment(concept):
             return f'#  Insert your {concept} here.'
-
-        service_file = (
-            f'{Config.ROOT_DIRECTORY}/app/services/{component_name}_service.py'
-        )
 
         component_files = {
             # blueprint
@@ -42,14 +36,13 @@ class ComponentCli(_BaseCli, ABC):
             f'{bp_dirname}/manager.py': build_comment('database queries'),
             f'{bp_dirname}/models.py': build_comment('models'),
             f'{bp_dirname}/serializers.py': build_comment('serializers'),
+            f'{bp_dirname}/service.py': build_comment('service'),
             f'{bp_dirname}/swagger.py': build_comment('swagger models'),
             # tests
             f'{test_dirname}/__init__.py': '',
             f'{test_integration_dirname}/__init__.py': '',
             f'{test_dirname}/factory.py': build_comment('factories'),
             f'{test_dirname}/seeder.py': build_comment('seeder'),
-            # services
-            service_file: build_comment('service'),
         }
 
         for file, file_content in component_files.items():
