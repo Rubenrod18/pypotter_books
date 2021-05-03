@@ -19,12 +19,15 @@ from app.extensions import db
 class Currency(db.Model, BaseMixin):
     __tablename__ = BaseMixin.tbl('currencies')
 
-    name = Column(String(255), nullable=False)
     code = Column(String(3), nullable=False)
-    num = Column(String(3), nullable=False)
     decimals = Column(
         Integer, doc='The number of digits after the decimal separator'
     )
+    name = Column(String(255), nullable=False)
+    name_plural = Column(String(255), nullable=False)
+    num = Column(String(3), nullable=False)
+    symbol = Column(String(10), nullable=False)
+    symbol_native = Column(String(10), nullable=False)
 
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
