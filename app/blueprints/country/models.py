@@ -21,7 +21,7 @@ from app.extensions import db
 class Country(db.Model, BaseMixin):
     __tablename__ = BaseMixin.tbl('countries')
 
-    country_id = Column(
+    currency_id = Column(
         Integer,
         ForeignKey(
             Currency.id,
@@ -33,21 +33,15 @@ class Country(db.Model, BaseMixin):
     name = Column(String(255), nullable=False)
     alpha_2_code = Column(String(2), nullable=False)
     alpha_3_code = Column(String(3), nullable=False)
-    numeric_code = Column(String(3), nullable=False)
 
-    currencies = relationship(Currency, backref=__tablename__)
+    currency = relationship(Currency, backref=__tablename__)
 
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
-    )
-    __local_table_args__ = (
         UniqueConstraint(
             'name',
             'alpha_2_code',
             'alpha_3_code',
-            'numeric_code',
-            name=BaseMixin.uq(
-                __tablename__, 'name_alpha_2_code_alpha_3_code_numeric_code'
-            ),
+            name=BaseMixin.uq(__tablename__, 'name_alpha_2_code_alpha_3_code'),
         ),
     )
