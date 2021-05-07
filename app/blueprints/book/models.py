@@ -1,4 +1,3 @@
-from sqlalchemy import BLOB
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import Float
@@ -8,6 +7,7 @@ from sqlalchemy import PrimaryKeyConstraint
 from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy import UniqueConstraint
+from sqlalchemy.dialects.mysql import LONGBLOB
 from sqlalchemy.orm import relationship
 
 from app.blueprints.base import BaseMixin
@@ -27,12 +27,10 @@ class Book(db.Model, BaseMixin):
     published_date = Column(Date, nullable=False)
     language = Column(String(255), nullable=False)
     dimensions = Column(String(255), nullable=False)
-    image = Column(BLOB, nullable=False)
+    image = Column(LONGBLOB, nullable=True)
 
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
-    )
-    __local_table_args__ = (
         UniqueConstraint('isbn', name=BaseMixin.uq(__tablename__, 'isbn')),
     )
 
