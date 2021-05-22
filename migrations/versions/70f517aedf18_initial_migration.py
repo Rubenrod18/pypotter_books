@@ -7,6 +7,7 @@ Create Date: 2021-04-25 11:03:25.026775
 """
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy.dialects.mysql import LONGBLOB
 
 
 # revision identifiers, used by Alembic.
@@ -33,7 +34,7 @@ def upgrade():
         sa.Column('published_date', sa.Date(), nullable=False),
         sa.Column('language', sa.String(length=255), nullable=False),
         sa.Column('dimensions', sa.String(length=255), nullable=False),
-        sa.Column('image', sa.BLOB(), nullable=False),
+        sa.Column('image', LONGBLOB(), nullable=False),
         sa.PrimaryKeyConstraint('id', name='pk_tbl_books'),
     )
     op.create_table(

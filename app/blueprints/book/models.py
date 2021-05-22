@@ -15,8 +15,67 @@ from app.blueprints.country.models import Country
 from app.extensions import db
 
 
+_BOOK_TBL = BaseMixin.tbl('books')
+
+
+class BookPrice(db.Model, BaseMixin):
+    __tablename__ = BaseMixin.tbl('book_prices')
+
+    book_id = Column(
+        Integer,
+        ForeignKey(
+            f'{_BOOK_TBL}.id', name=BaseMixin.fk(__tablename__, _BOOK_TBL)
+        ),
+        nullable=False,
+    )
+    country_id = Column(
+        Integer,
+        ForeignKey(
+            f'{Country.__tablename__}.id',
+            name=BaseMixin.fk(__tablename__, Country.__tablename__),
+        ),
+        nullable=False,
+    )
+    vat = Column(Float, nullable=False)
+
+    __table_args__ = (
+        PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
+        UniqueConstraint(
+            'country_id',
+            'book_id',
+            name=BaseMixin.uq(__tablename__, 'country_id_book_id'),
+        ),
+    )
+
+
+class BookStock(db.Model, BaseMixin):
+    __tablename__ = BaseMixin.tbl('book_stocks')
+
+    book_id = Column(
+        Integer,
+        ForeignKey(
+            f'{_BOOK_TBL}.id', name=BaseMixin.fk(__tablename__, _BOOK_TBL)
+        ),
+        nullable=False,
+    )
+    country_id = Column(
+        Integer,
+        ForeignKey(
+            f'{Country.__tablename__}.id',
+            name=BaseMixin.fk(__tablename__, Country.__tablename__),
+        ),
+        nullable=False,
+    )
+
+    quantity = Column(Integer, nullable=False)
+
+    __table_args__ = (
+        PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
+    )
+
+
 class Book(db.Model, BaseMixin):
-    __tablename__ = BaseMixin.tbl('books')
+    __tablename__ = _BOOK_TBL
 
     title = Column(String(255), nullable=False)
     author = Column(String(255), nullable=False)
@@ -29,62 +88,10 @@ class Book(db.Model, BaseMixin):
     dimensions = Column(String(255), nullable=False)
     image = Column(LONGBLOB, nullable=True)
 
+    book_stocks = relationship('BookStock', backref=__tablename__)
+    book_prices = relationship('BookPrice', backref=__tablename__)
+
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
         UniqueConstraint('isbn', name=BaseMixin.uq(__tablename__, 'isbn')),
-    )
-
-
-class BookPrice(db.Model, BaseMixin):
-    __tablename__ = BaseMixin.tbl('book_prices')
-
-    book_id = Column(
-        Integer,
-        ForeignKey(
-            Book.id, name=BaseMixin.fk(__tablename__, Book.__tablename__)
-        ),
-        nullable=False,
-    )
-    country_id = Column(
-        Integer,
-        ForeignKey(
-            Country.id, name=BaseMixin.fk(__tablename__, Country.__tablename__)
-        ),
-        nullable=False,
-    )
-    vat = Column(Float, nullable=False)
-
-    book = relationship(Book, backref=__tablename__)
-    country = relationship(Country, backref=__tablename__)
-
-    __table_args__ = (
-        PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
-    )
-
-
-class BookStock(db.Model, BaseMixin):
-    __tablename__ = BaseMixin.tbl('book_stocks')
-
-    country_id = Column(
-        Integer,
-        ForeignKey(
-            Country.id, name=BaseMixin.fk(__tablename__, Country.__tablename__)
-        ),
-        nullable=False,
-    )
-    book_id = Column(
-        Integer,
-        ForeignKey(
-            Book.id, name=BaseMixin.fk(__tablename__, Book.__tablename__)
-        ),
-        nullable=False,
-    )
-
-    quantity = Column(Integer, nullable=False)
-
-    book = relationship(Book, backref=__tablename__)
-    country = relationship(Country, backref=__tablename__)
-
-    __table_args__ = (
-        PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
     )
