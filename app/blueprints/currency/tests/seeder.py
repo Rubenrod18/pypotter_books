@@ -10,6 +10,7 @@ from app.decorators import seed_actions
 
 class Seeder:
     name = 'CurrencySeeder'
+    priority = 2
 
     @seed_actions
     def __init__(self):

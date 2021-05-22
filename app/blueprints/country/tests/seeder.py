@@ -10,6 +10,7 @@ from app.decorators import seed_actions
 
 class Seeder:
     name = 'CountrySeeder'
+    priority = 3
 
     @seed_actions
     def __init__(self):

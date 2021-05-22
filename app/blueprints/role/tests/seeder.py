@@ -5,6 +5,7 @@ from app.decorators import seed_actions
 
 class Seeder:
     name = 'RoleSeeder'
+    priority = 0
 
     @staticmethod
     def __create_admin_role() -> None:

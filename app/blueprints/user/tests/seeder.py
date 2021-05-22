@@ -8,6 +8,7 @@ from app.decorators import seed_actions
 
 class Seeder:
     name = 'UserSeeder'
+    priority = 1
 
     @staticmethod
     def __create_admin_user():

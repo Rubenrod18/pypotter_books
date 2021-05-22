@@ -15,6 +15,7 @@ from app.decorators import seed_actions
 
 class Seeder:
     name = 'BookSeeder'
+    priority = 4
 
     @seed_actions
     def __init__(self):
