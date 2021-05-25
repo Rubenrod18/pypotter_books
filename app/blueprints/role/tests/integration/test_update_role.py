@@ -1,5 +1,6 @@
 import factory
 
+from ...models import ROLE_NAME_DELIMITER
 from ._base_integration_test import _RoleBaseIntegrationTest
 from app.blueprints.role import RoleFactory
 from app.utils import ignore_keys
@@ -26,7 +27,7 @@ class TestUpdateRole(_RoleBaseIntegrationTest):
             self.assertEqual(200, response.status_code)
             self.assertEqual(role_id, json_data.get('id'))
             self.assertEqual(
-                data.get('label').lower().replace(' ', '-'),
+                data.get('label').lower().replace(' ', ROLE_NAME_DELIMITER),
                 json_data.get('name'),
             )
             self.assertEqual(data.get('label'), json_data.get('label'))

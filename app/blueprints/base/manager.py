@@ -32,10 +32,11 @@ class BaseManager(object):
             field_name = item['field_name']
             field_value = item['field_value']
 
-            if (
-                getattr(db_model, item['field_name'])
-                and isinstance(field_value, str)
-                and field_value.strip()
+            if isinstance(field_value, str):
+                field_value = field_value.strip()
+
+            if getattr(db_model, item['field_name']) and (
+                isinstance(field_value, str) or isinstance(field_value, int)
             ):
                 sql_expressions.update({field_name: field_value})
 

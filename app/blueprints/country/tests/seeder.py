@@ -13,7 +13,7 @@ class Seeder:
     priority = 3
 
     @seed_actions
-    def __init__(self):
+    def __init__(self, rows: int = 10):
         self.__create_country(
             UnitedStatesCountryFactory, **{'name': 'United States of America'}
         )
@@ -22,6 +22,7 @@ class Seeder:
             UnitedKingdomsCountryFactory,
             **{'name': 'United Kingdom of Great Britain and Northern Ireland'}
         )
+        CountryFactory.create_batch(rows)
 
     @staticmethod
     def __create_country(

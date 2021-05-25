@@ -8,6 +8,8 @@ from sqlalchemy import UniqueConstraint
 from app.blueprints.base.models import BaseMixin
 from app.extensions import db
 
+ROLE_NAME_DELIMITER = '_'
+
 
 class RoleBase(BaseMixin, RoleMixin):
     pass
