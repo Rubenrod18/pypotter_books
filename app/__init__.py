@@ -10,6 +10,7 @@ import os
 import flask
 from flask import Flask
 
+from app import exceptions
 from app import extensions
 from app.blueprints import BLUEPRINTS
 from app.cli import cli
@@ -62,5 +63,6 @@ def create_app(env_config: str) -> Flask:
     cli.init_app(app)
     extensions.init_app(app)
     _register_blueprints(app)
+    exceptions.init_app(app)
 
     return app
