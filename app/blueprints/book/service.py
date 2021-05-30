@@ -14,5 +14,5 @@ class BookService(BaseService):
         serialized_data = self.book_serializer.load(kwargs)
         book = self.manager.create(**serialized_data)
         db.session.add(book)
-        db.session.commit()
+        db.session.flush()
         return book

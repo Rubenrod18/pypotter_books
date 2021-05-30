@@ -1,5 +1,5 @@
-from .models import BookPrice
 from app.blueprints.base import TimestampField
+from app.blueprints.book import BookPrice
 from app.extensions import ma
 
 

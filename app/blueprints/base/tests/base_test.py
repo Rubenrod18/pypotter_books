@@ -1,13 +1,9 @@
 import os
-import sys
 import unittest
-from random import randint
 
 from flask import Flask
 
 from .custom_flask_client import CustomFlaskClient
-from app.cli import SeederCli
-from app.extensions import db
 
 
 class BaseTest(unittest.TestCase):
@@ -16,19 +12,7 @@ class BaseTest(unittest.TestCase):
         self.client = self.__create_test_client(self.app)
         self.base_path = '/api'
         self.__database_name = self.__build_database_name()
-
-        with self.app.app_context():
-            self.__create_database()
-            self.session = db.session()
-
-            db.create_all()
-            seeder_cli = SeederCli()
-            seeder_cli.run_command()
-
-    def tearDown(self):
-        with self.app.app_context():
-            self.__drop_database()
-            db.session.remove()
+        self.__set_sqlalchemy_database_uri()
 
     @staticmethod
     def __create_app():
@@ -43,7 +27,7 @@ class BaseTest(unittest.TestCase):
         app.test_client_class = CustomFlaskClient
         return app.test_client()
 
-    def __config_database_uri(self) -> None:
+    def __set_sqlalchemy_database_uri(self) -> None:
         database_uri_lst = self.app.config['SQLALCHEMY_DATABASE_URI'].split(
             '/'
         )
@@ -54,19 +38,7 @@ class BaseTest(unittest.TestCase):
 
     def __build_database_name(self) -> str:
         dbname = self.app.config['SQLALCHEMY_DATABASE_URI'].split('/')[-1:][0]
-        return f'test_{dbname}_{randint(1, sys.maxsize)}'
-
-    def __create_database(self) -> None:
-        conn = db.engine.connect()
-        # Next line needs to be executed after previous line
-        self.__config_database_uri()
-        conn.execute('CREATE DATABASE %s;' % self.__database_name)
-        conn.close()
-
-    def __drop_database(self) -> None:
-        conn = db.engine.connect()
-        conn.execute('DROP DATABASE %s;' % self.__database_name)
-        conn.close()
+        return f'test_{dbname}'
 
     def build_auth_header(self, user_email: str = None):
         """Create an auth header from a given user that can be added to

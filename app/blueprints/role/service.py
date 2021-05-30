@@ -14,7 +14,7 @@ class RoleService(BaseService):
         serialized_data = self.serializer.load(kwargs)
         role = self.manager.create(**serialized_data)
         db.session.add(role)
-        db.session.commit()
+        db.session.flush()
         return role
 
     def find(self, role_id: int, *args):
@@ -24,11 +24,10 @@ class RoleService(BaseService):
     def save(self, role_id: int, **kwargs):
         serialized_data = self.serializer.load(kwargs)
         self.manager.save(role_id, **serialized_data)
-        db.session.commit()
         return self.manager.find(role_id)
 
     def delete(self, role_id: int):
         self.serializer.load({'id': role_id}, partial=True)
         role = self.manager.delete(role_id)
-        db.session.commit()
+        db.session.flush()
         return role

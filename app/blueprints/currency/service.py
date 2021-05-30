@@ -14,5 +14,5 @@ class CurrencyService(BaseService):
         serialized_data = self.serializer.load(kwargs)
         currency = self.manager.create(**serialized_data)
         db.session.add(currency)
-        db.session.commit()
+        db.session.flush()
         return currency

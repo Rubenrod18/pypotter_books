@@ -12,7 +12,7 @@ class BookPriceService(BaseService):
 
     def create(self, **kwargs):
         serialized_data = self.book_price_serializer.load(kwargs)
-        book = self.manager.create(**serialized_data)
-        db.session.add(book)
-        db.session.commit()
-        return book
+        book_price = self.manager.create(**serialized_data)
+        db.session.add(book_price)
+        db.session.flush()
+        return book_price

@@ -14,5 +14,5 @@ class CountryService(BaseService):
         serialized_data = self.country_serializer.load(kwargs)
         country = self.manager.create(**serialized_data)
         db.session.add(country)
-        db.session.commit()
+        db.session.flush()
         return country

@@ -43,16 +43,20 @@ class Genre(enum.Enum):
         return [getattr(_, attr) for _ in list(cls)]
 
     @classmethod
-    def find_by_value(cls, value):
+    def deserialization(cls, genre_value: str):
         found_name = None
         attrs = cls.to_list(False)
 
         for attr in attrs:
             genre = getattr(cls, attr)
-            if genre.value == value:
+            if genre.value == genre_value:
                 found_name = genre.name
                 break
         return found_name
+
+    @classmethod
+    def serialization(cls, user_genre: 'Genre'):
+        return user_genre.value
 
 
 class UserBase(BaseMixin, UserMixin):

@@ -77,3 +77,6 @@ class TestConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     TESTING = True
+
+    # Flask SQLAlchemy
+    # SQLALCHEMY_ECHO = True

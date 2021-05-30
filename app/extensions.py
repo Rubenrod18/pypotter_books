@@ -35,6 +35,11 @@ def init_app(app: Flask):
     api.init_app(app)
     _init_flask_security_too_app(app)
 
+    @app.teardown_request
+    def teardown_request_context(exception):
+        if not app.config['TESTING']:
+            db.session.commit()
+
 
 def _init_flask_security_too_app(flask_app: Flask):
     from app.blueprints.user.models import user_datastore

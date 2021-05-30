@@ -1,5 +1,6 @@
 import logging
 
+from flask_login import current_user
 from marshmallow import EXCLUDE
 
 from app.blueprints.base import BaseService
@@ -29,17 +30,16 @@ class UserService(BaseService):
             user = self.manager.get_last_record()
             fs_uniquifier = 1 if user is None else user.id + 1
 
-            # FIXME: comment next line when auth is enabled
-            # deserialized_data.update({'created_by': current_user.id,
             deserialized_data.update(
                 {
-                    'created_by': None,
+                    'created_by': current_user,
                     'roles': [role],
                     'fs_uniquifier': fs_uniquifier,
                 }
             )
             user = user_datastore.create_user(**deserialized_data)
-            db.session.commit()
+            db.session.flush()
+            db.session.refresh(user)
         except Exception as e:
             logger.debug(e)
             db.session.rollback()
@@ -64,17 +64,15 @@ class UserService(BaseService):
                 deserialized_data.pop('role_id')
 
             self.manager.save(user_id, **deserialized_data)
-            db.session.commit()
+            db.session.flush()
+            db.session.refresh(user)
         except Exception as e:
             logger.debug(e)
-            db.session.rollback()
             raise
 
-        db.session.refresh(user)
         return user
 
     def delete(self, user_id: int):
         self.user_serializer.load({'id': user_id}, partial=True)
         user = self.manager.delete(user_id)
-        db.session.commit()
         return user
