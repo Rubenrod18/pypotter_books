@@ -66,10 +66,9 @@ def exists_attr_in_module(module: str, attr: str) -> bool:
         attr = get_attr_from_module(module, attr)
         if attr:
             exists = True
-    except ImportError as e:
+    except (ImportError, AttributeError) as e:
         logger.warning(e)
-    except AttributeError as e:
-        logger.warning(e)
+        exists = False
 
     return exists
 
