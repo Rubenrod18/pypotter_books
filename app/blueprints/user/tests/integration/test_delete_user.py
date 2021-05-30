@@ -17,6 +17,6 @@ class TestDeleteUser(_UserBaseIntegrationTest):
             self.assertEqual(200, response.status_code)
             self.assertEqual(user_id, json_data.get('id'))
             self.assertIsNotNone(json_data.get('deleted_at'))
-            self.assertEqual(
+            self.assertGreaterEqual(
                 json_data.get('deleted_at'), json_data.get('updated_at')
             )

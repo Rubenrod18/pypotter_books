@@ -1,7 +1,7 @@
 from sqlalchemy import func
 
 from app.blueprints.base import BaseTest
-from app.blueprints.book_price import BookPrice
+from app.blueprints.book import BookPrice
 from app.blueprints.role import Role
 from app.blueprints.user import User
 from app.blueprints.user import UserRoles
