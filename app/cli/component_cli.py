@@ -1,5 +1,6 @@
 import os
 from abc import ABC
+from distutils.dir_util import copy_tree
 
 from app.cli._base_cli import _BaseCli
 from config import Config
@@ -7,47 +8,50 @@ from config import Config
 
 class ComponentCli(_BaseCli, ABC):
     @staticmethod
-    def __create_packages(component_name):
-        bp_directory = (
-            f'{Config.ROOT_DIRECTORY}/app/blueprints/{component_name}'
+    def __create_package(component_name: str):
+        serialized_name = (
+            component_name.replace('-', ' ').lower().replace(' ', '_')
         )
-        bp_test_directory = f'{bp_directory}/tests'
-        bp_test_integration_directory = f'{bp_test_directory}/integration'
-        directories = [
-            bp_directory,
-            bp_test_directory,
-            bp_test_integration_directory,
-        ]
-
-        for directory in directories:
-            os.mkdir(directory)
-
-        return directories
+        bp_package = (
+            f'{Config.ROOT_DIRECTORY}/app/blueprints/{serialized_name}'
+        )
+        os.mkdir(bp_package)
+        return component_name, bp_package
 
     @staticmethod
-    def __create_modules(bp_dirname, test_dirname, test_integration_dirname):
-        def build_comment(concept):
-            return f'#  Insert your {concept} here.'
+    def __create_modules(component_name: str, bp_package: str):
+        component_structure_template = (
+            f'{Config.ROOT_DIRECTORY}/app/cli/component_structure_template'
+        )
 
-        component_files = {
-            # blueprint
-            f'{bp_dirname}/__init__.py': '',
-            f'{bp_dirname}/blueprint.py': build_comment('endpoints'),
-            f'{bp_dirname}/manager.py': build_comment('database queries'),
-            f'{bp_dirname}/models.py': build_comment('models'),
-            f'{bp_dirname}/serializers.py': build_comment('serializers'),
-            f'{bp_dirname}/service.py': build_comment('service'),
-            f'{bp_dirname}/swagger.py': build_comment('swagger models'),
-            # tests
-            f'{test_dirname}/__init__.py': '',
-            f'{test_integration_dirname}/__init__.py': '',
-            f'{test_dirname}/factory.py': build_comment('factories'),
-            f'{test_dirname}/seeder.py': build_comment('seeder'),
-        }
+        pascal_case_component_name = (
+            component_name.replace('_', ' ')
+            .replace('-', ' ')
+            .title()
+            .replace(' ', '')
+        )
+        snake_case_component_name = (
+            component_name.replace('-', ' ').lower().replace(' ', '_')
+        )
 
-        for file, file_content in component_files.items():
-            with open(file, 'w') as fd:
-                fd.write(file_content)
+        copy_tree(component_structure_template, bp_package)
+
+        for root, dirs, files in os.walk(bp_package, topdown=True):
+            for name in files:
+                src = os.path.join(root, name)
+
+                with open(src, 'r') as fd:
+                    filedata = fd.read()
+
+                filedata = filedata.replace(
+                    'ComponentPascalCase', pascal_case_component_name
+                ).replace('component_snake_case', snake_case_component_name)
+
+                with open(src, 'w') as fd:
+                    fd.write(filedata)
+
+                pre, ext = os.path.splitext(src)
+                os.rename(src, pre + '.py')
 
     def run_command(self, component_name):
-        self.__create_modules(*self.__create_packages(component_name))
+        self.__create_modules(*self.__create_package(component_name))

@@ -1,0 +1,15 @@
+from app.extensions import ma
+
+from .models import ComponentPascalCase
+
+
+class ComponentPascalCaseSerializer(ma.SQLAlchemySchema):
+    class Meta:
+        model = ComponentPascalCase
+        ordered = True
+
+    # TODO: insert serializer fields
+
+
+component_snake_case_serializer = ComponentPascalCaseSerializer()
+component_snake_cases_serializer = ComponentPascalCaseSerializer(many=True)

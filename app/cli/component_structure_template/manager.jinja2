@@ -1,0 +1,8 @@
+from app.blueprints.base import BaseManager
+from .models import ComponentPascalCase
+
+
+class ComponentPascalCaseManager(BaseManager):
+    def __init__(self):
+        super(ComponentPascalCase, self).__init__()
+        self.model = ComponentPascalCase
