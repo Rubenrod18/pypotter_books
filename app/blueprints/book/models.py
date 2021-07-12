@@ -71,6 +71,11 @@ class BookStock(db.Model, BaseMixin):
 
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
+        UniqueConstraint(
+            'country_id',
+            'book_id',
+            name=BaseMixin.uq(__tablename__, 'book_id_country_id'),
+        ),
     )
 
 
