@@ -29,7 +29,7 @@ api = Api(
 def init_app(app: Flask):
     # Order matters: Initialize SQLAlchemy before Marshmallow
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app, db, compare_type=True)
     ma.init_app(app)
     mail.init_app(app)
     api.init_app(app)

@@ -1,7 +1,7 @@
 from sqlalchemy import Column
-from sqlalchemy import Float
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy import Numeric
 from sqlalchemy import PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
 
@@ -47,7 +47,9 @@ class ShoppingCartBook(db.Model, BaseMixin):
         ),
         nullable=False,
     )
-    discount = Column(Float, nullable=False)
+    discount = Column(
+        Numeric(precision=10, scale=2, asdecimal=False), nullable=False
+    )
 
     shopping_cart = relationship(ShoppingCart, backref='shopping_cart_books')
     book = relationship(Book, backref='shopping_cart_books')
