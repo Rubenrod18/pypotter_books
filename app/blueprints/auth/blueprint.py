@@ -9,7 +9,7 @@ from app.decorators import token_required
 from app.extensions import api as root_api
 
 blueprint = Blueprint('auth', __name__)
-api = root_api.namespace('auth', description='Authentication endpoints')
+api = root_api.namespace('auth', description='Authentication endpoints.')
 
 
 class AuthBaseResource(BaseResource):

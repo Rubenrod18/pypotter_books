@@ -10,7 +10,7 @@ from app.decorators import token_required
 from app.extensions import api as root_api
 
 blueprint = Blueprint('currencies', __name__)
-api = root_api.namespace('currencies')
+api = root_api.namespace('currencies', description='Currencies endpoints.')
 
 
 class _CurrencyBaseResource(BaseResource):
