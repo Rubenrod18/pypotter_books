@@ -6,6 +6,10 @@ from flask_restx import Api
 from flask_security import Security
 from flask_sqlalchemy import SQLAlchemy
 
+from app import __author__
+from app import __description__
+from app import __project__
+from app import __version__
 from config import Config
 
 db = SQLAlchemy()
@@ -13,16 +17,19 @@ migrate = Migrate()
 security = Security()
 mail = Mail()
 ma = Marshmallow()
-
-authorizations = {
-    'auth_token': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': Config.SECURITY_TOKEN_AUTHENTICATION_HEADER,
-    },
-}
 api = Api(
-    prefix='/api', title='Flask Api Alchemy', authorizations=authorizations
+    prefix='/api',
+    author=__author__,
+    version=__version__,
+    authorizations={
+        'auth_token': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': Config.SECURITY_TOKEN_AUTHENTICATION_HEADER,
+        },
+    },
+    title=__project__,
+    description=__description__,
 )
 
 

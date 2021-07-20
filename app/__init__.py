@@ -4,6 +4,15 @@ The app package loads application configuration and registers middleware,
 blueprints, database models, etc.
 
 """
+
+__project__ = 'PyPotter Books'
+__author__ = 'Rubén Rodríguez Ramírez'
+__version__ = '0.2.0'
+__description__ = (
+    'PyPotter Books is a small shopping books API where you can buy any '
+    'Harry Potter book, from chapter one to chapter five.'
+)
+
 import logging
 import os
 
