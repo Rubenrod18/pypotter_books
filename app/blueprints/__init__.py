@@ -22,6 +22,7 @@ def _get_blueprint_packages():
     dirs = os.listdir(path)
     dirs.remove(os.path.basename(__file__))
     dirs.remove('__pycache__')
+    dirs.sort()
     return dirs
 
 
