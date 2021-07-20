@@ -8,7 +8,7 @@ from app.extensions import api as root_api
 
 
 blueprint = Blueprint('component_snake_cases', __name__)
-api = root_api.namespace('component_snake_cases', description='Description message.')
+api = root_api.namespace('component_snake_cases', description='ComponentPascalCase endpoints.')
 
 
 class _BaseComponentPascalCaseResource(BaseResource):
@@ -16,9 +16,10 @@ class _BaseComponentPascalCaseResource(BaseResource):
 
 
 @api.route('')
-class NewResource(_BaseComponentPascalCaseResource):
+class NewComponentPascalCaseResource(_BaseComponentPascalCaseResource):
     @api.doc(security='auth_token')
     @api.marshal_with(component_snake_case_sw_model, envelope='data', code=201)
     @token_required
     def post(self) -> tuple:
+        # TODO: insert logic
         pass
