@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/Rubenrod18/flask_api_alchemy/compare/v0.2.0...v0.3.0) (2021-07-22)
+
+
+### Features
+
+* **book-price:** add book price calculation logic ([8026d93](https://github.com/Rubenrod18/flask_api_alchemy/commit/8026d93fbbb2fa23472adfec8e8cab91dfa2db05))
+* **book-prices:** add model, factory and seeder ([2d383fb](https://github.com/Rubenrod18/flask_api_alchemy/commit/2d383fbd71df9a5060b05ca4d377a8e745cb858f))
+* **cli:** add new component cli version ([2f2a12f](https://github.com/Rubenrod18/flask_api_alchemy/commit/2f2a12f885e8d7e1e6f5e5eababd80fddcc9b7e3))
+* **components:** add bill component ([0a8f9e5](https://github.com/Rubenrod18/flask_api_alchemy/commit/0a8f9e5f9a4db7d7b7343125b15b913327ab7246))
+* **components:** add book component ([93099e7](https://github.com/Rubenrod18/flask_api_alchemy/commit/93099e792386814f14b406fbeb04e31306e93884))
+* **components:** add book price component ([d196367](https://github.com/Rubenrod18/flask_api_alchemy/commit/d196367885b17db5db1e2accf5f033c5d66bf398))
+* **components:** add book stock component ([0288b25](https://github.com/Rubenrod18/flask_api_alchemy/commit/0288b2556d24d3be49ae8a887e4c02fde097a2b0))
+* **components:** add country component ([2e16572](https://github.com/Rubenrod18/flask_api_alchemy/commit/2e165720d9ae421e7f1209ee091bd02073c0db3c))
+* **components:** add currency component ([4ee9b80](https://github.com/Rubenrod18/flask_api_alchemy/commit/4ee9b802fb7903261899cade871df55df87e5322))
+* **components:** add shopping cart book component ([8eeb4c0](https://github.com/Rubenrod18/flask_api_alchemy/commit/8eeb4c059ec05f417519e4a2a527b195453938f3))
+* **components:** add shopping cart component ([5e98ea0](https://github.com/Rubenrod18/flask_api_alchemy/commit/5e98ea0ea740c241a8bbdd20dd5a889144438464))
+* **db:** add database migration for allowing image column to be nullable ([cd70291](https://github.com/Rubenrod18/flask_api_alchemy/commit/cd702912a384ff278e6a18c12e435b24afbb88bf))
+* **db:** add potter books models ([bf5663b](https://github.com/Rubenrod18/flask_api_alchemy/commit/bf5663b681357c7df657d3dfbcad97058c1151b4))
+* **exceptions:** add exceptions module for managing application exceptions ([36b22d4](https://github.com/Rubenrod18/flask_api_alchemy/commit/36b22d4fb6e3a62f1b080ca1796ef42bae0ec3e2))
+* **seeders:** add attribute for sorting by priority of execution ([7e73609](https://github.com/Rubenrod18/flask_api_alchemy/commit/7e73609b9a512c72b9b429704858f43068b04a4c))
+
+
+### Bug Fixes
+
+* **cli:** correct component CLI ([9d92767](https://github.com/Rubenrod18/flask_api_alchemy/commit/9d927677c510413e22faa850a8e799c910142de4))
+
+
+### Build System
+
+* **services:** remove app.services directory ([e6ecd73](https://github.com/Rubenrod18/flask_api_alchemy/commit/e6ecd738ac7b201aae8f231d40c89b16f3838835))
+* **services:** the files are inside to components ([aa15e33](https://github.com/Rubenrod18/flask_api_alchemy/commit/aa15e33ecd3e81a542e62e4917339a865bc8a6a2))
+
 ## [0.2.0](https://github.com/Rubenrod18/flask_api_alchemy/compare/v0.1.0...v0.2.0) (2021-04-18)
 
 
