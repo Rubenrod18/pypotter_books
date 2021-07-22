@@ -1,5 +1,6 @@
 import factory
 
+from ...models import ROLE_NAME_DELIMITER
 from ._base_integration_test import _RoleBaseIntegrationTest
 from app.blueprints.role import RoleFactory
 from app.utils import ignore_keys
@@ -24,7 +25,8 @@ class TestSaveRole(_RoleBaseIntegrationTest):
             self.assertEqual(201, response.status_code)
             self.assertEqual(data['label'], json_data.get('label'))
             self.assertEqual(
-                data['label'].lower().replace(' ', '-'), json_data.get('name')
+                data['label'].lower().replace(' ', ROLE_NAME_DELIMITER),
+                json_data.get('name'),
             )
             self.assertTrue(json_data.get('created_at'))
             self.assertEqual(

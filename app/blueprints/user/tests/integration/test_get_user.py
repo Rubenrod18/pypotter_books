@@ -24,10 +24,10 @@ class TestGetUser(_UserBaseIntegrationTest):
             )
             self.assertEqual(user.genre.value, json_data.get('genre'))
             self.assertEqual(
-                user.created_at.strftime('%Y-%m-%dT%H:%M:%S'),
+                user.created_at.strftime('%Y-%m-%d %H:%M:%S'),
                 json_data.get('created_at'),
             )
-            self.assertGreater(
+            self.assertGreaterEqual(
                 json_data.get('updated_at'), json_data.get('created_at')
             )
             self.assertIsNone(json_data.get('deleted_at'))

@@ -7,6 +7,7 @@ from werkzeug.exceptions import NotFound
 
 from .manager import Role
 from .manager import RoleManager
+from .models import ROLE_NAME_DELIMITER
 from app.blueprints.base import TimestampField
 from app.extensions import ma
 
@@ -43,7 +44,9 @@ class RoleSerializer(ma.SQLAlchemySchema):
     @post_load
     def sluglify_name(self, item, many, **kwargs):
         if item.get('label'):
-            item['name'] = item['label'].lower().strip().replace(' ', '-')
+            item['name'] = (
+                item['label'].lower().strip().replace(' ', ROLE_NAME_DELIMITER)
+            )
         return item
 
     @validates('name')

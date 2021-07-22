@@ -8,12 +8,15 @@ from sqlalchemy import Date
 from sqlalchemy import Enum
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy import PrimaryKeyConstraint
 from sqlalchemy import String
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 
 from app.blueprints.base.models import BaseMixin
-from app.blueprints.role.models import Role as RoleModel
+from app.blueprints.country import Country
+from app.blueprints.role.models import Role
 from app.extensions import db
 
 
@@ -40,19 +43,27 @@ class Genre(enum.Enum):
         return [getattr(_, attr) for _ in list(cls)]
 
     @classmethod
-    def find_by_value(cls, value):
+    def deserialization(cls, genre_value: str):
         found_name = None
         attrs = cls.to_list(False)
 
         for attr in attrs:
             genre = getattr(cls, attr)
-            if genre.value == value:
+            if genre.value == genre_value:
                 found_name = genre.name
                 break
         return found_name
 
+    @classmethod
+    def serialization(cls, user_genre: 'Genre'):
+        return user_genre.value
 
-class User(db.Model, BaseMixin, UserMixin):
+
+class UserBase(BaseMixin, UserMixin):
+    pass
+
+
+class User(db.Model, UserBase):
     """User database model.
 
     References
@@ -62,38 +73,71 @@ class User(db.Model, BaseMixin, UserMixin):
 
     """
 
-    __tablename__ = 'users'
+    __tablename__ = BaseMixin.tbl('users')
 
-    # TODO: rename created_it to created_by
-    created_id = Column(Integer, ForeignKey('users.id'), nullable=True)
-    created_by = relationship('User', remote_side='User.id')
-
-    roles = relationship(
-        'Role',
-        secondary='user_roles',
-        backref=backref('users', lazy='dynamic'),
+    created_id = Column(
+        Integer,
+        ForeignKey(
+            f'{__tablename__}.id',
+            name=BaseMixin.fk(__tablename__, __tablename__),
+        ),
+        nullable=True,
     )
-
-    fs_uniquifier = Column(String(255), unique=True, nullable=False)
+    country_id = Column(
+        Integer,
+        ForeignKey(
+            Country.id, name=BaseMixin.fk(__tablename__, Country.__tablename__)
+        ),
+        nullable=True,
+    )
+    fs_uniquifier = Column(String(255), nullable=False)
 
     name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=False)
-    email = Column(String(255), unique=True, nullable=False)
+    email = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)
     genre = Column(Enum(Genre), nullable=False)
     birth_date = Column(Date, nullable=False)
     active = Column(Boolean, server_default='1', nullable=False)
 
+    created_by = relationship('User', remote_side='User.id')
+    roles = relationship(
+        'Role',
+        secondary='tbl_user_roles',
+        backref=backref('users', lazy='dynamic'),
+    )
+
+    __table_args__ = (
+        PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
+        UniqueConstraint('email', name=BaseMixin.uq(__tablename__, 'email')),
+        UniqueConstraint(
+            'fs_uniquifier', name=BaseMixin.uq(__tablename__, 'fs_uniquifier')
+        ),
+    )
+
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
 
 
-class UserRoles(db.Model):
-    __tablename__ = 'user_roles'
+class UserRoles(db.Model, BaseMixin):
+    __tablename__ = BaseMixin.tbl('user_roles')
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column('user_id', Integer, ForeignKey('users.id'))
-    role_id = Column('role_id', Integer, ForeignKey('roles.id'))
+    user_id = Column(
+        Integer,
+        ForeignKey(
+            User.id, name=BaseMixin.fk(__tablename__, User.__tablename__)
+        ),
+    )
+    role_id = Column(
+        Integer,
+        ForeignKey(
+            Role.id, name=BaseMixin.fk(__tablename__, Role.__tablename__)
+        ),
+    )
+
+    __table_args__ = (
+        PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
+    )
 
 
-user_datastore = SQLAlchemyUserDatastore(db, User, RoleModel)
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)

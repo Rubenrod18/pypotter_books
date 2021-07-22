@@ -4,6 +4,7 @@ from flask_security import roles_required
 
 from .serializers import role_serializer
 from .serializers import roles_serializer
+from .service import RoleService
 from .swagger import role_input_sw_model
 from .swagger import role_search_output_sw_model
 from .swagger import role_sw_model
@@ -11,7 +12,6 @@ from app.blueprints.base import BaseResource
 from app.blueprints.base import search_input_sw_model
 from app.decorators import token_required
 from app.extensions import api as root_api
-from app.services.role_service import RoleService
 
 _API_DESCRIPTION = 'Users with role admin can manage these endpoints.'
 blueprint = Blueprint('roles', __name__)

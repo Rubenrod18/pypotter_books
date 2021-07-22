@@ -1,3 +1,4 @@
+import collections
 from abc import ABC
 
 from flask import current_app
@@ -11,15 +12,16 @@ from app.utils import get_attr_from_module
 
 class SeederCli(_BaseCli, ABC):
     @staticmethod
-    def __get_seeder_instances(modules: list) -> list:
+    def __get_seeder_instances(modules: list) -> dict:
         """Get Seeder instances."""
-        seeders = []
+        seeders = {}
         for item in modules:
             if exists_attr_in_module(item, 'Seeder'):
-                seeders.append(get_attr_from_module(item, 'Seeder'))
+                seeder_instance = get_attr_from_module(item, 'Seeder')
+                seeders[seeder_instance.priority] = seeder_instance
         return seeders
 
-    def __get_seeders(self) -> list:
+    def __get_seeders(self) -> dict:
         """Get Blueprints via dynamic way."""
         seeder_modules = [
             f'{item}.tests.seeder' for item in get_blueprint_modules()
@@ -29,7 +31,9 @@ class SeederCli(_BaseCli, ABC):
     def run_command(self):
         session = db.Session()
         try:
-            for seed in self.__get_seeders():
+            seeders = self.__get_seeders()
+            ordered_seeders = collections.OrderedDict(sorted(seeders.items()))
+            for seed in ordered_seeders.values():
                 seed()
             session.commit()
         except Exception:

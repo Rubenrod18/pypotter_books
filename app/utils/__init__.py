@@ -1,6 +1,9 @@
 """Collection of functions and classes which make common patterns
 shorter and easier."""
 import importlib
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_attr_from_module(module: str, attr: str) -> any:
@@ -63,10 +66,9 @@ def exists_attr_in_module(module: str, attr: str) -> bool:
         attr = get_attr_from_module(module, attr)
         if attr:
             exists = True
-    except ImportError:
-        pass
-    except AttributeError:
-        pass
+    except (ImportError, AttributeError) as e:
+        logger.warning(e)
+        exists = False
 
     return exists
 

@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask import request
 from flask_restx import Resource
 
 from app.extensions import api as root_api
@@ -8,7 +9,9 @@ api = root_api.namespace('', description='Base endpoints')
 
 
 class BaseResource(Resource):
-    pass
+    @staticmethod
+    def request_payload():
+        return request.get_json() or {}
 
 
 @api.route('/welcome')

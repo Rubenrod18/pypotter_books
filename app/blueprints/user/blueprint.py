@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import request
 from flask_security import roles_accepted
 
+from .service import UserService
 from app.blueprints.base import BaseResource
 from app.blueprints.user import user_input_sw_model
 from app.blueprints.user import user_search_output_sw_model
@@ -10,7 +11,6 @@ from app.blueprints.user import user_sw_model
 from app.blueprints.user import users_serializer
 from app.decorators import token_required
 from app.extensions import api as root_api
-from app.services import UserService
 
 _API_DESCRIPTION = (
     'Users with role admin or team_leader can manage ' 'these endpoints.'
@@ -43,10 +43,7 @@ class NewUserResource(UserBaseResource):
     @roles_accepted('admin')
     def post(self) -> tuple:
         user = self.user_service.create(request.get_json())
-        user_data = self.user_serializer.dump(user)
-        # TODO: pending to define
-        # self.task_service.send_create_user_email(**user_data)
-        return user_data, 201
+        return self.user_serializer.dump(user), 201
 
 
 @api.route('/<int:user_id>')

@@ -1,0 +1,13 @@
+import factory
+
+from app.extensions import db
+from ..models import ComponentPascalCase
+
+
+class ComponentPascalCaseFactory(factory.alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        model = ComponentPascalCase
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = 'commit'
+
+    # TODO: insert factory fields

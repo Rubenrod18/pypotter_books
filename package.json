@@ -1,5 +1,5 @@
 {
-  "name": "flask_api_alchemy",
+  "name": "pypotter-books",
   "version": "0.2.0",
   "scripts": {
     "first-release": "npm run release -- --first-release",

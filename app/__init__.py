@@ -4,12 +4,22 @@ The app package loads application configuration and registers middleware,
 blueprints, database models, etc.
 
 """
+
+__project__ = 'PyPotter Books'
+__author__ = 'Rubén Rodríguez Ramírez'
+__version__ = '0.2.0'
+__description__ = (
+    'PyPotter Books is a small shopping books API where you can buy any '
+    'Harry Potter book, from chapter one to chapter five.'
+)
+
 import logging
 import os
 
 import flask
 from flask import Flask
 
+from app import exceptions
 from app import extensions
 from app.blueprints import BLUEPRINTS
 from app.cli import cli
@@ -62,5 +72,6 @@ def create_app(env_config: str) -> Flask:
     cli.init_app(app)
     extensions.init_app(app)
     _register_blueprints(app)
+    exceptions.init_app(app)
 
     return app

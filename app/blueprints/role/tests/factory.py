@@ -3,6 +3,7 @@ import unicodedata
 import factory
 
 from ..models import Role
+from ..models import ROLE_NAME_DELIMITER
 from app.extensions import db
 
 
@@ -28,4 +29,4 @@ class RoleFactory(factory.alchemy.SQLAlchemyModelFactory):
             .encode('ascii', 'ignore')
             .decode('utf8')
         )
-        return clean_name.capitalize().replace('_', ' ')
+        return clean_name.capitalize().replace(ROLE_NAME_DELIMITER, ' ')

@@ -2,6 +2,7 @@ import logging
 
 from flask_security import hash_password
 from marshmallow import fields
+from marshmallow import post_dump
 from marshmallow import post_load
 from marshmallow import validate
 from marshmallow import validates
@@ -56,9 +57,9 @@ class UserSerializer(ma.SQLAlchemySchema):
     role_id = _VerifyRoleId(load_only=True)
 
     # Output fields
-    created_at = ma.auto_field(dump_only=True)
-    updated_at = ma.auto_field(dump_only=True)
-    deleted_at = ma.auto_field(dump_only=True)
+    created_at = ma.auto_field(dump_only=True, format='%Y-%m-%d %H:%M:%S')
+    updated_at = ma.auto_field(dump_only=True, format='%Y-%m-%d %H:%M:%S')
+    deleted_at = ma.auto_field(dump_only=True, format='%Y-%m-%d %H:%M:%S')
     roles = fields.List(
         fields.Nested(RoleSerializer, only=('name', 'label')), dump_only=True
     )
@@ -82,12 +83,18 @@ class UserSerializer(ma.SQLAlchemySchema):
             raise BadRequest('User email already created')
 
     @post_load
-    def postprocess(self, data, **kwargs):
+    def post_load_process(self, data, **kwargs):
         if 'password' in data:
             data['password'] = hash_password(data['password'])
 
         if 'genre' in data:
-            data['genre'] = Genre.find_by_value(data['genre'])
+            data['genre'] = Genre.deserialization(data['genre'])
+        return data
+
+    @post_dump
+    def post_dump_process(self, data, **kwargs):
+        if 'genre' in data:
+            data['genre'] = Genre.serialization(data['genre'])
         return data
 
 

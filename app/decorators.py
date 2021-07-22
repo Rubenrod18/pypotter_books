@@ -40,23 +40,16 @@ def token_required(fnc):
 def seed_actions(fnc):
     @functools.wraps(fnc)
     def message(*args, **kwargs):
-        is_test_env = current_app.config['TESTING'] is True
         seeder = args[0]
 
-        if not is_test_env:
-            print(' Seeding: %s' % seeder.name)
+        print(' Seeding: %s' % seeder.name)
         exec_time = 0
         try:
             start = time.time()
             res = fnc(*args, **kwargs)
             exec_time = round((time.time() - start), 2)
         finally:
-            if not is_test_env:
-                print(
-                    ' Seeded:  {} ( {} seconds )'.format(
-                        seeder.name, exec_time
-                    )
-                )
+            print(' Seeded:  {} ( {} seconds )'.format(seeder.name, exec_time))
         return res
 
     return message
