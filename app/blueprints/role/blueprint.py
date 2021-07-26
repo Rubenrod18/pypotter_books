@@ -1,5 +1,4 @@
 from flask import Blueprint
-from flask import request
 from flask_security import roles_required
 
 from .serializers import role_serializer
@@ -37,7 +36,7 @@ class NewRoleResource(RoleBaseResource):
     @token_required
     @roles_required('admin')
     def post(self) -> tuple:
-        role = self.role_service.create(**request.get_json())
+        role = self.role_service.create(**self.request_payload())
         return role_serializer.dump(role), 201
 
 
@@ -72,7 +71,7 @@ class RoleResource(RoleBaseResource):
     @token_required
     @roles_required('admin')
     def put(self, role_id: int) -> tuple:
-        role = self.role_service.save(role_id, **request.get_json())
+        role = self.role_service.save(role_id, **self.request_payload())
         return role_serializer.dump(role), 200
 
     @api.doc(
@@ -107,8 +106,7 @@ class RolesSearchResource(RoleBaseResource):
     @token_required
     @roles_required('admin')
     def post(self) -> tuple:
-        payload = request.get_json() or {}
-        role_data = self.role_service.get(**payload)
+        role_data = self.role_service.get(**self.request_payload())
         return {
             'data': roles_serializer.dump(role_data['query'].items),
             'records_total': role_data['records_total'],

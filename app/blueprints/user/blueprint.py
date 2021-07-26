@@ -1,5 +1,4 @@
 from flask import Blueprint
-from flask import request
 from flask_security import roles_accepted
 
 from .service import UserService
@@ -13,7 +12,7 @@ from app.decorators import token_required
 from app.extensions import api as root_api
 
 _API_DESCRIPTION = (
-    'Users with role admin or team_leader can manage ' 'these endpoints.'
+    'Users with role admin or team_leader can manage these endpoints.'
 )
 blueprint = Blueprint('users', __name__)
 api = root_api.namespace('users', description=_API_DESCRIPTION)
@@ -42,7 +41,7 @@ class NewUserResource(UserBaseResource):
     @token_required
     @roles_accepted('admin')
     def post(self) -> tuple:
-        user = self.user_service.create(request.get_json())
+        user = self.user_service.create(self.request_payload())
         return self.user_serializer.dump(user), 201
 
 
@@ -77,7 +76,7 @@ class UserResource(UserBaseResource):
     @token_required
     @roles_accepted('admin')
     def put(self, user_id: int) -> tuple:
-        user = self.user_service.save(user_id, **request.get_json())
+        user = self.user_service.save(user_id, **self.request_payload())
         return self.user_serializer.dump(user), 200
 
     @api.doc(
@@ -114,11 +113,9 @@ class UsersSearchResource(UserBaseResource):
     @token_required
     @roles_accepted('admin')
     def post(self) -> tuple:
-        payload = request.get_json() or {}
-        user_data = self.user_service.get(**payload)
-        user_data_lst = list(user_data['query'])
+        user_data = self.user_service.get(**self.request_payload())
         return {
-            'data': self.users_serializer.dump(user_data_lst),
+            'data': self.users_serializer.dump(user_data['query'].items),
             'records_total': user_data['records_total'],
             'records_filtered': user_data['records_filtered'],
         }, 200

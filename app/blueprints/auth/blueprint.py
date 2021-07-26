@@ -1,5 +1,4 @@
 from flask import Blueprint
-from flask import request
 
 from .service import AuthService
 from .swagger import auth_login_sw_model
@@ -29,7 +28,7 @@ class AuthUserLoginResource(AuthBaseResource):
     @api.expect(auth_login_sw_model)
     @api.marshal_with(auth_token_sw_model)
     def post(self) -> tuple:
-        token = self.auth_service.login_user(**request.get_json())
+        token = self.auth_service.login_user(**self.request_payload())
         return {'token': f'Bearer {token}'}, 200
 
 
