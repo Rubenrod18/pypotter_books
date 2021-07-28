@@ -1,22 +1,21 @@
 import factory
+from sqlalchemy import func
 
+from app.blueprints.base import BaseFactory
 from app.blueprints.shopping_cart import ShoppingCart
 from app.blueprints.user import User
-from app.extensions import db
 
 
-class ShoppingCartFactory(factory.alchemy.SQLAlchemyModelFactory):
+class ShoppingCartFactory(BaseFactory):
     class Meta:
         model = ShoppingCart
-        sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     @factory.lazy_attribute
     def user_id(self):
         rand_user = (
             User.query.with_entities(User.id)
             .filter_by(deleted_at=None)
-            .order_by(db.func.random())
+            .order_by(func.random())
             .first()
         )
         return rand_user.id
@@ -29,7 +28,7 @@ class UserWithShoppingCartFactory(ShoppingCartFactory):
             User.query.with_entities(User.id)
             .outerjoin(ShoppingCart)
             .filter_by(deleted_at=None)
-            .order_by(db.func.random())
+            .order_by(func.random())
             .first()
         )
         return rand_user.id
@@ -44,7 +43,7 @@ class UserWithoutShoppingCartFactory(ShoppingCartFactory):
             User.query.filter(
                 User.deleted_at.is_(None), ~User.id.in_(subquery)
             )
-            .order_by(db.func.random())
+            .order_by(func.random())
             .first()
         )
 

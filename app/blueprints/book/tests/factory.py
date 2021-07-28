@@ -4,8 +4,8 @@ import random
 
 import factory
 
+from app.blueprints.base import BaseFactory
 from app.blueprints.book import Book
-from app.extensions import db
 
 _CURRENT_PATH = '%s/../' % os.path.dirname(os.path.abspath(__file__))
 
@@ -16,11 +16,9 @@ def _get_base64_image(book_path: str = None):
     return base64_image
 
 
-class BookFactory(factory.alchemy.SQLAlchemyModelFactory):
+class BookFactory(BaseFactory):
     class Meta:
         model = Book
-        sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     # Normal fields
     title = factory.Faker('sentence')

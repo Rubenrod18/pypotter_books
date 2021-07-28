@@ -1,17 +1,15 @@
 import factory
 from sqlalchemy import func
 
+from app.blueprints.base import BaseFactory
 from app.blueprints.book import Book
 from app.blueprints.shopping_cart import ShoppingCart
 from app.blueprints.shopping_cart import ShoppingCartBook
-from app.extensions import db
 
 
-class ShoppingCartBookFactory(factory.alchemy.SQLAlchemyModelFactory):
+class ShoppingCartBookFactory(BaseFactory):
     class Meta:
         model = ShoppingCartBook
-        sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     discount = factory.Faker(
         'pyfloat', right_digits=2, positive=True, max_value=10.0

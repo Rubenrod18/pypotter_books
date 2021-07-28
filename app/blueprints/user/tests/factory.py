@@ -9,10 +9,10 @@ from faker.providers import date_time
 from faker.providers import person
 from sqlalchemy import func
 
+from app.blueprints.base import BaseFactory
 from app.blueprints.role import Role
 from app.blueprints.user import User
 from app.blueprints.user import UserManager
-from app.extensions import db
 from app.helpers import SecurityHelper
 
 _user_manager = UserManager()
@@ -23,11 +23,9 @@ fake.add_provider(person)
 fake.add_provider(date_time)
 
 
-class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
+class UserFactory(BaseFactory):
     class Meta:
         model = User
-        sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     name = factory.Faker('name')
     last_name = factory.Faker('last_name')

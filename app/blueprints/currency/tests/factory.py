@@ -3,16 +3,12 @@ from random import randint
 import factory
 
 from ..models import Currency
-from app.extensions import db
+from app.blueprints.base import BaseFactory
 
 
-class CurrencyFactory(factory.alchemy.SQLAlchemyModelFactory):
+class CurrencyFactory(BaseFactory):
     class Meta:
         model = Currency
-        # Use the not-so-global scoped_session
-        # Warning: DO NOT USE common.Session()!
-        sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     code = factory.Faker('currency_code')
     decimals = 2

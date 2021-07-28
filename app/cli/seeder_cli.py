@@ -4,8 +4,8 @@ from abc import ABC
 from flask import current_app
 
 from app.blueprints import get_blueprint_modules
+from app.blueprints.base import BaseFactory
 from app.cli._base_cli import _BaseCli
-from app.extensions import db
 from app.utils import exists_attr_in_module
 from app.utils import get_attr_from_module
 
@@ -29,7 +29,7 @@ class SeederCli(_BaseCli, ABC):
         return self.__get_seeder_instances(seeder_modules)
 
     def run_command(self):
-        session = db.Session()
+        session = BaseFactory.get_db_session()
         try:
             seeders = self.__get_seeders()
             ordered_seeders = collections.OrderedDict(sorted(seeders.items()))

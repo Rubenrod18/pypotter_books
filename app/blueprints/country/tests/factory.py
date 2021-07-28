@@ -1,19 +1,17 @@
 import factory
 from sqlalchemy import func
 
+from app.blueprints.base import BaseFactory
 from app.blueprints.country import Country
 from app.blueprints.currency import Currency
 from app.blueprints.currency.tests.factory import BritishPoundCurrencyFactory
 from app.blueprints.currency.tests.factory import DollarCurrencyFactory
 from app.blueprints.currency.tests.factory import EuroCurrencyFactory
-from app.extensions import db
 
 
-class CountryFactory(factory.alchemy.SQLAlchemyModelFactory):
+class CountryFactory(BaseFactory):
     class Meta:
         model = Country
-        sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     # Normal fields
     name = factory.Faker('country')

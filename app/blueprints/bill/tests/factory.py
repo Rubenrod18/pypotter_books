@@ -1,17 +1,15 @@
 import factory
 from sqlalchemy import func
 
+from app.blueprints.base import BaseFactory
 from app.blueprints.bill import Bill
 from app.blueprints.currency import Currency
 from app.blueprints.shopping_cart import ShoppingCart
-from app.extensions import db
 
 
-class BillFactory(factory.alchemy.SQLAlchemyModelFactory):
+class BillFactory(BaseFactory):
     class Meta:
         model = Bill
-        sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     @factory.lazy_attribute
     def currency_id(self):
