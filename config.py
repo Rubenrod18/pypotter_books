@@ -10,21 +10,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def _build_test_sqlalchemy_database_uri(config: 'Config') -> str:
-    database_uri_lst = config.SQLALCHEMY_DATABASE_URI.split('/')
-    database_uri_lst[1] = '//'
-    tmp = ''.join(database_uri_lst[0:-1])
-
-    dbname = _build_database_name(config)
-    test_db_uri = f'{tmp}/{dbname}'
-    return test_db_uri
-
-
-def _build_database_name(config: 'Config') -> str:
-    dbname = config.SQLALCHEMY_DATABASE_URI.split('/')[-1:][0]
-    return f'test_{dbname}'
-
-
 class Config:
     """Default configuration options."""
 
@@ -94,4 +79,4 @@ class TestConfig(Config):
     TESTING = True
 
     # Flask SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = _build_test_sqlalchemy_database_uri(Config)
+    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_SQLALCHEMY_DATABASE_URI')

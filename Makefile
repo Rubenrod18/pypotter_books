@@ -1,8 +1,10 @@
 .PHONY: run component shell migrate migrate-rollback linter coverage coverage-html test test-parallel
 VENV := venv
+FLASK_CONFIG := config.ProdConfig
+
 
 help:
-	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make COMMAND\033[36m\033[0m\n\n  A general utility script.\n\n  Provides commands to run the application, database migrations, test, etc.\n  Next command start up the application:\n\n    \44 flask run\n\nCommands:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-14s\033[0m \t%s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make COMMAND\033[36m\033[0m\n\n  A general utility script.\n\n  Provides commands to run the application, database migrations, tests, etc.\n  Next command start up the application:\n\n    \44 make run\n\nCommands:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-14s\033[0m \t%s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 run:  ## Run web server
 	$(VENV)/bin/python3 manage.py runserver
@@ -14,13 +16,16 @@ shell:  ## Shell context for an interactive shell for this application
 	$(VENV)/bin/flask shell
 
 migrate:  ## Upgrade to a later database migration
-	$(VENV)/bin/flask db upgrade
+	FLASK_CONFIG=$(FLASK_CONFIG) $(VENV)/bin/flask db upgrade
 
 migrate-rollback:  ## Revert to a previous database migration
-	$(VENV)/bin/flask db downgrade
+	FLASK_CONFIG=$(FLASK_CONFIG) $(VENV)/bin/flask db downgrade
+
+seed:  ## Fill database with fake data
+	FLASK_CONFIG=$(FLASK_CONFIG) $(VENV)/bin/flask seed
 
 linter:  ## Analyzes code and detects various errors
-	pre-commit run flake8 --all-files
+	$(VENV)/bin/pre-commit run flake8 --all-files
 
 coverage: ## Report coverage statistics on modules
 	$(VENV)/bin/coverage report -m
