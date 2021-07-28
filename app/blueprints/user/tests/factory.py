@@ -7,15 +7,15 @@ import factory
 from faker import Faker
 from faker.providers import date_time
 from faker.providers import person
-from flask_security import hash_password
 from sqlalchemy import func
 
-from .. import UserManager
-from ..models import User
 from app.blueprints.role import Role
+from app.blueprints.user import User
+from app.blueprints.user import UserManager
 from app.extensions import db
+from app.helpers import SecurityHelper
 
-user_manager = UserManager()
+_user_manager = UserManager()
 
 # TODO: move to common.py
 fake = Faker()
@@ -41,7 +41,7 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     @factory.lazy_attribute
     def password(self):
-        return hash_password(os.getenv('TEST_USER_PASSWORD'))
+        return SecurityHelper.ensure_password(os.getenv('TEST_USER_PASSWORD'))
 
     @factory.lazy_attribute
     def created_id(self):
@@ -57,7 +57,7 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     @factory.lazy_attribute
     def fs_uniquifier(self):
-        user = user_manager.get_last_record()
+        user = _user_manager.get_last_record()
         return 1 if user is None else user.id + 1
 
     @factory.lazy_attribute

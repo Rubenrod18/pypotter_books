@@ -11,3 +11,12 @@ class TestLogoutUser(_AuthBaseIntegrationTest):
                 f'{self.base_path}/logout', json={}, headers=auth_header
             )
             self.assertEqual(204, response.status_code)
+
+    def test_is_logout_ko_user_is_not_logged_unauthorized_response(self):
+        with self.app.app_context():
+            response = self.client.post(f'{self.base_path}/logout', json={})
+
+            self.assertEqual(401, response.status_code)
+            self.assertDictEqual(
+                {'message': 'User is not authorized'}, response.get_json()
+            )
