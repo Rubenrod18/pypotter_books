@@ -1,6 +1,5 @@
 import logging
 
-from flask_security import hash_password
 from marshmallow import fields
 from marshmallow import post_dump
 from marshmallow import post_load
@@ -15,6 +14,7 @@ from .models import Genre
 from app.blueprints.role import RoleManager
 from app.blueprints.role.serializers import RoleSerializer
 from app.extensions import ma
+from app.helpers import SecurityHelper
 from config import Config
 
 logger = logging.getLogger(__name__)
@@ -85,7 +85,7 @@ class UserSerializer(ma.SQLAlchemySchema):
     @post_load
     def post_load_process(self, data, **kwargs):
         if 'password' in data:
-            data['password'] = hash_password(data['password'])
+            data['password'] = SecurityHelper.ensure_password(data['password'])
 
         if 'genre' in data:
             data['genre'] = Genre.deserialization(data['genre'])
