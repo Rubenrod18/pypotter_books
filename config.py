@@ -25,7 +25,7 @@ class Config:
     SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT')
     SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
     SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Authorization'
-    SECURITY_TOKEN_MAX_AGE = None
+    SECURITY_LOGIN_WITHIN = '1 days'
     SECURITY_PASSWORD_LENGTH_MIN = 8
 
     # Flask-Mail
@@ -77,6 +77,9 @@ class TestConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     TESTING = True
+
+    # Flask-Security-Too
+    SECURITY_LOGIN_WITHIN = '60 seconds'
 
     # Flask SQLAlchemy
     SQLALCHEMY_DATABASE_URI = os.getenv('TEST_SQLALCHEMY_DATABASE_URI')
