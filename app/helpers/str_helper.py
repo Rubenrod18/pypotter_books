@@ -1,7 +1,10 @@
+from typing import Union
+
+
 class StrHelper:
     @staticmethod
-    def total_count(value, lst: list) -> int:
-        """Get total count from a value searched in a list.
+    def total_count(value: Union[str, int], lst: list) -> int:
+        """Get total count given a value in a list.
 
         Parameters
         ----------
@@ -11,15 +14,15 @@ class StrHelper:
         lst : list
             A list to check if the value is in it.
 
-        Return
-        ------
+        Returns
+        -------
         lst : list
-            Duplicated values.
+            Posible values.
 
         Example
         -------
-        >>> StrHelper.total_count([1, 1, 1, 2, 2, 3, 4])
-        [1, 2]
+        >>> StrHelper.total_count(1, [1, 1, 1, 2, 2, 3, 4])
+        3
 
         """
         total = 0

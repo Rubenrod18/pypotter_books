@@ -1,8 +1,8 @@
 import math
 from collections import Counter
 
-from app.utils.list_helper import ListHelper
-from app.utils.str_helper import StrHelper
+from app.helpers import ListHelper
+from app.helpers import StrHelper
 
 
 class BookPriceService:

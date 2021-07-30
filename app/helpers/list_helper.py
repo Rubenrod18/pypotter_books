@@ -11,8 +11,8 @@ class ListHelper:
         lst : list
             TODO: pending to define
 
-        Return
-        ------
+        Returns
+        -------
         lst : list
             Duplicated values.
 
