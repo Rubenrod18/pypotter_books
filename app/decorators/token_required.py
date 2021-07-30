@@ -7,7 +7,6 @@ from werkzeug.exceptions import Forbidden
 from werkzeug.exceptions import Unauthorized
 
 from app.helpers import SecurityHelper
-from app.utils.constants import TOKEN_REGEX
 
 
 def token_required(fnc):
@@ -15,7 +14,7 @@ def token_required(fnc):
     def decorator(*args, **kwargs):
         key = current_app.config.get('SECURITY_TOKEN_AUTHENTICATION_HEADER')
         token = request.headers.get(key, '')
-        match_data = re.match(TOKEN_REGEX, token)
+        match_data = re.match(r'^Bearer\s(\S+)$', token)
 
         if not token or not match_data:
             raise Unauthorized('User is not authorized')
