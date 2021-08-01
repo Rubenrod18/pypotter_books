@@ -20,9 +20,7 @@ class ComponentCli(_BaseCli, ABC):
 
     @staticmethod
     def __create_modules(component_name: str, bp_package: str):
-        component_structure_template = (
-            f'{Config.ROOT_DIRECTORY}/app/cli/component_structure_template'
-        )
+        component_structure_template = f'{Config.ROOT_DIRECTORY}/app/cli/component_cli/component_structure_template'  # noqa
 
         pascal_case_component_name = (
             component_name.replace('_', ' ')
@@ -54,4 +52,5 @@ class ComponentCli(_BaseCli, ABC):
                 os.rename(src, pre + '.py')
 
     def run_command(self, component_name):
-        self.__create_modules(*self.__create_package(component_name))
+        component_name, bp_package = self.__create_package(component_name)
+        self.__create_modules(component_name, bp_package)

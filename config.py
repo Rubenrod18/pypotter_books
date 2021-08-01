@@ -54,6 +54,7 @@ class Config:
     # Mr Developer
     ROOT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
     LOG_DIRECTORY = '%s/log' % ROOT_DIRECTORY
+    BLUEPRINTS_DIRECTORY = '%s/app/blueprints' % ROOT_DIRECTORY
 
 
 class ProdConfig(Config):

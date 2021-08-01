@@ -1,8 +1,6 @@
 import collections
 from abc import ABC
 
-from flask import current_app
-
 from app.blueprints import get_blueprint_modules
 from app.blueprints.base import BaseFactory
 from app.cli._base_cli import _BaseCli
@@ -36,10 +34,9 @@ class SeederCli(_BaseCli, ABC):
             for seed in ordered_seeders.values():
                 seed()
             session.commit()
+            print(' Database seeding completed successfully.')
         except Exception:
             session.rollback()
             raise
         finally:
             session.close()
-            if current_app.config['TESTING'] is False:
-                print(' Database seeding completed successfully.')

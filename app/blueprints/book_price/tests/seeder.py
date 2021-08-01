@@ -1,4 +1,9 @@
+import math
+
+from sqlalchemy import func
+
 from app.blueprints.book import Book
+from app.blueprints.book import BookPrice
 from app.blueprints.book_price.tests.factory import BookPriceFactory
 from app.blueprints.country import Country
 from app.decorators import seed_actions
@@ -14,12 +19,14 @@ class Seeder:
 
     @staticmethod
     def __create_book_prices():
-        total_countries_without_relations_with_book_prices = 15
         total_books = Book.query.count()
-        total_countries = Country.query.count()
-        total_book_prices = (
-            total_books * total_countries
-            - total_countries_without_relations_with_book_prices
+        total_countries = (
+            Country.query.with_entities(Country.id)
+            .outerjoin(BookPrice)
+            .filter_by(deleted_at=None)
+            .group_by(Country.id)
+            .having(func.count(Country.id) < total_books)
+            .count()
         )
-
+        total_book_prices = math.ceil(total_books * total_countries / 3)
         BookPriceFactory.create_batch(total_book_prices)

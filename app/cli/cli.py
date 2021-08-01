@@ -9,7 +9,7 @@ from app.extensions import db
 def init_app(app: Flask):
     @app.cli.command('component', help='Create a component structure.')
     @click.option('--name', '-n', help='Component name.')
-    def create_component(name):
+    def create_component(name: str) -> None:
         component_cli = ComponentCli()
         component_cli.run_command(name)
 
@@ -28,11 +28,6 @@ def init_app(app: Flask):
         To explore the data in your application, you can start an interactive
         Python shell with the shell command. An application context will be
         active and the app instance will be imported.
-
-        References
-        ----------
-        Open a Shell:
-        https://flask.palletsprojects.com/en/1.1.x/cli/#open-a-shell
 
         Returns
         -------

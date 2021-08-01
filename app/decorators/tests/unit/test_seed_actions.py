@@ -14,12 +14,6 @@ class _SeedExample:
 
 
 class TestSeedActions(BaseTest):
-    """
-    is_login_ok: is the unit of work.
-    user_does_not_exist: is the scenario.
-    returns_false: is the expected end result or behavior of the system.
-    """
-
     def setUp(self):
         super(TestSeedActions, self).setUp()
 
