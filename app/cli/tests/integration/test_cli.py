@@ -1,6 +1,9 @@
 import shutil
 
 from flask import current_app
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.model import DefaultMeta
 
 from app.blueprints.base import BaseCliTest
 
@@ -36,11 +39,19 @@ class TestCli(BaseCliTest):
             component_abs_path = f'{bp_path}/{component_name}'
             shutil.rmtree(component_abs_path)
 
-    def xtest_is_cli_flask_shell_ok(self):
-        result = self.runner.invoke(args=['make', 'shell'])
+    def test_is_flask_shell_ok_resources_are_available_returns_resources(self):
+        resources = self.app.make_shell_context()
 
-        from pprint import pprint
-
-        pprint(result.__dict__)
-
-        self.assertEqual(0, result.exit_code)
+        self.assertTrue(isinstance(resources['app'], Flask))
+        self.assertTrue(isinstance(resources['db'], SQLAlchemy))
+        self.assertTrue(isinstance(resources['Bill'], DefaultMeta))
+        self.assertTrue(isinstance(resources['Book'], DefaultMeta))
+        self.assertTrue(isinstance(resources['BookPrice'], DefaultMeta))
+        self.assertTrue(isinstance(resources['BookStock'], DefaultMeta))
+        self.assertTrue(isinstance(resources['Country'], DefaultMeta))
+        self.assertTrue(isinstance(resources['Currency'], DefaultMeta))
+        self.assertTrue(isinstance(resources['Role'], DefaultMeta))
+        self.assertTrue(isinstance(resources['ShoppingCart'], DefaultMeta))
+        self.assertTrue(isinstance(resources['ShoppingCartBook'], DefaultMeta))
+        self.assertTrue(isinstance(resources['User'], DefaultMeta))
+        self.assertTrue(isinstance(resources['UserRoles'], DefaultMeta))

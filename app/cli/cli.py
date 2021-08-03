@@ -4,6 +4,7 @@ from flask import Flask
 from app.cli.component_cli import ComponentCli
 from app.cli.seeder_cli import SeederCli
 from app.extensions import db
+from app.helpers import SqlAlchemyHelper
 
 
 def init_app(app: Flask):
@@ -35,4 +36,6 @@ def init_app(app: Flask):
             Imports available in Python shell.
 
         """
-        return {'app': app, 'db': db}
+        resources = {'app': app, 'db': db}
+        resources.update(SqlAlchemyHelper.get_all_db_models(db))
+        return resources
