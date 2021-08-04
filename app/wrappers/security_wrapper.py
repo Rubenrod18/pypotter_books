@@ -7,7 +7,7 @@ from flask_security.passwordless import login_token_status
 from app.blueprints.user import User
 
 
-class SecurityHelper:
+class SecurityWrapper:
     @staticmethod
     def create_token(user: User) -> str:
         return generate_login_token(user)

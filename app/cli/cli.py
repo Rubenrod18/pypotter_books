@@ -4,7 +4,7 @@ from flask import Flask
 from app.cli.component_cli import ComponentCli
 from app.cli.seeder_cli import SeederCli
 from app.extensions import db
-from app.helpers import SqlAlchemyHelper
+from app.wrappers import SqlAlchemyWrapper
 
 
 def init_app(app: Flask):
@@ -37,5 +37,5 @@ def init_app(app: Flask):
 
         """
         resources = {'app': app, 'db': db}
-        resources.update(SqlAlchemyHelper.get_all_db_models(db))
+        resources.update(SqlAlchemyWrapper.get_all_db_models(db))
         return resources

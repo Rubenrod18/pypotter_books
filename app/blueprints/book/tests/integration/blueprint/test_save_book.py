@@ -2,7 +2,7 @@ import factory
 
 from ...factory import BookFactory
 from ._base_integration_test import _BookBaseIntegrationTest
-from app.utils import ignore_keys
+from app.helpers import DictHelper
 
 
 class TestSaveBook(_BookBaseIntegrationTest):
@@ -10,7 +10,7 @@ class TestSaveBook(_BookBaseIntegrationTest):
         self,
     ):
         with self.app.app_context():
-            data = ignore_keys(
+            data = DictHelper.ignore_keys(
                 factory.build(dict, FACTORY_CLASS=BookFactory),
                 exclude=['image'],
             )

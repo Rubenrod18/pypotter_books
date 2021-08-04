@@ -6,7 +6,7 @@ from .swagger import auth_token_sw_model
 from app.blueprints.base import BaseResource
 from app.decorators import token_required
 from app.extensions import api as root_api
-from app.helpers import SecurityHelper
+from app.wrappers import SecurityWrapper
 
 blueprint = Blueprint('auth', __name__)
 api = root_api.namespace('auth', description='Authentication endpoints.')
@@ -30,8 +30,8 @@ class AuthUserLoginResource(AuthBaseResource):
         user = auth_user_login_serializer.load(self.request_payload())
         # TODO: Pending to testing whats happen if add a new field in user
         # model when a user is logged
-        SecurityHelper.login_user(user)
-        token = SecurityHelper.create_token(user)
+        SecurityWrapper.login_user(user)
+        token = SecurityWrapper.create_token(user)
         return {'token': f'Bearer {token}'}, 200
 
 
@@ -47,5 +47,5 @@ class AuthUserLogoutResource(AuthBaseResource):
     )
     @token_required
     def post(self) -> tuple:
-        SecurityHelper.logout_user()
+        SecurityWrapper.logout_user()
         return {}, 204

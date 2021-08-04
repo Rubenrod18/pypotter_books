@@ -3,7 +3,7 @@ import factory
 from ...models import ROLE_NAME_DELIMITER
 from ._base_integration_test import _RoleBaseIntegrationTest
 from app.blueprints.role import RoleFactory
-from app.utils import ignore_keys
+from app.helpers import DictHelper
 
 
 class TestUpdateRole(_RoleBaseIntegrationTest):
@@ -12,7 +12,7 @@ class TestUpdateRole(_RoleBaseIntegrationTest):
             role_id = self.get_rand_role().id
 
             exclude = ['name']
-            data = ignore_keys(
+            data = DictHelper.ignore_keys(
                 factory.build(dict, FACTORY_CLASS=RoleFactory), exclude
             )
 

@@ -3,7 +3,7 @@ import os
 from ._base_integration_test import _AuthBaseIntegrationTest
 from app.blueprints.user import UserFactory
 from app.blueprints.user.tests.factory import fake
-from app.helpers import SecurityHelper
+from app.wrappers import SecurityWrapper
 
 
 class TestLoginUser(_AuthBaseIntegrationTest):
@@ -65,7 +65,7 @@ class TestLoginUser(_AuthBaseIntegrationTest):
             )
 
     def __password_invalid_process(self, plain_password: str):
-        ensured_password = SecurityHelper.ensure_password(plain_password)
+        ensured_password = SecurityWrapper.ensure_password(plain_password)
         user = UserFactory(
             active=True, deleted_at=None, password=ensured_password
         )

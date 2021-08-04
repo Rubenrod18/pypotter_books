@@ -4,8 +4,7 @@ from abc import ABC
 from app.blueprints import get_blueprint_modules
 from app.blueprints.base import BaseFactory
 from app.cli._base_cli import _BaseCli
-from app.utils import exists_attr_in_module
-from app.utils import get_attr_from_module
+from app.helpers import ModuleHelper
 
 
 class SeederCli(_BaseCli, ABC):
@@ -14,8 +13,10 @@ class SeederCli(_BaseCli, ABC):
         """Get Seeder instances."""
         seeders = {}
         for item in modules:
-            if exists_attr_in_module(item, 'Seeder'):
-                seeder_instance = get_attr_from_module(item, 'Seeder')
+            if ModuleHelper.exists_attr_in_module(item, 'Seeder'):
+                seeder_instance = ModuleHelper.get_attr_from_module(
+                    item, 'Seeder'
+                )
                 seeders[seeder_instance.priority] = seeder_instance
         return seeders
 

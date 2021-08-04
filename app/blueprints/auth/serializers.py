@@ -8,7 +8,7 @@ from werkzeug.exceptions import Unauthorized
 from app.blueprints.user import User
 from app.blueprints.user import UserManager
 from app.extensions import ma
-from app.helpers import SecurityHelper
+from app.wrappers import SecurityWrapper
 from config import Config
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class AuthUserLoginSerializer(ma.Schema):
 
     @staticmethod
     def __check_password(user: User, plain_password: str) -> None:
-        if not SecurityHelper.match_password(plain_password, user.password):
+        if not SecurityWrapper.match_password(plain_password, user.password):
             logger.debug(f'User "{user.email}" password does not match.')
             raise Unauthorized('Credentials invalid')
 

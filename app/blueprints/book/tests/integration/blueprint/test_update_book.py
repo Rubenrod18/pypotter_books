@@ -2,7 +2,7 @@ import factory
 
 from ...factory import BookFactory
 from ._base_integration_test import _BookBaseIntegrationTest
-from app.utils import ignore_keys
+from app.helpers import DictHelper
 
 
 class TestUpdateBook(_BookBaseIntegrationTest):
@@ -11,7 +11,7 @@ class TestUpdateBook(_BookBaseIntegrationTest):
     ):
         with self.app.app_context():
             book_id = self.get_rand_book().id
-            data = ignore_keys(
+            data = DictHelper.ignore_keys(
                 factory.build(dict, FACTORY_CLASS=BookFactory),
                 exclude=['image'],
             )

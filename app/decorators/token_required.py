@@ -6,7 +6,7 @@ from flask import request
 from werkzeug.exceptions import Forbidden
 from werkzeug.exceptions import Unauthorized
 
-from app.helpers import SecurityHelper
+from app.wrappers import SecurityWrapper
 
 
 def token_required(fnc):
@@ -19,7 +19,7 @@ def token_required(fnc):
         if not token or not match_data:
             raise Unauthorized('User is not authorized')
 
-        expired, invalid, user = SecurityHelper.login_token_status(
+        expired, invalid, user = SecurityWrapper.login_token_status(
             match_data[1]
         )
 

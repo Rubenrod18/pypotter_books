@@ -5,7 +5,7 @@ from werkzeug.exceptions import Unauthorized
 from app.blueprints.base import BaseTest
 from app.blueprints.user import User
 from app.decorators import token_required
-from app.helpers import SecurityHelper
+from app.wrappers import SecurityWrapper
 
 
 class TestTokenRequired(BaseTest):
@@ -111,7 +111,7 @@ class TestTokenRequired(BaseTest):
             user = self.__get_rand_user(
                 **{'active': False, 'deleted_at': None}
             )
-            created_token = SecurityHelper.create_token(user)
+            created_token = SecurityWrapper.create_token(user)
 
         with self.app.test_request_context(
             headers={self.token_auth_header: f'Bearer {created_token}'}
@@ -136,7 +136,7 @@ class TestTokenRequired(BaseTest):
     ):
         with self.app.app_context():
             user = self.__get_rand_user(**{'active': True, 'deleted_at': None})
-            created_token = SecurityHelper.create_token(user)
+            created_token = SecurityWrapper.create_token(user)
 
         with self.app.test_request_context(
             headers={self.token_auth_header: f'Bearer {created_token}'}

@@ -13,7 +13,7 @@ from app.blueprints.base import BaseFactory
 from app.blueprints.role import Role
 from app.blueprints.user import User
 from app.blueprints.user import UserManager
-from app.helpers import SecurityHelper
+from app.wrappers import SecurityWrapper
 
 _user_manager = UserManager()
 
@@ -39,7 +39,7 @@ class UserFactory(BaseFactory):
 
     @factory.lazy_attribute
     def password(self):
-        return SecurityHelper.ensure_password(os.getenv('TEST_USER_PASSWORD'))
+        return SecurityWrapper.ensure_password(os.getenv('TEST_USER_PASSWORD'))
 
     @factory.lazy_attribute
     def created_id(self):

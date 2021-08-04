@@ -5,7 +5,7 @@ import factory
 
 from ._base_integration_test import _UserBaseIntegrationTest
 from app.blueprints.user import UserFactory
-from app.utils import ignore_keys
+from app.helpers import DictHelper
 
 
 class TestUpdateUser(_UserBaseIntegrationTest):
@@ -24,7 +24,7 @@ class TestUpdateUser(_UserBaseIntegrationTest):
                 'roles',
                 'genre',
             ]
-            data = ignore_keys(
+            data = DictHelper.ignore_keys(
                 factory.build(dict, FACTORY_CLASS=UserFactory), exclude
             )
             data['genre'] = choice(['male', 'female'])

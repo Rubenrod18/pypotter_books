@@ -14,7 +14,7 @@ from .models import Genre
 from app.blueprints.role import RoleManager
 from app.blueprints.role.serializers import RoleSerializer
 from app.extensions import ma
-from app.helpers import SecurityHelper
+from app.wrappers import SecurityWrapper
 from config import Config
 
 logger = logging.getLogger(__name__)
@@ -85,7 +85,9 @@ class UserSerializer(ma.SQLAlchemySchema):
     @post_load
     def post_load_process(self, data, **kwargs):
         if 'password' in data:
-            data['password'] = SecurityHelper.ensure_password(data['password'])
+            data['password'] = SecurityWrapper.ensure_password(
+                data['password']
+            )
 
         if 'genre' in data:
             data['genre'] = Genre.deserialization(data['genre'])

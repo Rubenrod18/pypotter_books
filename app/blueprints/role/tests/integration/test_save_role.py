@@ -3,14 +3,14 @@ import factory
 from ...models import ROLE_NAME_DELIMITER
 from ._base_integration_test import _RoleBaseIntegrationTest
 from app.blueprints.role import RoleFactory
-from app.utils import ignore_keys
+from app.helpers import DictHelper
 
 
 class TestSaveRole(_RoleBaseIntegrationTest):
     def test_save_role(self):
         with self.app.app_context():
             exclude = ['name']
-            data = ignore_keys(
+            data = DictHelper.ignore_keys(
                 factory.build(dict, FACTORY_CLASS=RoleFactory), exclude
             )
 

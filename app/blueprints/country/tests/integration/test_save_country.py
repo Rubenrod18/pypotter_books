@@ -2,7 +2,7 @@ import factory
 
 from ..factory import CountryFactory
 from ._base_integration_test import _CountryBaseIntegrationTest
-from app.utils import ignore_keys
+from app.helpers import DictHelper
 
 
 class TestSaveCountry(_CountryBaseIntegrationTest):
@@ -11,7 +11,7 @@ class TestSaveCountry(_CountryBaseIntegrationTest):
     ):
         with self.app.app_context():
             exclude = ['currency']
-            data = ignore_keys(
+            data = DictHelper.ignore_keys(
                 factory.build(dict, FACTORY_CLASS=CountryFactory), exclude
             )
 
