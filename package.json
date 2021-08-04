@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rubenrod18/flask_api_alchemy.git"
+    "url": "git+https://github.com/Rubenrod18/pypotter_books.git"
   },
   "author": "Rubén Rodríguez Ramírez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Rubenrod18/flask_api_alchemy/issues"
+    "url": "https://github.com/Rubenrod18/pypotter_books/issues"
   },
-  "homepage": "https://github.com/Rubenrod18/flask_api_alchemy#readme",
+  "homepage": "https://github.com/Rubenrod18/pypotter_books#readme",
   "engine": {
     "node": ">= 14.15.4"
   },
