@@ -35,16 +35,19 @@ def _init_logging(app: Flask) -> None:
     log_dirname = '{}/app'.format(app.config.get('LOG_DIRECTORY'))
     log_filename = f'{log_dirname}/{log_basename}.log'
 
-    if not os.path.exists(log_dirname):
-        os.mkdir(log_dirname)
+    log_directories = [app.config.get('LOG_DIRECTORY'), log_dirname]
 
-    config = {
-        'format': '%(asctime)s - %(levelname)s - %(name)s - %(message)s',
-        'level': logging.DEBUG,
-        'filename': log_filename,
-    }
+    for log_dir in log_directories:
+        if not os.path.exists(log_dir):
+            os.mkdir(log_dir)
 
-    logging.basicConfig(**config)
+    logging.basicConfig(
+        **{
+            'format': '%(asctime)s - %(levelname)s - %(name)s - %(message)s',
+            'level': logging.DEBUG,
+            'filename': log_filename,
+        }
+    )
 
 
 def create_app(env_config: str) -> Flask:

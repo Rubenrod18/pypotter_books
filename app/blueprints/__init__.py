@@ -16,11 +16,11 @@ def _get_blueprint_packages():
     ['auth', 'base', 'role', 'user']
 
     """
+    ignore = ('__pycache__', os.path.basename(__file__))
+
     abs_path = os.path.abspath(__file__)
     path = os.path.dirname(abs_path)
-    dirs = os.listdir(path)
-    dirs.remove(os.path.basename(__file__))
-    dirs.remove('__pycache__')
+    dirs = [dir for dir in os.listdir(path) if dir not in ignore]
     dirs.sort()
     return dirs
 
