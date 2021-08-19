@@ -14,46 +14,40 @@ class TestSearchRoles(_RoleBaseIntegrationTest):
         return json_response.get('data')[0]
 
     def test_search_role_exist_role_name_returns_role(self):
-        with self.app.app_context():
-            role = self.get_rand_role()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'name',
-                        'field_value': role.name,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'name',
+                    'field_value': self.role.name,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(role.name, json_data.get('name'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.role.name, json_data.get('name'))
 
     def test_search_role_exist_role_description_returns_role(self):
-        with self.app.app_context():
-            role = self.get_rand_role()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'description',
-                        'field_value': role.description,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'description',
+                    'field_value': self.role.description,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(role.description, json_data.get('description'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.role.description, json_data.get('description'))
 
     def test_search_role_exist_role_label_returns_role(self):
-        with self.app.app_context():
-            role = self.get_rand_role()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'label',
-                        'field_value': role.label,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'label',
+                    'field_value': self.role.label,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(role.label, json_data.get('label'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.role.label, json_data.get('label'))

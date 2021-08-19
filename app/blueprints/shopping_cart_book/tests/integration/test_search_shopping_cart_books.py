@@ -16,57 +16,51 @@ class TestSearchCurrencies(_ShoppingCartBookBaseIntegrationTest):
     def test_search_shopping_cart_book_exist_shopping_cart_book_shopping_cart_id_returns_shopping_cart_book(  # noqa
         self,
     ):
-        with self.app.app_context():
-            shopping_cart_book = self.get_rand_shopping_cart_book()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'shopping_cart_id',
-                        'field_value': shopping_cart_book.shopping_cart_id,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'shopping_cart_id',
+                    'field_value': self.shopping_cart_book.shopping_cart_id,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(
-                shopping_cart_book.shopping_cart_id,
-                json_data.get('shopping_cart_id'),
-            )
+        json_data = self.__request(payload)
+        self.assertEqual(
+            self.shopping_cart_book.shopping_cart_id,
+            json_data.get('shopping_cart_id'),
+        )
 
     def test_search_shopping_cart_book_exist_shopping_cart_book_book_id_returns_shopping_cart_book(  # noqa
         self,
     ):
-        with self.app.app_context():
-            shopping_cart_book = self.get_rand_shopping_cart_book()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'book_id',
-                        'field_value': shopping_cart_book.book_id,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'book_id',
+                    'field_value': self.shopping_cart_book.book_id,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(
-                shopping_cart_book.book_id, json_data.get('book_id')
-            )
+        json_data = self.__request(payload)
+        self.assertEqual(
+            self.shopping_cart_book.book_id, json_data.get('book_id')
+        )
 
     def test_search_shopping_cart_book_exist_shopping_cart_book_discount_returns_shopping_cart_book(  # noqa
         self,
     ):
-        with self.app.app_context():
-            shopping_cart_book = self.get_rand_shopping_cart_book()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'discount',
-                        'field_value': shopping_cart_book.discount,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'discount',
+                    'field_value': self.shopping_cart_book.discount,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(
-                shopping_cart_book.discount, json_data.get('discount')
-            )
+        json_data = self.__request(payload)
+        self.assertEqual(
+            self.shopping_cart_book.discount, json_data.get('discount')
+        )

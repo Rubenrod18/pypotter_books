@@ -14,46 +14,40 @@ class TestSearchCurrencies(_CurrencyBaseIntegrationTest):
         return json_response.get('data')[0]
 
     def test_search_currency_exist_currency_name_returns_currency(self):
-        with self.app.app_context():
-            currency = self.get_rand_currency()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'name',
-                        'field_value': currency.name,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'name',
+                    'field_value': self.currency.name,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(currency.name, json_data.get('name'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.currency.name, json_data.get('name'))
 
     def test_search_currency_exist_currency_code_returns_currency(self):
-        with self.app.app_context():
-            currency = self.get_rand_currency()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'code',
-                        'field_value': currency.code,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'code',
+                    'field_value': self.currency.code,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(currency.code, json_data.get('code'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.currency.code, json_data.get('code'))
 
     def test_search_currency_exist_currency_num_returns_currency(self):
-        with self.app.app_context():
-            currency = self.get_rand_currency()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'num',
-                        'field_value': currency.num,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'num',
+                    'field_value': self.currency.num,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(currency.num, json_data.get('num'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.currency.num, json_data.get('num'))

@@ -1,18 +1,7 @@
-from sqlalchemy import func
-
-from app.blueprints.base import BaseTest
-from app.blueprints.user import User
+from app.blueprints.base.tests.base_api_test import BaseApiTest
 
 
-class _AuthBaseIntegrationTest(BaseTest):
+class _AuthBaseIntegrationTest(BaseApiTest):
     def setUp(self):
         super(_AuthBaseIntegrationTest, self).setUp()
-        self.base_path = '/api/auth'
-
-    @staticmethod
-    def get_rand_user():
-        return (
-            User.query.filter_by(deleted_at=None, active=True)
-            .order_by(func.random())
-            .first()
-        )
+        self.base_path = f'{self.base_path}/auth'

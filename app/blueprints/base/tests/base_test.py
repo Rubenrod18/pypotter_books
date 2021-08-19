@@ -1,12 +1,14 @@
 import logging
+import unittest
 
+from flask import Flask
 from flask import Response
 from flask.testing import FlaskClient
 
 logger = logging.getLogger(__name__)
 
 
-class CustomFlaskClient(FlaskClient):
+class _CustomFlaskClient(FlaskClient):
     @staticmethod
     def __before_request(*args, **kwargs):
         logger.info(f'args: {args}')
@@ -51,3 +53,31 @@ class CustomFlaskClient(FlaskClient):
     def delete(self, *args, **kwargs):
         """Like open but method is enforced to DELETE."""
         return self.__make_request('DELETE', *args, **kwargs)
+
+
+class BaseTest(unittest.TestCase):
+    def setUp(self) -> None:
+        app = self.__create_app()
+        app_context = app.app_context()
+        app_context.push()
+
+        self.app = app
+        self.client = self.__create_test_client(self.app)
+        self.runner = self.app.test_cli_runner()
+        self._ctx = app_context
+
+    def tearDown(self) -> None:
+        self._ctx.pop()
+
+    @staticmethod
+    def __create_app():
+        """Create an app with testing environment."""
+        from app import create_app
+
+        return create_app('config.TestConfig')
+
+    @staticmethod
+    def __create_test_client(app: Flask):
+        """Create a test client for making http requests."""
+        app.test_client_class = _CustomFlaskClient
+        return app.test_client()

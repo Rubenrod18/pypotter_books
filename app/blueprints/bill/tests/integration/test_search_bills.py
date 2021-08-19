@@ -16,52 +16,46 @@ class TestSearchCurrencies(_BillBaseIntegrationTest):
     def test_search_bill_exist_bill_user_id_returns_bill(
         self,
     ):
-        with self.app.app_context():
-            bill = self.get_rand_bill()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'user_id',
-                        'field_value': bill.user_id,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'user_id',
+                    'field_value': self.bill.user_id,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(bill.user_id, json_data.get('user_id'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.bill.user_id, json_data.get('user_id'))
 
     def test_search_bill_exist_bill_currency_id_returns_bill(
         self,
     ):
-        with self.app.app_context():
-            bill = self.get_rand_bill()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'currency_id',
-                        'field_value': bill.currency_id,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'currency_id',
+                    'field_value': self.bill.currency_id,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(bill.currency_id, json_data.get('currency_id'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.bill.currency_id, json_data.get('currency_id'))
 
     def test_search_bill_exist_bill_shopping_cart_id_returns_bill(
         self,
     ):
-        with self.app.app_context():
-            bill = self.get_rand_bill()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'shopping_cart_id',
-                        'field_value': bill.shopping_cart_id,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'shopping_cart_id',
+                    'field_value': self.bill.shopping_cart_id,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(
-                bill.shopping_cart_id, json_data.get('shopping_cart_id')
-            )
+        json_data = self.__request(payload)
+        self.assertEqual(
+            self.bill.shopping_cart_id, json_data.get('shopping_cart_id')
+        )

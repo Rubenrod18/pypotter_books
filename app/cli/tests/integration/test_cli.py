@@ -5,10 +5,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import DefaultMeta
 
-from app.blueprints.base import BaseCliTest
+from app.blueprints.base import BaseTest
 
 
-class TestCli(BaseCliTest):
+class TestCli(BaseTest):
     def setUp(self):
         super(TestCli, self).setUp()
 

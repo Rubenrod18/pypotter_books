@@ -8,27 +8,25 @@ class TestUpdateBookPrice(_BookPriceBaseIntegrationTest):
     def test_is_book_updated_book_exist_previously_returns_book(
         self,
     ):
-        with self.app.app_context():
-            book_id = self.get_rand_book_price().id
-            data = factory.build(dict, FACTORY_CLASS=BookPriceFactory)
+        data = factory.build(dict, FACTORY_CLASS=BookPriceFactory)
 
-            admin_user = self.get_rand_admin_user()
-            auth_header = self.build_auth_header(admin_user.email)
-            response = self.client.put(
-                f'{self.base_path}/{book_id}',
-                json=data,
-                headers=auth_header,
-            )
-            json_response = response.get_json()
-            json_data = json_response.get('data')
+        admin_user = self.get_rand_admin_user()
+        auth_header = self.build_auth_header(admin_user.email)
+        response = self.client.put(
+            f'{self.base_path}/{self.book_price.id}',
+            json=data,
+            headers=auth_header,
+        )
+        json_response = response.get_json()
+        json_data = json_response.get('data')
 
-            self.assertEqual(200, response.status_code)
-            self.assertEqual(book_id, json_data.get('id'))
-            self.assertEqual(data['country_id'], json_data.get('country_id'))
-            self.assertEqual(data['book_id'], json_data.get('book_id'))
-            self.assertEqual(data['vat'], json_data.get('vat'))
-            self.assertTrue(json_data.get('created_at'))
-            self.assertGreaterEqual(
-                json_data.get('updated_at'), json_data.get('created_at')
-            )
-            self.assertIsNone(json_data.get('deleted_at'))
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(self.book_price.id, json_data.get('id'))
+        self.assertEqual(data['country_id'], json_data.get('country_id'))
+        self.assertEqual(data['book_id'], json_data.get('book_id'))
+        self.assertEqual(data['vat'], json_data.get('vat'))
+        self.assertTrue(json_data.get('created_at'))
+        self.assertGreaterEqual(
+            json_data.get('updated_at'), json_data.get('created_at')
+        )
+        self.assertIsNone(json_data.get('deleted_at'))

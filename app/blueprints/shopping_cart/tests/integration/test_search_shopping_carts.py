@@ -13,19 +13,17 @@ class TestSearchCurrencies(_ShoppingCartBaseIntegrationTest):
 
         return json_response.get('data')[0]
 
-    def test_search_shopping_chart_exist_shopping_chart_user_id_returns_shopping_chart(  # noqa
+    def test_search_shopping_cart_exist_shopping_cart_user_id_returns_shopping_cart(  # noqa
         self,
     ):
-        with self.app.app_context():
-            shopping_chart = self.get_rand_shopping_chart()
-            payload = {
-                'search': [
-                    {
-                        'field_name': 'user_id',
-                        'field_value': shopping_chart.user_id,
-                    },
-                ],
-            }
+        payload = {
+            'search': [
+                {
+                    'field_name': 'user_id',
+                    'field_value': self.shopping_cart.user_id,
+                },
+            ],
+        }
 
-            json_data = self.__request(payload)
-            self.assertEqual(shopping_chart.user_id, json_data.get('user_id'))
+        json_data = self.__request(payload)
+        self.assertEqual(self.shopping_cart.user_id, json_data.get('user_id'))

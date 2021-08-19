@@ -16,3 +16,7 @@ class BookService(BaseService):
         db.session.add(book)
         db.session.flush()
         return book
+
+    def save(self, record_id: int, **kwargs):
+        serialized_data = self.book_serializer.load(kwargs)
+        return super().save(record_id, **serialized_data)
