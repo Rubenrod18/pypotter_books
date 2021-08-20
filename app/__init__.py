@@ -17,17 +17,13 @@ import logging
 import os
 
 import flask
-from flask import Flask
+from flask import Flask, send_from_directory
+from werkzeug.utils import import_string
 
 from app import exceptions
 from app import extensions
 from app.blueprints import BLUEPRINTS
 from app.cli import cli
-
-
-def _register_blueprints(app: Flask) -> None:
-    for blueprint in BLUEPRINTS:
-        app.register_blueprint(blueprint)
 
 
 def _init_logging(app: Flask) -> None:
@@ -50,6 +46,17 @@ def _init_logging(app: Flask) -> None:
     )
 
 
+def _register_blueprints(app: Flask) -> None:
+    for blueprint in BLUEPRINTS:
+        app.register_blueprint(blueprint)
+
+
+def _register_static_routes(app: Flask) -> None:
+    @app.route('/static/<path:path>')
+    def static_files(path: str):
+        return send_from_directory(app.config['STATIC_FOLDER'], path)
+
+
 def create_app(env_config: str) -> Flask:
     """Builds an application based on environment configuration.
 
@@ -68,13 +75,20 @@ def create_app(env_config: str) -> Flask:
         A `flask.flask` instance.
 
     """
-    app = flask.Flask(__name__)
+    config = import_string(env_config)
+
+    app = flask.Flask(
+        __name__,
+        static_url_path=config.STATIC_FOLDER,
+        template_folder=config.TEMPLATES_FOLDER,
+    )
     app.config.from_object(env_config)
 
     _init_logging(app)
     cli.init_app(app)
     extensions.init_app(app)
     _register_blueprints(app)
+    _register_static_routes(app)
     exceptions.init_app(app)
 
     return app

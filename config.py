@@ -42,7 +42,7 @@ class Config:
         'SWAGGER_API_URL', f'http://{SERVER_NAME}/static/swagger.yaml'
     )
 
-    # Flask Restful
+    # Flask Restx
     RESTX_ERROR_404_HELP = False
     FLASK_RESTFUL_PREFIX = '/api'
     RESTX_MASK_SWAGGER = False
@@ -55,6 +55,8 @@ class Config:
     ROOT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
     LOG_DIRECTORY = '%s/log' % ROOT_DIRECTORY
     BLUEPRINTS_DIRECTORY = '%s/app/blueprints' % ROOT_DIRECTORY
+    STATIC_FOLDER = '%s/static' % ROOT_DIRECTORY
+    TEMPLATES_FOLDER = '%s/templates' % ROOT_DIRECTORY
 
 
 class ProdConfig(Config):

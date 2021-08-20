@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask import jsonify
 from flask import request
 from flask_restx import Resource
 
@@ -12,6 +13,12 @@ class BaseResource(Resource):
     @staticmethod
     def request_payload():
         return request.get_json() or {}
+
+
+@blueprint.route('/swagger.json')
+def swagger_spec():
+    schema = root_api.__schema__
+    return jsonify(schema)
 
 
 @api.route('/welcome')

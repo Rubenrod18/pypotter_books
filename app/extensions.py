@@ -2,7 +2,6 @@ from flask import Flask
 from flask_mail import Mail
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
-from flask_restx import Api
 from flask_security import Security
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,6 +9,7 @@ from app import __author__
 from app import __description__
 from app import __project__
 from app import __version__
+from app.wrappers.custom_api import CustomApi
 from config import Config
 
 db = SQLAlchemy()
@@ -17,7 +17,7 @@ migrate = Migrate()
 security = Security()
 mail = Mail()
 ma = Marshmallow()
-api = Api(
+api = CustomApi(
     prefix='/api',
     author=__author__,
     version=__version__,
