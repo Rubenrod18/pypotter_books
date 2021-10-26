@@ -100,7 +100,7 @@ class BooksSearchResource(_BookBaseResource):
         book_data = self.book_service.get(**self.request_payload())
         book_data_lst = list(book_data['query'].items)
         return {
-            'data': books_serializer.dump(book_data_lst),
             'records_total': book_data['records_total'],
             'records_filtered': book_data['records_filtered'],
+            'data': books_serializer.dump(book_data_lst),
         }, 200

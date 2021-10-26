@@ -31,7 +31,7 @@ class CountrySerializer(ma.SQLAlchemySchema):
     currency_id = ma.auto_field(load_only=True)
 
     # Output fields
-    currency = fields.Nested(CurrencySerializer, dump_only=True)
+    currency = fields.Nested(lambda: CurrencySerializer(), dump_only=True)
     created_at = TimestampField(dump_only=True)
     updated_at = TimestampField(dump_only=True)
     deleted_at = TimestampField(dump_only=True)

@@ -34,3 +34,11 @@ class TestGetBook(_BookBaseIntegrationTest):
             json_data.get('updated_at'),
         )
         self.assertEqual(self.book.deleted_at, json_data.get('deleted_at'))
+        self.assertEqual(
+            f'{self.base_path}/{self.book.id}',
+            json_data.get('_links', {}).get('self'),
+        )
+        self.assertEqual(
+            f'{self.base_path}/search',
+            json_data.get('_links', {}).get('collection'),
+        )

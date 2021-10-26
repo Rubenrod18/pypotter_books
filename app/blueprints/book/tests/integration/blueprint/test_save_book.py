@@ -39,3 +39,11 @@ class TestSaveBook(_BookBaseIntegrationTest):
             json_data.get('updated_at'), json_data.get('created_at')
         )
         self.assertIsNone(json_data.get('deleted_at'))
+        self.assertEqual(
+            f'{self.base_path}/{json_data.get("id")}',
+            json_data.get('_links', {}).get('self'),
+        )
+        self.assertEqual(
+            f'{self.base_path}/search',
+            json_data.get('_links', {}).get('collection'),
+        )

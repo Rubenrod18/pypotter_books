@@ -134,3 +134,14 @@ class TestSearchBooks(_BookBaseIntegrationTest):
 
         json_data = self.__request(payload)
         self.assertEqual(self.book.dimensions, json_data.get('dimensions'))
+
+    def test_search_book_exist_smart_hyperlinks_returns_book(self):
+        json_data = self.__request({})
+        self.assertEqual(
+            f'{self.base_path}/{json_data.get("id")}',
+            json_data.get('_links', {}).get('self'),
+        )
+        self.assertEqual(
+            f'{self.base_path}/search',
+            json_data.get('_links', {}).get('collection'),
+        )
