@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    links:
+      - sql
+      - test_sql
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/pypotter-books-docker-dir
+
+  sql:
+    image: mariadb:10.6.4
+    ports:
+      - "3406:3306"
+    environment:
+      MARIADB_USER: "${MARIADB_USER}"
+      MARIADB_PASSWORD: "${MARIADB_PASSWORD}"
+      MARIADB_DATABASE: "${MARIADB_DATABASE}"
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
+
+  # TODO: move test database to another place
+  test_sql:
+    image: mariadb:10.6.4
+    ports:
+      - "3407:3306"
+    environment:
+      MARIADB_USER: "${MARIADB_TEST_USER}"
+      MARIADB_PASSWORD: "${MARIADB_TEST_PASSWORD}"
+      MARIADB_DATABASE: "${MARIADB_TEST_DATABASE}"
+      MARIADB_ROOT_PASSWORD: "${MARIADB_TEST_ROOT_PASSWORD}"

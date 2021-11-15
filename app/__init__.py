@@ -15,6 +15,7 @@ __description__ = (
 
 import logging
 import os
+import pprint
 
 import flask
 from flask import Flask, send_from_directory
@@ -83,6 +84,7 @@ def create_app(env_config: str) -> Flask:
         template_folder=config.TEMPLATES_FOLDER,
     )
     app.config.from_object(env_config)
+    app.logger.info(pprint.pformat(app.config, indent=4))
 
     _init_logging(app)
     cli.init_app(app)
