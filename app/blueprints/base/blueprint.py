@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint
 from flask import jsonify
 from flask import request
@@ -6,6 +8,7 @@ from flask_restx import Resource
 from app.extensions import api as root_api
 
 blueprint = Blueprint('base', __name__)
+logger = logging.getLogger(__name__)
 api = root_api.namespace('', description='Base endpoints')
 
 
@@ -22,7 +25,7 @@ def swagger_spec():
 
 
 @api.route('/welcome')
-class WelcomeResource(Resource):
+class WelcomeResource(BaseResource):
     @api.doc(
         responses={
             200: 'Welcome to flask_api!',

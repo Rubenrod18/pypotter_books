@@ -27,7 +27,7 @@ from app.blueprints import BLUEPRINTS
 from app.cli import cli
 
 
-def _init_logging(app: Flask) -> None:
+def _create_logging_file(app: Flask) -> str:
     log_basename = os.path.basename(app.config.get('ROOT_DIRECTORY'))
     log_dirname = '{}/app'.format(app.config.get('LOG_DIRECTORY'))
     log_filename = f'{log_dirname}/{log_basename}.log'
@@ -38,13 +38,33 @@ def _init_logging(app: Flask) -> None:
         if not os.path.exists(log_dir):
             os.mkdir(log_dir)
 
-    logging.basicConfig(
-        **{
-            'format': '%(asctime)s - %(levelname)s - %(name)s - %(message)s',
-            'level': logging.DEBUG,
-            'filename': log_filename,
-        }
+    return log_filename
+
+
+def _init_logging(app: Flask) -> None:
+    del app.logger.handlers[:]
+    loggers = [
+        app.logger,
+    ]
+    handlers = []
+
+    console_handler = logging.FileHandler(filename=_create_logging_file(app))
+    console_handler.setLevel(app.config.get('LOGGING_LEVEL'))
+    console_handler.setFormatter(
+        logging.Formatter(
+            '%(asctime)s - %(levelname)s - %(name)s - %(message)s',
+            datefmt='%d/%m/%Y %H:%M:%S',
+        )
     )
+    handlers.append(console_handler)
+
+    for logger in loggers:
+        for handler in handlers:
+            logger.addHandler(handler)
+        logger.propagate = False
+        logger.setLevel(app.config.get('LOGGING_LEVEL'))
+
+    app.logger.debug(pprint.pformat(app.config, indent=4))
 
 
 def _register_blueprints(app: Flask) -> None:
@@ -77,14 +97,12 @@ def create_app(env_config: str) -> Flask:
 
     """
     config = import_string(env_config)
-
     app = flask.Flask(
         __name__,
         static_url_path=config.STATIC_FOLDER,
         template_folder=config.TEMPLATES_FOLDER,
     )
     app.config.from_object(env_config)
-    app.logger.info(pprint.pformat(app.config, indent=4))
 
     _init_logging(app)
     cli.init_app(app)

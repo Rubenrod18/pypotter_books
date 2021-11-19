@@ -3,6 +3,7 @@
 The extension and custom configurations are defined here.
 
 """
+import logging
 import os
 
 from dotenv import load_dotenv
@@ -57,6 +58,7 @@ class Config:
     BLUEPRINTS_DIRECTORY = '%s/app/blueprints' % ROOT_DIRECTORY
     STATIC_FOLDER = '%s/static' % ROOT_DIRECTORY
     TEMPLATES_FOLDER = '%s/templates' % ROOT_DIRECTORY
+    LOGGING_LEVEL = logging.INFO
 
 
 class ProdConfig(Config):
@@ -72,6 +74,9 @@ class DevConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
 
+    # Mr Developer
+    LOGGING_LEVEL = logging.DEBUG
+
 
 class TestConfig(Config):
     """Testing configuration options."""
@@ -86,3 +91,6 @@ class TestConfig(Config):
 
     # Flask SQLAlchemy
     SQLALCHEMY_DATABASE_URI = os.getenv('TEST_SQLALCHEMY_DATABASE_URI')
+
+    # Mr Developer
+    LOGGING_LEVEL = logging.WARNING
