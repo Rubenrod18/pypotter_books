@@ -23,6 +23,7 @@ class TestSaveBookPrice(_BookPriceBaseIntegrationTest):
         self.assertEqual(data['country_id'], json_data.get('country_id'))
         self.assertEqual(data['book_id'], json_data.get('book_id'))
         self.assertEqual(data['vat'], json_data.get('vat'))
+        self.assertEqual(data['price'], json_data.get('price'))
         self.assertTrue(json_data.get('created_at'))
         self.assertEqual(
             json_data.get('updated_at'), json_data.get('created_at')

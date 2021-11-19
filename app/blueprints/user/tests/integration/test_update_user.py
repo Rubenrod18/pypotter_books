@@ -44,7 +44,7 @@ class TestUpdateUser(_UserBaseIntegrationTest):
         self.assertEqual(data.get('birth_date'), json_data.get('birth_date'))
         self.assertEqual(data.get('genre'), json_data.get('genre'))
         self.assertTrue(json_data.get('created_at'))
-        self.assertGreater(
+        self.assertGreaterEqual(
             json_data.get('updated_at'), json_data.get('created_at')
         )
         self.assertIsNone(json_data.get('deleted_at'))

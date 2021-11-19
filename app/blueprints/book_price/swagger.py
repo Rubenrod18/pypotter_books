@@ -11,6 +11,7 @@ book_price_sw_model = api.clone(
         'book_id': fields.Integer(required=True),
         'country_id': fields.Integer(required=True),
         'vat': fields.Float(required=True),
+        'price': fields.Float(required=True),
     },
 )
 
