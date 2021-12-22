@@ -29,4 +29,4 @@ class WelcomeResource(BaseResource):
         },
     )
     def get(self) -> tuple:
-        return 'Welcome to flask_api!', 200
+        return 'Welcome to PyPotter Books API!', 200
