@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-class BaseManager(object):
+class BaseManager:
     def __init__(self, *args, **kwargs):
         self.model = None
 
