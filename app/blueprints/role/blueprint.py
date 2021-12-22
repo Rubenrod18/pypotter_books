@@ -57,7 +57,7 @@ class RoleResource(_RoleBaseResource):
     @token_required
     @roles_required('admin')
     def get(self, role_id: int) -> tuple:
-        role = self._role_service.find(role_id)
+        role = self._role_service.find_by_id(role_id)
         return role_serializer.dump(role), 200
 
     @_api.doc(

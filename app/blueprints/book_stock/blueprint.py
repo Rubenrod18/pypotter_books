@@ -51,7 +51,7 @@ class BookStockResource(_BookStockResource):
     @_api.marshal_with(book_stock_sw_model, envelope='data')
     @token_required
     def get(self, book_stock_id: int) -> tuple:
-        book_stock = self._book_stock_service.find(book_stock_id)
+        book_stock = self._book_stock_service.find_by_id(book_stock_id)
         return book_stock_serializer.dump(book_stock), 200
 
     @_api.doc(

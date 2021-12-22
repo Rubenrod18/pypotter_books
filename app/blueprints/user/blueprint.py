@@ -58,7 +58,7 @@ class UserResource(_UserBaseResource):
     @token_required
     @roles_accepted('admin')
     def get(self, user_id: int) -> tuple:
-        user = self._user_service.find(user_id)
+        user = self._user_service.find_by_id(user_id)
         return self._user_serializer.dump(user), 200
 
     @_api.doc(

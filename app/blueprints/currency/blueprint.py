@@ -50,7 +50,7 @@ class CurrencyResource(_CurrencyBaseResource):
     @_api.marshal_with(currency_sw_model, envelope='data')
     @token_required
     def get(self, currency_id: int) -> tuple:
-        currency = self._currency_service.find(currency_id)
+        currency = self._currency_service.find_by_id(currency_id)
         return currency_serializer.dump(currency), 200
 
     @_api.doc(

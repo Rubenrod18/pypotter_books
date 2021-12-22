@@ -17,14 +17,14 @@ class RoleService(BaseService):
         db.session.flush()
         return role
 
-    def find(self, role_id: int, *args):
+    def find_by_id(self, role_id: int, *args):
         self.serializer.load({'id': role_id}, partial=True)
-        return self.manager.find(role_id)
+        return self.manager.find_by_id(role_id)
 
     def save(self, role_id: int, **kwargs):
         serialized_data = self.serializer.load(kwargs)
         self.manager.save(role_id, **serialized_data)
-        return self.manager.find(role_id)
+        return self.manager.find_by_id(role_id)
 
     def delete(self, role_id: int):
         self.serializer.load({'id': role_id}, partial=True)

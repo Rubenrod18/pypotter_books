@@ -52,7 +52,7 @@ class BookPriceResource(_BookPriceBaseResource):
     @_api.marshal_with(book_price_sw_model, envelope='data')
     @token_required
     def get(self, book_id: int) -> tuple:
-        book_price = self._book_price_service.find(book_id)
+        book_price = self._book_price_service.find_by_id(book_id)
         return book_price_serializer.dump(book_price), 200
 
     @_api.doc(

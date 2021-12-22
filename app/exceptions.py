@@ -7,35 +7,20 @@ flask-restx: https://flask-restx.readthedocs.io/en/latest/errors.html
 """
 import logging
 import traceback
-import typing
 
 from flask import current_app
 from flask import Flask
 from flask import jsonify
 from marshmallow import ValidationError
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import UnprocessableEntity
 
 from app.extensions import db
-
-if typing.TYPE_CHECKING:
-    from werkzeug.sansio.response import Response
 
 logger = logging.getLogger(__name__)
 
 
-class DoesNotExist(HTTPException):
-    code = 422
-    description = 'The record doesn\'t exist'
-
-    def __init__(
-        self,
-        description: typing.Optional[str] = None,
-        response: typing.Optional['Response'] = None,
-    ) -> None:
-        if description is not None:
-            self.description = description
-        self.response = response
-        super(DoesNotExist, self).__init__(description, response)
+class DoesNotExist(UnprocessableEntity):
+    pass
 
 
 def init_app(app: Flask) -> None:

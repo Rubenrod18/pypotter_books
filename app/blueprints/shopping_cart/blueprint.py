@@ -76,7 +76,9 @@ class ShoppingCartResource(_ShoppingCartResource):
     @_api.marshal_with(shopping_cart_sw_model, envelope='data')
     @token_required
     def get(self, shopping_cart_id: int) -> tuple:
-        shopping_cart = self._shopping_cart_service.find(shopping_cart_id)
+        shopping_cart = self._shopping_cart_service.find_by_id(
+            shopping_cart_id
+        )
         return shopping_cart_serializer.dump(shopping_cart), 200
 
     @_api.doc(
@@ -92,7 +94,7 @@ class ShoppingCartResource(_ShoppingCartResource):
     @_api.marshal_with(shopping_cart_sw_model, envelope='data')
     @token_required
     def put(self, shopping_cart_id: int) -> tuple:
-        shopping_cart = self._shopping_cart_service.find(
+        shopping_cart = self._shopping_cart_service.find_by_id(
             shopping_cart_id, **{'deleted_at': None}
         )
         self._shopping_cart_service.delete_books_relation(shopping_cart_id)

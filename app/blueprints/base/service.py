@@ -9,12 +9,12 @@ class BaseService:
     def create(self, **kwargs):
         return self.manager.create(**kwargs)
 
-    def find(self, record_id: int, **kwargs):
-        return self.manager.find(record_id, **kwargs)
+    def find_by_id(self, record_id: int, **kwargs):
+        return self.manager.find_by_id(record_id, **kwargs)
 
     def save(self, record_id: int, **kwargs):
         self.manager.save(record_id, **kwargs)
-        return self.manager.find(record_id, **{'deleted_at': None})
+        return self.manager.find_by_id(record_id, **{'deleted_at': None})
 
     def get(self, **kwargs):
         serialized_data = search_serializer.load(kwargs)

@@ -44,7 +44,7 @@ class LoadShoppingCartBookSerializer(ma.Schema):
     @staticmethod
     def __check_if_books_are_already_created(book_ids: list) -> None:
         for book_id in book_ids:
-            if not _book_manager.find(book_id, **{'deleted_at': None}):
+            if not _book_manager.find_by_id(book_id, **{'deleted_at': None}):
                 ValidationError(
                     field_name='book_id',
                     message=[f'"{book_id}" Book ID not found.'],
@@ -65,7 +65,7 @@ class LoadShoppingCartBookSerializer(ma.Schema):
     @staticmethod
     def __check_exists_shopping_cart_id(shopping_cart_id: int) -> None:
         if (
-            _shopping_cart_manager.find(
+            _shopping_cart_manager.find_by_id(
                 shopping_cart_id, **{'deleted_at': None}
             )
             is None

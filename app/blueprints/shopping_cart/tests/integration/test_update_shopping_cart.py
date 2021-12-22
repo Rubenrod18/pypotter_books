@@ -66,6 +66,6 @@ class TestUpdateShoppingCart(_ShoppingCartBaseIntegrationTest):
         self.assertEqual(422, response.status_code, msg=json_response)
         self.assertEqual(
             json_response.get('message'),
-            'The record doesn\'t exist',
+            'Shopping Cart not found',
             msg=json_response,
         )

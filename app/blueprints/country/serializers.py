@@ -39,7 +39,7 @@ class CountrySerializer(ma.SQLAlchemySchema):
     @validates('currency_id')
     def validate_currency_id(self, currency_id: int):
         kwargs = {'deleted_at': None}
-        currency = currency_manager.find(currency_id, **kwargs)
+        currency = currency_manager.find_by_id(currency_id, **kwargs)
 
         if currency is None:
             logger.debug(f'Currency "{currency_id}" not found')

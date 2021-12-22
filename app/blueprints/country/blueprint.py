@@ -54,7 +54,7 @@ class CountryResource(_CountryBaseResource):
     @_api.marshal_with(country_sw_model, envelope='data')
     @token_required
     def get(self, country_id: int) -> tuple:
-        country = self._country_service.find(country_id)
+        country = self._country_service.find_by_id(country_id)
         return country_serializer.dump(country), 200
 
     @_api.doc(

@@ -1,6 +1,4 @@
 from marshmallow import fields
-from marshmallow import validates
-from marshmallow import ValidationError
 
 from app.blueprints.base import TimestampField
 from app.blueprints.shopping_cart import ShoppingCart
@@ -29,19 +27,5 @@ class ShoppingCartSerializer(ma.SQLAlchemySchema):
     books = fields.List(fields.Nested('ShoppingCartBookSerializer'))
 
 
-class LoadShoppingCartUpdateSerializer(ShoppingCartSerializer):
-    @validates('id')
-    def validate_age(self, data, **kwargs):
-        print(f' ====> {data}')
-
-        if _shopping_cart_manager.find(data, **{'deleted_at': None}) is None:
-            raise ValidationError(
-                field_name='id',
-                message=['Doesn\'t exist in database'],
-            )
-
-
 shopping_cart_serializer = ShoppingCartSerializer()
 shopping_carts_serializer = ShoppingCartSerializer(many=True)
-
-load_shopping_cart_update_serializer = LoadShoppingCartUpdateSerializer()

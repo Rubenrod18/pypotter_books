@@ -50,7 +50,7 @@ class BillResource(_BillBaseResource):
     @_api.marshal_with(bill_sw_model, envelope='data')
     @token_required
     def get(self, bill_id: int) -> tuple:
-        bill = self._bill_service.find(bill_id)
+        bill = self._bill_service.find_by_id(bill_id)
         return bill_serializer.dump(bill), 200
 
     @_api.doc(

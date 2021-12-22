@@ -1,8 +1,6 @@
-from ...exceptions import DoesNotExist
 from ...extensions import db
 from ..shopping_cart_book.manager import ShoppingCartBookManager
 from .manager import ShoppingCartManager
-from .serializers import load_shopping_cart_update_serializer
 from .serializers import shopping_cart_serializer
 from app.blueprints.base import BaseService
 
@@ -25,19 +23,3 @@ class ShoppingCartService(BaseService):
         return self.shopping_cart_book_manager.remove_by_shopping_cart_id(
             shopping_cart_id
         )
-
-    def find(self, record_id: int, **kwargs):
-        record = self.manager.find(record_id, **kwargs)
-
-        if record is None:
-            raise DoesNotExist()
-
-        return record
-
-    def save(self, record_id: int, **kwargs):
-        kwargs['id'] = record_id
-        deserialized_data = load_shopping_cart_update_serializer.load(kwargs)
-        kwargs.pop('id')
-
-        self.manager.save(record_id, **deserialized_data)
-        return self.manager.find(record_id, **{'deleted_at': None})

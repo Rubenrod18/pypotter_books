@@ -24,7 +24,7 @@ role_manager = RoleManager()
 
 class _VerifyRoleId(fields.Field):
     def _deserialize(self, value, *args, **kwargs):
-        role = role_manager.find(value)
+        role = role_manager.find_by_id(value)
         if role is None:
             raise NotFound(f'Role "{value}" not found')
 
@@ -67,7 +67,7 @@ class UserSerializer(ma.SQLAlchemySchema):
     @validates('id')
     def validate_id(self, user_id: int):
         kwargs = {'deleted_at': None}
-        user = user_manager.find(user_id, **kwargs)
+        user = user_manager.find_by_id(user_id, **kwargs)
 
         if user is None:
             logger.debug(f'User "{user_id}" not found')

@@ -1,3 +1,4 @@
+import re
 from typing import Union
 
 
@@ -30,3 +31,7 @@ class StrHelper:
             if value == item:
                 total += 1
         return total
+
+    @staticmethod
+    def pascal_case_to_normal_case(input: str) -> Union[str, None]:
+        return re.sub(r'(?<!^)(?=[A-Z])', ' ', input)
