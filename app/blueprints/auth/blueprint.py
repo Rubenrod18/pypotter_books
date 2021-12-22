@@ -27,7 +27,7 @@ class AuthUserLoginResource(AuthBaseResource):
     @api.expect(auth_login_sw_model)
     @api.marshal_with(auth_token_sw_model)
     def post(self) -> tuple:
-        user = auth_user_login_serializer.load(self.request_payload())
+        user = auth_user_login_serializer.load(self._request_payload())
         # TODO: Pending to testing whats happen if add a new field in user
         # model when a user is logged
         SecurityWrapper.login_user(user)

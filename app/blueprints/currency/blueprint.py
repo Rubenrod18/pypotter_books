@@ -10,16 +10,18 @@ from app.decorators import token_required
 from app.extensions import api as root_api
 
 blueprint = Blueprint('currencies', __name__)
-api = root_api.namespace('currencies', description='Currencies endpoints.')
+_api = root_api.namespace('currencies', description='Currencies endpoints.')
 
 
 class _CurrencyBaseResource(BaseResource):
-    currency_service = CurrencyService()
+    def __init__(self, *args, **kwargs):
+        super(_CurrencyBaseResource, self).__init__(*args, **kwargs)
+        self._currency_service = CurrencyService()
 
 
-@api.route('')
+@_api.route('')
 class NewCurrencyResource(_CurrencyBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -27,17 +29,17 @@ class NewCurrencyResource(_CurrencyBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(currency_sw_model)
-    @api.marshal_with(currency_sw_model, envelope='data', code=201)
+    @_api.expect(currency_sw_model)
+    @_api.marshal_with(currency_sw_model, envelope='data', code=201)
     @token_required
     def post(self) -> tuple:
-        currency = self.currency_service.create(**self.request_payload())
+        currency = self._currency_service.create(**self._request_payload())
         return currency_serializer.dump(currency), 201
 
 
-@api.route('/<int:currency_id>')
+@_api.route('/<int:currency_id>')
 class CurrencyResource(_CurrencyBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -45,13 +47,13 @@ class CurrencyResource(_CurrencyBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(currency_sw_model, envelope='data')
+    @_api.marshal_with(currency_sw_model, envelope='data')
     @token_required
     def get(self, currency_id: int) -> tuple:
-        currency = self.currency_service.find(currency_id)
+        currency = self._currency_service.find(currency_id)
         return currency_serializer.dump(currency), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -60,16 +62,16 @@ class CurrencyResource(_CurrencyBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(currency_sw_model)
-    @api.marshal_with(currency_sw_model, envelope='data')
+    @_api.expect(currency_sw_model)
+    @_api.marshal_with(currency_sw_model, envelope='data')
     @token_required
     def put(self, currency_id: int) -> tuple:
-        currency = self.currency_service.save(
-            currency_id, **self.request_payload()
+        currency = self._currency_service.save(
+            currency_id, **self._request_payload()
         )
         return currency_serializer.dump(currency), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -78,16 +80,16 @@ class CurrencyResource(_CurrencyBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(currency_sw_model, envelope='data')
+    @_api.marshal_with(currency_sw_model, envelope='data')
     @token_required
     def delete(self, currency_id: int) -> tuple:
-        currency = self.currency_service.delete(currency_id)
+        currency = self._currency_service.delete(currency_id)
         return currency_serializer.dump(currency), 200
 
 
-@api.route('/search')
+@_api.route('/search')
 class CurrencysSearchResource(_CurrencyBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             200: 'Success',
             401: 'Unauthorized',
@@ -96,10 +98,10 @@ class CurrencysSearchResource(_CurrencyBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(currency_search_output_sw_model)
+    @_api.marshal_with(currency_search_output_sw_model)
     @token_required
     def post(self) -> tuple:
-        currency_data = self.currency_service.get(**self.request_payload())
+        currency_data = self._currency_service.get(**self._request_payload())
         currency_data_lst = list(currency_data['query'].items)
         return {
             'data': currencies_serializer.dump(currency_data_lst),

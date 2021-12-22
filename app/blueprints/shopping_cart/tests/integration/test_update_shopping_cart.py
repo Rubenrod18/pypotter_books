@@ -48,7 +48,9 @@ class TestUpdateShoppingCart(_ShoppingCartBaseIntegrationTest):
             self.assertEqual(item.get('updated_at'), item.get('created_at'))
             self.assertIsNone(item.get('deleted_at'))
 
-    def test_tmp(self):
+    def test_is_shopping_cart_not_updated_shopping_cart_doesnt_exist_returns_validation_error_response(  # noqa
+        self,
+    ):
         data = {'units': [3], 'book_ids': [1]}
         shopping_cart_id = 999
 

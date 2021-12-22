@@ -10,16 +10,18 @@ from app.decorators import token_required
 from app.extensions import api as root_api
 
 blueprint = Blueprint('books', __name__)
-api = root_api.namespace('books', description='Books endpoints.')
+_api = root_api.namespace('books', description='Books endpoints.')
 
 
 class _BookBaseResource(BaseResource):
-    book_service = BookService()
+    def __init__(self, *args, **kwargs):
+        super(_BookBaseResource, self).__init__(*args, **kwargs)
+        self._book_service = BookService()
 
 
-@api.route('')
+@_api.route('')
 class NewBookResource(_BookBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -27,17 +29,17 @@ class NewBookResource(_BookBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(book_sw_model)
-    @api.marshal_with(book_sw_model, envelope='data', code=201)
+    @_api.expect(book_sw_model)
+    @_api.marshal_with(book_sw_model, envelope='data', code=201)
     @token_required
     def post(self) -> tuple:
-        book = self.book_service.create(**self.request_payload())
+        book = self._book_service.create(**self._request_payload())
         return book_serializer.dump(book), 201
 
 
-@api.route('/<int:book_id>')
+@_api.route('/<int:book_id>')
 class BookResource(_BookBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -45,13 +47,13 @@ class BookResource(_BookBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(book_sw_model, envelope='data')
+    @_api.marshal_with(book_sw_model, envelope='data')
     @token_required
     def get(self, book_id: int) -> tuple:
-        book = self.book_service.find(book_id)
+        book = self._book_service.find(book_id)
         return book_serializer.dump(book), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -60,14 +62,14 @@ class BookResource(_BookBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(book_sw_model)
-    @api.marshal_with(book_sw_model, envelope='data')
+    @_api.expect(book_sw_model)
+    @_api.marshal_with(book_sw_model, envelope='data')
     @token_required
     def put(self, book_id: int) -> tuple:
-        book = self.book_service.save(book_id, **self.request_payload())
+        book = self._book_service.save(book_id, **self._request_payload())
         return book_serializer.dump(book), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -76,16 +78,16 @@ class BookResource(_BookBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(book_sw_model, envelope='data')
+    @_api.marshal_with(book_sw_model, envelope='data')
     @token_required
     def delete(self, book_id: int) -> tuple:
-        book = self.book_service.delete(book_id)
+        book = self._book_service.delete(book_id)
         return book_serializer.dump(book), 200
 
 
-@api.route('/search')
+@_api.route('/search')
 class BooksSearchResource(_BookBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             200: 'Success',
             401: 'Unauthorized',
@@ -94,10 +96,10 @@ class BooksSearchResource(_BookBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(book_search_output_sw_model)
+    @_api.marshal_with(book_search_output_sw_model)
     @token_required
     def post(self) -> tuple:
-        book_data = self.book_service.get(**self.request_payload())
+        book_data = self._book_service.get(**self._request_payload())
         book_data_lst = list(book_data['query'].items)
         return {
             'records_total': book_data['records_total'],

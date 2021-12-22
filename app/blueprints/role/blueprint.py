@@ -12,18 +12,21 @@ from app.blueprints.base import search_input_sw_model
 from app.decorators import token_required
 from app.extensions import api as root_api
 
-_API_DESCRIPTION = 'Users with role admin can manage these endpoints.'
 blueprint = Blueprint('roles', __name__)
-api = root_api.namespace('roles', description=_API_DESCRIPTION)
+_api = root_api.namespace(
+    'roles', description='Users with role admin can manage these endpoints.'
+)
 
 
-class RoleBaseResource(BaseResource):
-    role_service = RoleService()
+class _RoleBaseResource(BaseResource):
+    def __init__(self, *args, **kwargs):
+        super(_RoleBaseResource, self).__init__(*args, **kwargs)
+        self._role_service = RoleService()
 
 
-@api.route('')
-class NewRoleResource(RoleBaseResource):
-    @api.doc(
+@_api.route('')
+class NewRoleResource(_RoleBaseResource):
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -31,18 +34,18 @@ class NewRoleResource(RoleBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(role_input_sw_model)
-    @api.marshal_with(role_sw_model, envelope='data', code=201)
+    @_api.expect(role_input_sw_model)
+    @_api.marshal_with(role_sw_model, envelope='data', code=201)
     @token_required
     @roles_required('admin')
     def post(self) -> tuple:
-        role = self.role_service.create(**self.request_payload())
+        role = self._role_service.create(**self._request_payload())
         return role_serializer.dump(role), 201
 
 
-@api.route('/<int:role_id>')
-class RoleResource(RoleBaseResource):
-    @api.doc(
+@_api.route('/<int:role_id>')
+class RoleResource(_RoleBaseResource):
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -50,14 +53,14 @@ class RoleResource(RoleBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(role_sw_model, envelope='data')
+    @_api.marshal_with(role_sw_model, envelope='data')
     @token_required
     @roles_required('admin')
     def get(self, role_id: int) -> tuple:
-        role = self.role_service.find(role_id)
+        role = self._role_service.find(role_id)
         return role_serializer.dump(role), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -66,15 +69,15 @@ class RoleResource(RoleBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(role_input_sw_model)
-    @api.marshal_with(role_sw_model, envelope='data')
+    @_api.expect(role_input_sw_model)
+    @_api.marshal_with(role_sw_model, envelope='data')
     @token_required
     @roles_required('admin')
     def put(self, role_id: int) -> tuple:
-        role = self.role_service.save(role_id, **self.request_payload())
+        role = self._role_service.save(role_id, **self._request_payload())
         return role_serializer.dump(role), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -82,17 +85,17 @@ class RoleResource(RoleBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(role_sw_model, envelope='data')
+    @_api.marshal_with(role_sw_model, envelope='data')
     @token_required
     @roles_required('admin')
     def delete(self, role_id: int) -> tuple:
-        role = self.role_service.delete(role_id)
+        role = self._role_service.delete(role_id)
         return role_serializer.dump(role), 200
 
 
-@api.route('/search')
-class RolesSearchResource(RoleBaseResource):
-    @api.doc(
+@_api.route('/search')
+class RolesSearchResource(_RoleBaseResource):
+    @_api.doc(
         responses={
             200: 'Success',
             401: 'Unauthorized',
@@ -101,12 +104,12 @@ class RolesSearchResource(RoleBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(search_input_sw_model)
-    @api.marshal_with(role_search_output_sw_model)
+    @_api.expect(search_input_sw_model)
+    @_api.marshal_with(role_search_output_sw_model)
     @token_required
     @roles_required('admin')
     def post(self) -> tuple:
-        role_data = self.role_service.get(**self.request_payload())
+        role_data = self._role_service.get(**self._request_payload())
         return {
             'data': roles_serializer.dump(role_data['query'].items),
             'records_total': role_data['records_total'],
