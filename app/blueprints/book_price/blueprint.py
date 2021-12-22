@@ -2,10 +2,12 @@ from flask import Blueprint
 
 from .serializers import book_price_serializer
 from .serializers import book_prices_serializer
-from .service import BookPriceService
 from .swagger import book_price_search_output_sw_model
 from .swagger import book_price_sw_model
 from app.blueprints.base import BaseResource
+from app.blueprints.book_price.services.book_price_service import (
+    BookPriceService,
+)
 from app.decorators import token_required
 from app.extensions import api as root_api
 

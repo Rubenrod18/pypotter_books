@@ -21,7 +21,7 @@ class TestGetBookStock(_BookStockBaseIntegrationTest):
             self.book_stock.country_id, json_data.get('country_id')
         )
         self.assertEqual(self.book_stock.book_id, json_data.get('book_id'))
-        self.assertEqual(self.book_stock.quantity, json_data.get('quantity'))
+        self.assertEqual(self.book_stock.stock, json_data.get('stock'))
         self.assertEqual(
             self.book_stock.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             json_data.get('created_at'),

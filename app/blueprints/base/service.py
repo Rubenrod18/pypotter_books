@@ -9,8 +9,8 @@ class BaseService:
     def create(self, **kwargs):
         return self.manager.create(**kwargs)
 
-    def find(self, record_id: int, *args):
-        return self.manager.find(record_id, *args)
+    def find(self, record_id: int, **kwargs):
+        return self.manager.find(record_id, **kwargs)
 
     def save(self, record_id: int, **kwargs):
         self.manager.save(record_id, **kwargs)

@@ -10,6 +10,12 @@ class ShoppingCartFactory(BaseFactory):
     class Meta:
         model = ShoppingCart
 
+    total_price = factory.Faker(
+        'pyfloat',
+        right_digits=2,
+        positive=True,
+    )
+
     @factory.lazy_attribute
     def user_id(self):
         rand_user = (

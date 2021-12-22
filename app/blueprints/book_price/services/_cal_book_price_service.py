@@ -1,13 +1,29 @@
 import math
 from collections import Counter
+from typing import Union
 
 from app.helpers import ListHelper
 from app.helpers import StrHelper
 
 
-class BookPriceService:
+class _CalBookPriceService:
     @staticmethod
     def calculate(books):
+        """Calculate final price based on all collections.
+
+        Parameters
+        ----------
+        books : list
+            Book collections calculated. For example::
+
+                [[0, 1, 3, 4], [0, 1, 3, 4], [0, 3], [3]]
+
+        Returns
+        -------
+        float or int
+            Calculated price.
+
+        """
         book_price = 8
         books_final_price = 0
 
@@ -29,11 +45,33 @@ class BookPriceService:
         return books_final_price
 
     @staticmethod
-    def duplicates(needle, lst):
+    def duplicates(needle, books):
+        """
+
+        Parameters
+        ----------
+        needle : list
+            Values to search in the `books` param.
+        books : list
+            Contains the book id's.
+
+        Returns
+        -------
+        list
+            Book collections calculated.
+
+        Example
+        -------
+        >>> needle = [0, 1, 3, 4]
+        >>> lst = [0, 0, 0, 1, 1, 2, 3, 3, 3, 3, 4, 4]
+        >>> _CalBookPriceService.duplicates(needle, lst)
+        [[0, 1, 3, 4], [0, 1, 3, 4], [0, 3], [3]]
+
+        """
         book_collections = []
 
         for item in needle:
-            total_duplicated = StrHelper.total_count(item, lst)
+            total_duplicated = StrHelper.total_count(item, books)
 
             for index in range(total_duplicated):
                 try:
@@ -47,6 +85,36 @@ class BookPriceService:
     def check_four_discount_collections(
         books, books_collections, unique_books
     ):
+        """Check four discount collections.
+
+        If any collection has more than 4 items then one of them is added
+        to the collection with minimum items.
+
+        Parameters
+        ----------
+        books : list
+            Contains the book id's.
+        books_collections : list
+            Contains the book collections calculated.
+        unique_books : set
+            Unique book id's.
+
+        Returns
+        -------
+        list
+            New book collections calculated.
+
+        Example
+        -------
+        >>> books = [0, 0, 0, 1, 1, 2, 3, 3, 3, 3, 4, 4]
+        >>> books_collections = [[0, 1, 3, 4], [0, 1, 3, 4], [0, 3], [3, 2]]
+        >>> unique_books = {0, 1, 2, 3, 4}
+        >>> _CalBookPriceService.check_four_discount_collections(
+        >>>     books, books_collections, unique_books
+        >>> )
+        [[0, 1, 3], [0, 1, 3], [0, 3, 4], [3, 2, 4]]
+
+        """
         if len(unique_books) == 5 and len(books) > 6:
             is_invalid = True
             while is_invalid:
@@ -56,7 +124,7 @@ class BookPriceService:
                     if len(item) >= 4:
                         max_coll += 1
 
-                if four_collections != max_coll:
+                if four_collections != max_coll and max_coll > 0:
                     # TODO: improve this code for getting the min row
                     min_index = None
                     min_elements = len(books)
@@ -77,11 +145,32 @@ class BookPriceService:
                     books_collections[min_index].append(value)
                 else:
                     is_invalid = False
+
         return books_collections
 
     def cal_duplicate_book_collections(
-        self, books, books_duplicated, unique_books
-    ):
+        self, books: list, books_duplicated: list, unique_books: set
+    ) -> list:
+        """Calcuation duplicate book collections.
+
+        Parameters
+        ----------
+        books : list
+            Contains the book id's.
+        books_duplicated : list
+            Contains the book id's that has duplicated values in `books` param.
+        unique_books : set
+            Unique book id's.
+
+        Returns
+        -------
+        list
+            Book collections calculated. For example::
+
+                [[0, 1, 2, 3, 4], [1]]
+                [[0, 1], [0, 1]]
+
+        """
         books_collections = self.duplicates(books_duplicated, books)
         c = Counter(books)
         common = [
@@ -107,7 +196,27 @@ class BookPriceService:
 
         return books_collections
 
-    def cal_collections(self, books):
+    def cal_collections(self, books: list) -> list:
+        """Calculation book collections.
+
+        The books are ordered by a collection with secuence number.
+        The duplicated ID's are added to diferents collections.
+
+        Parameters
+        ----------
+        books : list
+            Contains the book id's. For example::
+
+                [0, 1, 1, 2, 3, 4]
+
+        Returns
+        -------
+        list
+            Returns the books group by collection of five. For example::
+
+                [[0, 1, 2, 3, 4], [1]]
+
+        """
         books_collections = []
 
         if books:
@@ -127,6 +236,21 @@ class BookPriceService:
 
         return books_collections
 
-    def price(self, books):
+    def price(self, books: list) -> Union[float, int]:
+        """Calculation books price.
+
+        Parameters
+        ----------
+        books : list
+            Contains the book id's. For example::
+
+                [0, 1, 1, 2, 3, 4]
+
+        Returns
+        -------
+        float or int
+            Calculated price for books.
+
+        """
         books_collections = self.cal_collections(books)
         return self.calculate(books_collections)

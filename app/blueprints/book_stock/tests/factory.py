@@ -11,7 +11,7 @@ class BookStockFactory(BaseFactory):
     class Meta:
         model = BookStock
 
-    quantity = factory.Faker('pyint', min_value=1, max_value=9999)
+    stock = factory.Faker('pyint', min_value=100, max_value=9999)
 
     @factory.lazy_attribute
     def country_id(self):

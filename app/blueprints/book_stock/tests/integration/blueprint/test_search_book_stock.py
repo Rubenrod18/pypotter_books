@@ -45,17 +45,17 @@ class TestSearchBookStocks(_BookStockBaseIntegrationTest):
         json_data = self.__request(payload)
         self.assertEqual(self.book_stock.book_id, json_data.get('book_id'))
 
-    def test_search_book_stock_exist_book_stock_quantity_returns_book_stock(
+    def test_search_book_stock_exist_book_stock_stock_returns_book_stock(
         self,
     ):
         payload = {
             'search': [
                 {
-                    'field_name': 'quantity',
-                    'field_value': self.book_stock.quantity,
+                    'field_name': 'stock',
+                    'field_value': self.book_stock.stock,
                 },
             ],
         }
 
         json_data = self.__request(payload)
-        self.assertEqual(self.book_stock.quantity, json_data.get('quantity'))
+        self.assertEqual(self.book_stock.stock, json_data.get('stock'))

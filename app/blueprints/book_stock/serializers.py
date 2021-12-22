@@ -14,7 +14,7 @@ class BookStockSerializer(ma.SQLAlchemySchema):
     # Normal fields
     country_id = ma.auto_field()
     book_id = ma.auto_field()
-    quantity = ma.auto_field()
+    stock = ma.auto_field()
 
     # Output fields
     created_at = TimestampField(dump_only=True)

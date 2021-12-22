@@ -1,14 +1,17 @@
 from flask import Blueprint
 
+from ...wrappers import SecurityWrapper
+from ..book_price.services.book_price_service import BookPriceService
+from ..shopping_cart_book.service import ShoppingCartBookService
 from .serializers import shopping_cart_serializer
 from .serializers import shopping_carts_serializer
 from .service import ShoppingCartService
+from .swagger import shopping_cart_input_sw_model
 from .swagger import shopping_cart_search_output_sw_model
 from .swagger import shopping_cart_sw_model
 from app.blueprints.base import BaseResource
 from app.decorators import token_required
 from app.extensions import api as root_api
-
 
 blueprint = Blueprint('shopping_carts', __name__)
 api = root_api.namespace(
@@ -17,7 +20,9 @@ api = root_api.namespace(
 
 
 class _ShoppingCartResource(BaseResource):
+    book_price_service = BookPriceService()
     shopping_cart_service = ShoppingCartService()
+    shopping_cart_book_service = ShoppingCartBookService()
 
 
 @api.route('')
@@ -30,12 +35,30 @@ class NewShoppingCartResource(_ShoppingCartResource):
         },
         security='auth_token',
     )
-    @api.expect(shopping_cart_sw_model)
+    @api.expect(shopping_cart_input_sw_model)
     @api.marshal_with(shopping_cart_sw_model, envelope='data', code=201)
     @token_required
     def post(self) -> tuple:
-        book = self.shopping_cart_service.create(**self.request_payload())
-        return shopping_cart_serializer.dump(book), 201
+        current_user = SecurityWrapper.current_user()
+        shopping_cart = self.shopping_cart_service.create(
+            **{'user_id': current_user.id, 'total_price': 0}
+        )
+
+        request_payload = self.request_payload()
+        request_payload['shopping_cart_id'] = shopping_cart.id
+        shopping_cart_books = self.shopping_cart_book_service.create(
+            **request_payload
+        )
+
+        book_ids = []
+        for shopping_cart_book in shopping_cart_books:
+            book_ids += [shopping_cart_book.book_id] * shopping_cart_book.units
+
+        self.shopping_cart_service.manager.save(
+            shopping_cart.id,
+            **{'total_price': self.book_price_service.cal_price(book_ids)}
+        )
+        return shopping_cart_serializer.dump(shopping_cart), 201
 
 
 @api.route('/<int:shopping_cart_id>')
@@ -63,12 +86,28 @@ class ShoppingCartResource(_ShoppingCartResource):
         },
         security='auth_token',
     )
-    @api.expect(shopping_cart_sw_model)
+    @api.expect(shopping_cart_input_sw_model)
     @api.marshal_with(shopping_cart_sw_model, envelope='data')
     @token_required
     def put(self, shopping_cart_id: int) -> tuple:
-        shopping_cart = self.shopping_cart_service.save(
-            shopping_cart_id, **self.request_payload()
+        shopping_cart = self.shopping_cart_service.find(
+            shopping_cart_id, **{'deleted_at': None}
+        )
+        self.shopping_cart_service.delete_books_relation(shopping_cart_id)
+
+        request_payload = self.request_payload()
+        request_payload['shopping_cart_id'] = shopping_cart.id
+        shopping_cart_books = self.shopping_cart_book_service.create(
+            **request_payload
+        )
+
+        book_ids = []
+        for shopping_cart_book in shopping_cart_books:
+            book_ids += [shopping_cart_book.book_id] * shopping_cart_book.units
+
+        self.shopping_cart_service.manager.save(
+            shopping_cart.id,
+            **{'total_price': self.book_price_service.cal_price(book_ids)}
         )
         return shopping_cart_serializer.dump(shopping_cart), 200
 

@@ -36,7 +36,6 @@ class BookPrice(db.Model, BaseMixin):
         ),
         nullable=False,
     )
-    vat = Column(Float, nullable=False)
     price = Column(Float, nullable=False)
 
     __table_args__ = (
@@ -67,7 +66,7 @@ class BookStock(db.Model, BaseMixin):
         ),
         nullable=False,
     )
-    quantity = Column(Integer, nullable=False)
+    stock = Column(Integer, nullable=False)
 
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),

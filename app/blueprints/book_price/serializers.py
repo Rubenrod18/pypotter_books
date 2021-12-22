@@ -14,7 +14,6 @@ class BookPriceSerializer(ma.SQLAlchemySchema):
     # Normal fields
     book_id = ma.auto_field()
     country_id = ma.auto_field()
-    vat = ma.auto_field()
     price = ma.auto_field()
 
     # Output fields

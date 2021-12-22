@@ -11,9 +11,6 @@ class BookPriceFactory(BaseFactory):
     class Meta:
         model = BookPrice
 
-    vat = factory.Faker(
-        'pyfloat', right_digits=2, positive=True, max_value=10.0
-    )
     price = 8.00
 
     @factory.lazy_attribute

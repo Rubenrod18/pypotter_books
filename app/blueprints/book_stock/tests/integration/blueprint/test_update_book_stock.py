@@ -24,7 +24,7 @@ class TestUpdateBookPrice(_BookStockBaseIntegrationTest):
         self.assertEqual(self.book_stock.id, json_data.get('id'))
         self.assertEqual(data['country_id'], json_data.get('country_id'))
         self.assertEqual(data['book_id'], json_data.get('book_id'))
-        self.assertEqual(data['quantity'], json_data.get('quantity'))
+        self.assertEqual(data['stock'], json_data.get('stock'))
         self.assertTrue(json_data.get('created_at'))
         self.assertGreaterEqual(
             json_data.get('updated_at'), json_data.get('created_at')

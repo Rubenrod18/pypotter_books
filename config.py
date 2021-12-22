@@ -94,4 +94,4 @@ class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv('TEST_SQLALCHEMY_DATABASE_URI')
 
     # Mr Developer
-    LOGGING_LEVEL = logging.WARNING
+    LOGGING_LEVEL = logging.INFO

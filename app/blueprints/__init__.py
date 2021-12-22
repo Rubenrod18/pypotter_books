@@ -16,7 +16,7 @@ def _get_blueprint_packages():
     ['auth', 'base', 'role', 'user']
 
     """
-    ignore = ('__pycache__', os.path.basename(__file__))
+    ignore = ('__pycache__', os.path.basename(__file__), 'shopping_cart_book')
 
     abs_path = os.path.abspath(__file__)
     path = os.path.dirname(abs_path)

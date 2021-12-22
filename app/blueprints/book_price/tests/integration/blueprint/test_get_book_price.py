@@ -21,7 +21,6 @@ class TestGetBookPrice(_BookPriceBaseIntegrationTest):
             self.book_price.country_id, json_data.get('country_id')
         )
         self.assertEqual(self.book_price.book_id, json_data.get('book_id'))
-        self.assertEqual(self.book_price.vat, json_data.get('vat'))
         self.assertEqual(self.book_price.price, json_data.get('price'))
         self.assertEqual(
             self.book_price.created_at.strftime('%Y-%m-%d %H:%M:%S'),

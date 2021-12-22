@@ -12,6 +12,10 @@ if typing.TYPE_CHECKING:
 
 class SecurityWrapper:
     @staticmethod
+    def current_user():
+        return flask_security.current_user
+
+    @staticmethod
     def create_token(user: 'User') -> str:
         return generate_login_token(user)
 

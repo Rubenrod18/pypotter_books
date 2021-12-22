@@ -19,6 +19,9 @@ class TestGetShoppingCart(_ShoppingCartBaseIntegrationTest):
         self.assertEqual(self.shopping_cart.id, json_data.get('id'))
         self.assertEqual(self.shopping_cart.user_id, json_data.get('user_id'))
         self.assertEqual(
+            self.shopping_cart.total_price, json_data.get('total_price')
+        )
+        self.assertEqual(
             self.shopping_cart.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             json_data.get('created_at'),
         )
