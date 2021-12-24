@@ -1,11 +1,26 @@
 import logging
+import os
 import unittest
+import uuid
 
+from faker import Faker
+from faker.providers import date_time
+from faker.providers import person
 from flask import Flask
 from flask import Response
 from flask.testing import FlaskClient
+from sqlalchemy import create_engine
+from sqlalchemy_utils import create_database
+from sqlalchemy_utils import database_exists
+from sqlalchemy_utils import drop_database
+
+from app.extensions import db
 
 logger = logging.getLogger(__name__)
+
+faker = Faker()
+faker.add_provider(person)
+faker.add_provider(date_time)
 
 
 class _CustomFlaskClient(FlaskClient):
@@ -56,7 +71,16 @@ class _CustomFlaskClient(FlaskClient):
 
 
 class BaseTest(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super(BaseTest, self).__init__(*args, **kwargs)
+        self.__engine = None
+        self._ctx = None
+        self.app = None
+        self.client = None
+        self.runner = None
+
     def setUp(self) -> None:
+        self.__create_database()
         app = self.__create_app()
         app_context = app.app_context()
         app_context.push()
@@ -65,19 +89,34 @@ class BaseTest(unittest.TestCase):
         self.client = self.__create_test_client(self.app)
         self.runner = self.app.test_cli_runner()
         self._ctx = app_context
+        with self.app.app_context():
+            db.create_all()
 
     def tearDown(self) -> None:
+        with self.app.app_context():
+            db.session.remove()
+            drop_database(self.__engine.url)
         self._ctx.pop()
 
-    @staticmethod
-    def __create_app():
+    def __create_app(self):
         """Create an app with testing environment."""
         from app import create_app
+        from config import TestConfig
 
-        return create_app('config.TestConfig')
+        TestConfig.SQLALCHEMY_DATABASE_URI = self.__engine.url.__str__()
+        return create_app(TestConfig)
 
     @staticmethod
     def __create_test_client(app: Flask):
         """Create a test client for making http requests."""
         app.test_client_class = _CustomFlaskClient
         return app.test_client()
+
+    def __create_database(self):
+        database_uri = (
+            f'{os.getenv("TEST_SQLALCHEMY_DATABASE_URI")}_{uuid.uuid4()}'
+        )
+        self.__engine = create_engine(database_uri)
+        if not database_exists(self.__engine.url):
+            create_database(self.__engine.url)
+        assert database_exists(self.__engine.url)

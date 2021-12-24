@@ -5,7 +5,7 @@ class TestDeleteBookPrice(_BookPriceBaseIntegrationTest):
     def test_is_book_price_deleted_book_price_exists_returns_book_price_deleted(  # noqa
         self,
     ):
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.delete(
             f'{self.base_path}/{self.book_price.id}',

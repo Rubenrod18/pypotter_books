@@ -1,11 +1,12 @@
 from ._base_integration_test import _BillBaseIntegrationTest
+from app.blueprints.user.tests.factories import AdminUserFactory
 
 
 class TestDeleteBill(_BillBaseIntegrationTest):
     def test_is_bill_deleted_bill_exists_returns_bill_deleted(
         self,
     ):
-        admin_user = self.get_rand_admin_user()
+        admin_user = AdminUserFactory(active=True, deleted_at=None)
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.delete(
             f'{self.base_path}/{self.bill.id}',

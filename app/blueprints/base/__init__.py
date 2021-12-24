@@ -7,4 +7,5 @@ from .swagger import creator_sw_model
 from .swagger import record_monitoring_sw_model
 from .swagger import search_input_sw_model
 from .tests.base_factory import BaseFactory
+from .tests.base_factory import BaseSeedFactory
 from .tests.base_test import BaseTest

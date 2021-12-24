@@ -59,4 +59,4 @@ test-path: ## Run only one test by path
 	docker-compose exec app coverage run -m unittest '$(path)'
 
 test-parallel:  ## Run tests in parallel
-	docker-compose exec app nosetests --processes=-1
+	docker-compose exec app nosetests -w app --processes=-1

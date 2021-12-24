@@ -1,8 +1,8 @@
 import os
 
-from .factory import Role
-from .factory import User
-from .factory import UserFactory
+from ...role import Role
+from .factories import User
+from .factories import UserSeedFactory
 from app.decorators import seed_actions
 
 
@@ -25,9 +25,9 @@ class Seeder:
                 'created_by': None,
                 'roles': [admin_role],
             }
-            UserFactory.create(**params)
+            UserSeedFactory.create(**params)
 
     @seed_actions
     def __init__(self, rows: int = 10):
         self.__create_admin_user()
-        UserFactory.create_batch(rows)
+        UserSeedFactory.create_batch(rows)

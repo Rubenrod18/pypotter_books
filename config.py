@@ -87,11 +87,5 @@ class TestConfig(Config):
     DEBUG = True
     TESTING = True
 
-    # Flask-Security-Too
-    SECURITY_LOGIN_WITHIN = '60 seconds'
-
     # Flask SQLAlchemy
     SQLALCHEMY_DATABASE_URI = os.getenv('TEST_SQLALCHEMY_DATABASE_URI')
-
-    # Mr Developer
-    LOGGING_LEVEL = logging.INFO

@@ -2,7 +2,7 @@ import collections
 from abc import ABC
 
 from app.blueprints import get_blueprint_modules
-from app.blueprints.base import BaseFactory
+from app.blueprints.base import BaseSeedFactory
 from app.cli._base_cli import _BaseCli
 from app.helpers import ModuleHelper
 
@@ -28,7 +28,7 @@ class SeederCli(_BaseCli, ABC):
         return self.__get_seeder_instances(seeder_modules)
 
     def run_command(self):
-        session = BaseFactory.get_db_session()
+        session = BaseSeedFactory.get_db_session()
         try:
             seeders = self.__get_seeders()
             ordered_seeders = collections.OrderedDict(sorted(seeders.items()))

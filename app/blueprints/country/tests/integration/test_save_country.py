@@ -1,6 +1,6 @@
 import factory
 
-from ..factory import CountryFactory
+from ..factories import CountryFactory
 from ._base_integration_test import _CountryBaseIntegrationTest
 from app.helpers import DictHelper
 
@@ -14,7 +14,7 @@ class TestSaveCountry(_CountryBaseIntegrationTest):
             factory.build(dict, FACTORY_CLASS=CountryFactory), exclude
         )
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
 
         response = self.client.post(

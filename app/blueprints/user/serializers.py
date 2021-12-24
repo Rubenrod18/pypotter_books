@@ -5,6 +5,7 @@ from marshmallow import post_dump
 from marshmallow import post_load
 from marshmallow import validate
 from marshmallow import validates
+from marshmallow import ValidationError
 from werkzeug.exceptions import BadRequest
 from werkzeug.exceptions import NotFound
 
@@ -24,12 +25,14 @@ role_manager = RoleManager()
 
 class _VerifyRoleId(fields.Field):
     def _deserialize(self, value, *args, **kwargs):
-        role = role_manager.find_by_id(value)
+        role = role_manager.find_or_none(**{'id': value})
         if role is None:
-            raise NotFound(f'Role "{value}" not found')
+            raise ValidationError(field_name='role', message=['Not found'])
 
         if role.deleted_at is not None:
-            raise BadRequest(f'Role "{value}" deleted')
+            raise ValidationError(
+                field_name='role', message=['Already deleted']
+            )
         return value
 
 

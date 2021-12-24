@@ -1,6 +1,6 @@
 import factory
 
-from ...factory import BookStockFactory
+from ...factories import BookStockFactory
 from ._base_integration_test import _BookStockBaseIntegrationTest
 
 
@@ -10,7 +10,7 @@ class TestUpdateBookPrice(_BookStockBaseIntegrationTest):
     ):
         data = factory.build(dict, FACTORY_CLASS=BookStockFactory)
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.put(
             f'{self.base_path}/{self.book_stock.id}',

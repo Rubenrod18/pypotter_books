@@ -5,7 +5,7 @@ class TestGetShoppingCart(_ShoppingCartBaseIntegrationTest):
     def test_is_shopping_cart_obtained_shopping_cart_exists_returns_shopping_cart(  # noqa
         self,
     ):
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.get(
             f'{self.base_path}/{self.shopping_cart.id}',

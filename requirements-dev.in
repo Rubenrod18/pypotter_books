@@ -1,11 +1,14 @@
 -r requirements.txt
 
+# Database
+sqlalchemy-utils
+
+# Git hooks
+pre-commit
+
 # Manage python packages
 pip-tools
 
 # Test
 coverage
 nose
-
-# Git hooks
-pre-commit

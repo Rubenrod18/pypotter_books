@@ -2,16 +2,36 @@ import factory
 from sqlalchemy import func
 
 from app.blueprints.base import BaseFactory
+from app.blueprints.base import BaseSeedFactory
 from app.blueprints.book import Book
-from app.blueprints.book import BookPrice
+from app.blueprints.book import BookStock
+from app.blueprints.book.tests.factories import BookFactory
 from app.blueprints.country import Country
+from app.blueprints.country.tests.factories import CountryFactory
 
 
-class BookPriceFactory(BaseFactory):
+class BookStockFactory(BaseFactory):
     class Meta:
-        model = BookPrice
+        model = BookStock
 
-    price = 8.00
+    stock = factory.Faker('pyint', min_value=100, max_value=9999)
+
+    @factory.lazy_attribute
+    def country_id(self):
+        country = CountryFactory(deleted_at=None)
+        return country.id
+
+    @factory.lazy_attribute
+    def book_id(self):
+        book = BookFactory(deleted_at=None)
+        return book.id
+
+
+class BookStockSeedFactory(BaseSeedFactory):
+    class Meta:
+        model = BookStock
+
+    stock = factory.Faker('pyint', min_value=100, max_value=9999)
 
     @factory.lazy_attribute
     def country_id(self):
@@ -19,7 +39,7 @@ class BookPriceFactory(BaseFactory):
 
         country = (
             Country.query.with_entities(Country.id)
-            .outerjoin(BookPrice)
+            .outerjoin(BookStock)
             .filter_by(deleted_at=None)
             .group_by(Country.id)
             .having(func.count(Country.id) < total_books)
@@ -33,13 +53,13 @@ class BookPriceFactory(BaseFactory):
     def book_id(self):
         subquery = (
             Book.query.with_entities(Book.id)
-            .outerjoin(BookPrice)
-            .filter(BookPrice.country_id == self.country_id)
+            .outerjoin(BookStock)
+            .filter(BookStock.country_id == self.country_id)
         )
 
         if subquery.count():
             book = (
-                Book.query.outerjoin(BookPrice)
+                Book.query.outerjoin(BookStock)
                 .outerjoin(Country)
                 .filter(Book.deleted_at.is_(None), ~Book.id.in_(subquery))
                 .first()

@@ -5,7 +5,7 @@ class TestDeleteBook(_BookBaseIntegrationTest):
     def test_is_book_deleted_book_exists_returns_book_deleted(
         self,
     ):
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.delete(
             f'{self.base_path}/{self.book.id}', json={}, headers=auth_header

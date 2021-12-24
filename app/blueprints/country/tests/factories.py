@@ -2,18 +2,35 @@ import factory
 from sqlalchemy import func
 
 from app.blueprints.base import BaseFactory
+from app.blueprints.base import BaseSeedFactory
 from app.blueprints.country import Country
 from app.blueprints.currency import Currency
-from app.blueprints.currency.tests.factory import BritishPoundCurrencyFactory
-from app.blueprints.currency.tests.factory import DollarCurrencyFactory
-from app.blueprints.currency.tests.factory import EuroCurrencyFactory
+from app.blueprints.currency.tests.factories import (
+    BritishPoundCurrencySeedFactory,
+)
+from app.blueprints.currency.tests.factories import CurrencyFactory
+from app.blueprints.currency.tests.factories import DollarCurrencySeedFactory
+from app.blueprints.currency.tests.factories import EuroCurrencySeedFactory
 
 
 class CountryFactory(BaseFactory):
     class Meta:
         model = Country
 
-    # Normal fields
+    name = factory.Faker('country')
+    alpha_2_code = factory.Faker('country_code', representation='alpha-2')
+    alpha_3_code = factory.Faker('country_code', representation='alpha-3')
+
+    @factory.lazy_attribute
+    def currency_id(self):
+        currency = CurrencyFactory()
+        return currency.id
+
+
+class CountrySeedFactory(BaseSeedFactory):
+    class Meta:
+        model = Country
+
     name = factory.Faker('country')
     alpha_2_code = factory.Faker('country_code', representation='alpha-2')
     alpha_3_code = factory.Faker('country_code', representation='alpha-3')
@@ -31,8 +48,8 @@ class CountryFactory(BaseFactory):
         return self.currency.id
 
 
-class UnitedStatesCountryFactory(CountryFactory):
-    currency = factory.RelatedFactory(DollarCurrencyFactory)
+class UnitedStatesCountrySeedFactory(CountrySeedFactory):
+    currency = factory.RelatedFactory(DollarCurrencySeedFactory)
     name = 'United States of America'
     alpha_2_code = 'US'
     alpha_3_code = 'USA'
@@ -46,8 +63,8 @@ class UnitedStatesCountryFactory(CountryFactory):
         )
 
 
-class SpainCountryFactory(CountryFactory):
-    currency = factory.RelatedFactory(EuroCurrencyFactory)
+class SpainCountrySeedFactory(CountrySeedFactory):
+    currency = factory.RelatedFactory(EuroCurrencySeedFactory)
     name = 'Spain'
     alpha_2_code = 'ES'
     alpha_3_code = 'ESP'
@@ -61,8 +78,8 @@ class SpainCountryFactory(CountryFactory):
         )
 
 
-class UnitedKingdomsCountryFactory(CountryFactory):
-    currency = factory.RelatedFactory(BritishPoundCurrencyFactory)
+class UnitedKingdomsCountrySeedFactory(CountrySeedFactory):
+    currency = factory.RelatedFactory(BritishPoundCurrencySeedFactory)
     name = 'United Kingdom of Great Britain and Northern Ireland'
     alpha_2_code = 'GB'
     alpha_3_code = 'GBR'

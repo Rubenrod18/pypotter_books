@@ -4,7 +4,7 @@ from sqlalchemy import func
 
 from app.blueprints.book import Book
 from app.blueprints.book import BookPrice
-from app.blueprints.book_price.tests.factory import BookPriceFactory
+from app.blueprints.book_price.tests.factories import BookPriceSeedFactory
 from app.blueprints.country import Country
 from app.decorators import seed_actions
 
@@ -29,4 +29,4 @@ class Seeder:
             .count()
         )
         total_book_prices = math.ceil(total_books * total_countries / 3)
-        BookPriceFactory.create_batch(total_book_prices)
+        BookPriceSeedFactory.create_batch(total_book_prices)

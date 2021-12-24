@@ -3,9 +3,7 @@ import os
 from sqlalchemy import func
 
 from app.blueprints.base import BaseTest
-from app.blueprints.role import Role
-from app.blueprints.user import User
-from app.blueprints.user import UserRoles
+from app.blueprints.user.tests.factories import AdminUserFactory
 from app.extensions import db
 
 
@@ -15,18 +13,8 @@ class BaseApiTest(BaseTest):
         self.base_path = '/api'
 
     @staticmethod
-    def get_rand_admin_user():
-        return (
-            db.session.query(User)
-            .join(UserRoles)
-            .join(Role)
-            .filter(
-                User.deleted_at.is_(None),
-                User.active == 1,
-                Role.name == 'admin',
-            )
-            .first()
-        )
+    def get_active_admin_user():
+        return AdminUserFactory(active=True, deleted_at=None)
 
     @staticmethod
     def find_random_record(model: db.Model, *args, **kwargs):

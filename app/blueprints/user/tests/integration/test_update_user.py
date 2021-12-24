@@ -4,14 +4,14 @@ from random import choice
 import factory
 
 from ._base_integration_test import _UserBaseIntegrationTest
-from app.blueprints.role import Role
+from app.blueprints.role import RoleFactory
 from app.blueprints.user import UserFactory
 from app.helpers import DictHelper
 
 
 class TestUpdateUser(_UserBaseIntegrationTest):
     def test_update_user_is_sending_valid_request_is_updated(self):
-        role = self.find_random_record(Role, **{'deleted_at': None})
+        role = RoleFactory(deleted_at=None)
 
         exclude = [
             'active',
@@ -30,7 +30,7 @@ class TestUpdateUser(_UserBaseIntegrationTest):
         data['password'] = os.getenv('TEST_USER_PASSWORD')
         data['role_id'] = role.id
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.put(
             f'{self.base_path}/{self.user.id}', json=data, headers=auth_header

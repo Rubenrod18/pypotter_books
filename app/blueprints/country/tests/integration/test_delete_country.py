@@ -5,7 +5,7 @@ class TestDeleteCountry(_CountryBaseIntegrationTest):
     def test_is_country_deleted_country_exists_returns_country_deleted(
         self,
     ):
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.delete(
             f'{self.base_path}/{self.country.id}', json={}, headers=auth_header

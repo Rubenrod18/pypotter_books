@@ -3,7 +3,7 @@ from ._base_integration_test import _CountryBaseIntegrationTest
 
 class TestGetcountry(_CountryBaseIntegrationTest):
     def test_is_country_obtained_country_exists_returns_country(self):
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.get(
             f'{self.base_path}/{self.country.id}', json={}, headers=auth_header

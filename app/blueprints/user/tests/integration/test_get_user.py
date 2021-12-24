@@ -5,7 +5,7 @@ class TestGetUser(_UserBaseIntegrationTest):
     def test_get_user_is_sending_valid_request_is_obtained(self):
         role = self.user.roles[0]
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.get(
             f'{self.base_path}/{self.user.id}', json={}, headers=auth_header

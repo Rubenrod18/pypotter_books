@@ -1,6 +1,6 @@
 import factory
 
-from ..factory import CurrencyFactory
+from ..factories import CurrencyFactory
 from ._base_integration_test import _CurrencyBaseIntegrationTest
 
 
@@ -10,7 +10,7 @@ class TestUpdateCurrency(_CurrencyBaseIntegrationTest):
     ):
         data = factory.build(dict, FACTORY_CLASS=CurrencyFactory)
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.put(
             f'{self.base_path}/{self.currency.id}',

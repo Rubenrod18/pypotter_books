@@ -1,12 +1,22 @@
 from typing import Type
 
 from app.blueprints.book import Book
-from app.blueprints.book.tests.factory import BookFactory
-from app.blueprints.book.tests.factory import HarryPotterPartFiveBookFactory
-from app.blueprints.book.tests.factory import HarryPotterPartFourBookFactory
-from app.blueprints.book.tests.factory import HarryPotterPartOneBookFactory
-from app.blueprints.book.tests.factory import HarryPotterPartThreeBookFactory
-from app.blueprints.book.tests.factory import HarryPotterPartTwoBookFactory
+from app.blueprints.book.tests.factories import BookSeedFactory
+from app.blueprints.book.tests.factories import (
+    HarryPotterPartFiveBookSeedFactory,
+)
+from app.blueprints.book.tests.factories import (
+    HarryPotterPartFourBookSeedFactory,
+)
+from app.blueprints.book.tests.factories import (
+    HarryPotterPartOneBookSeedFactory,
+)
+from app.blueprints.book.tests.factories import (
+    HarryPotterPartThreeBookSeedFactory,
+)
+from app.blueprints.book.tests.factories import (
+    HarryPotterPartTwoBookSeedFactory,
+)
 from app.decorators import seed_actions
 
 
@@ -19,28 +29,28 @@ class Seeder:
         self.__create_books()
 
     @staticmethod
-    def __create_book(book_factory: Type[BookFactory], **kwargs) -> None:
+    def __create_book(book_factory: Type[BookSeedFactory], **kwargs) -> None:
         if Book.query.filter_by(**kwargs).first() is None:
             book_factory.create()
 
     def __create_books(self) -> None:
         self.__create_book(
-            HarryPotterPartOneBookFactory,
-            **{'isbn': HarryPotterPartOneBookFactory.isbn}
+            HarryPotterPartOneBookSeedFactory,
+            **{'isbn': HarryPotterPartOneBookSeedFactory.isbn}
         )
         self.__create_book(
-            HarryPotterPartTwoBookFactory,
-            **{'isbn': HarryPotterPartTwoBookFactory.isbn}
+            HarryPotterPartTwoBookSeedFactory,
+            **{'isbn': HarryPotterPartTwoBookSeedFactory.isbn}
         )
         self.__create_book(
-            HarryPotterPartThreeBookFactory,
-            **{'isbn': HarryPotterPartThreeBookFactory.isbn}
+            HarryPotterPartThreeBookSeedFactory,
+            **{'isbn': HarryPotterPartThreeBookSeedFactory.isbn}
         )
         self.__create_book(
-            HarryPotterPartFourBookFactory,
-            **{'isbn': HarryPotterPartFourBookFactory.isbn}
+            HarryPotterPartFourBookSeedFactory,
+            **{'isbn': HarryPotterPartFourBookSeedFactory.isbn}
         )
         self.__create_book(
-            HarryPotterPartFiveBookFactory,
-            **{'isbn': HarryPotterPartFiveBookFactory.isbn}
+            HarryPotterPartFiveBookSeedFactory,
+            **{'isbn': HarryPotterPartFiveBookSeedFactory.isbn}
         )

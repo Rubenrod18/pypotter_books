@@ -6,4 +6,4 @@ from .serializers import users_serializer
 from .swagger import user_input_sw_model
 from .swagger import user_search_output_sw_model
 from .swagger import user_sw_model
-from .tests.factory import UserFactory
+from .tests.factories import UserFactory

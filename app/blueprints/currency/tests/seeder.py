@@ -1,10 +1,10 @@
 from typing import Type
 
 from .. import Currency
-from .factory import BritishPoundCurrencyFactory
-from .factory import CurrencyFactory
-from .factory import DollarCurrencyFactory
-from .factory import EuroCurrencyFactory
+from .factories import BritishPoundCurrencySeedFactory
+from .factories import CurrencyFactory
+from .factories import DollarCurrencySeedFactory
+from .factories import EuroCurrencySeedFactory
 from app.decorators import seed_actions
 
 
@@ -15,10 +15,13 @@ class Seeder:
     @seed_actions
     def __init__(self):
         self.__create_currency(
-            BritishPoundCurrencyFactory, **{'name': 'British Pound Sterling'}
+            BritishPoundCurrencySeedFactory,
+            **{'name': 'British Pound Sterling'}
         )
-        self.__create_currency(DollarCurrencyFactory, **{'name': 'US Dollar'})
-        self.__create_currency(EuroCurrencyFactory, **{'name': 'Euro'})
+        self.__create_currency(
+            DollarCurrencySeedFactory, **{'name': 'US Dollar'}
+        )
+        self.__create_currency(EuroCurrencySeedFactory, **{'name': 'Euro'})
 
     @staticmethod
     def __create_currency(

@@ -1,16 +1,29 @@
 import factory
 
-from ..factory import BillFactory
+from ..factories import BillFactory
 from ._base_integration_test import _BillBaseIntegrationTest
+from app.blueprints.currency.tests.factories import CurrencyFactory
+from app.blueprints.shopping_cart.tests.factories import ShoppingCartFactory
+from app.blueprints.user.tests.factories import AdminUserFactory
 
 
 class TestUpdateBill(_BillBaseIntegrationTest):
     def test_is_bill_updated_bill_exist_previously_returns_bill(
         self,
     ):
-        data = factory.build(dict, FACTORY_CLASS=BillFactory)
+        currency = CurrencyFactory()
+        shopping_cart = ShoppingCartFactory()
+        data = factory.build(
+            dict,
+            FACTORY_CLASS=BillFactory,
+            **{
+                'currency_id': currency.id,
+                'shopping_cart_id': shopping_cart.id,
+                'user_id': shopping_cart.user_id,
+            },
+        )
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = AdminUserFactory(active=True, deleted_at=None)
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.put(
             f'{self.base_path}/{self.bill.id}',

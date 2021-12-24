@@ -184,6 +184,7 @@ six==1.16.0
     #   flask-marshmallow
     #   flask-restx
     #   python-dateutil
+    #   sqlalchemy-utils
     #   virtualenv
 sqlalchemy==1.4.26
     # via
@@ -191,6 +192,9 @@ sqlalchemy==1.4.26
     #   alembic
     #   flask-sqlalchemy
     #   marshmallow-sqlalchemy
+    #   sqlalchemy-utils
+sqlalchemy-utils==0.38.1
+    # via -r requirements-dev.in
 text-unidecode==1.3
     # via
     #   -r requirements.txt

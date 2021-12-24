@@ -5,7 +5,7 @@ class TestDeleteCurrency(_CurrencyBaseIntegrationTest):
     def test_is_currency_deleted_currency_exists_returns_currency_deleted(
         self,
     ):
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.delete(
             f'{self.base_path}/{self.currency.id}',

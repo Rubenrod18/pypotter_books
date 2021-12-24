@@ -1,9 +1,10 @@
-from sqlalchemy import func
+import time
+
 from werkzeug.exceptions import Forbidden
 from werkzeug.exceptions import Unauthorized
 
 from app.blueprints.base import BaseTest
-from app.blueprints.user import User
+from app.blueprints.user import UserFactory
 from app.decorators import token_required
 from app.wrappers import SecurityWrapper
 
@@ -15,10 +16,6 @@ class TestTokenRequired(BaseTest):
             self.token_auth_header = self.app.config.get(
                 'SECURITY_TOKEN_AUTHENTICATION_HEADER'
             )
-
-    @staticmethod
-    def __get_rand_user(**kwargs):
-        return User.query.filter_by(**kwargs).order_by(func.random()).first()
 
     def test_is_token_valid_auth_header_does_not_exist_returns_user_is_not_authorized(  # noqa
         self,
@@ -84,10 +81,15 @@ class TestTokenRequired(BaseTest):
     def test_is_token_valid_add_expired_bearer_token_returns_token_has_expired(
         self,
     ):
-        expired_token = 'Bearer WyIxIl0.YQQq9w.ohL2ObAcY04iUGifhbXyU6EUaBU'
+        user = UserFactory(active=True, deleted_at=None)
+        self.app.config[
+            'SECURITY_LOGIN_WITHIN'
+        ] = '100000 microseconds'  # 0.1 seconds  # noqa
+        expired_token = SecurityWrapper.create_token(user)
+        time.sleep(1)
 
         with self.app.test_request_context(
-            headers={self.token_auth_header: expired_token}
+            headers={self.token_auth_header: f'Bearer {expired_token}'}
         ):
 
             @token_required
@@ -108,13 +110,11 @@ class TestTokenRequired(BaseTest):
         self,
     ):
         with self.app.app_context():
-            user = self.__get_rand_user(
-                **{'active': False, 'deleted_at': None}
-            )
-            created_token = SecurityWrapper.create_token(user)
+            user = UserFactory(active=False, deleted_at=None)
+            token = SecurityWrapper.create_token(user)
 
         with self.app.test_request_context(
-            headers={self.token_auth_header: f'Bearer {created_token}'}
+            headers={self.token_auth_header: f'Bearer {token}'}
         ):
 
             @token_required
@@ -135,11 +135,11 @@ class TestTokenRequired(BaseTest):
         self,
     ):
         with self.app.app_context():
-            user = self.__get_rand_user(**{'active': True, 'deleted_at': None})
-            created_token = SecurityWrapper.create_token(user)
+            user = UserFactory(active=True, deleted_at=None)
+            token = SecurityWrapper.create_token(user)
 
         with self.app.test_request_context(
-            headers={self.token_auth_header: f'Bearer {created_token}'}
+            headers={self.token_auth_header: f'Bearer {token}'}
         ):
 
             @token_required

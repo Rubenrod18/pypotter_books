@@ -1,6 +1,6 @@
 import factory
 
-from ...factory import BookFactory
+from ...factories import BookFactory
 from ._base_integration_test import _BookBaseIntegrationTest
 from app.helpers import DictHelper
 
@@ -14,7 +14,7 @@ class TestUpdateBook(_BookBaseIntegrationTest):
             exclude=['image'],
         )
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.put(
             f'{self.base_path}/{self.book.id}',

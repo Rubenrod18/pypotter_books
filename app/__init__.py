@@ -16,6 +16,7 @@ __description__ = (
 import logging
 import os
 import pprint
+import typing as t
 
 import flask
 from flask import Flask, send_from_directory
@@ -24,7 +25,10 @@ from werkzeug.utils import import_string
 from app import exceptions
 from app import extensions
 from app.blueprints import BLUEPRINTS
-from app.cli import cli
+from app.cli import cli_register
+
+if t.TYPE_CHECKING:
+    from config import Config
 
 
 def _create_logging_file(app: Flask) -> str:
@@ -78,12 +82,12 @@ def _register_static_routes(app: Flask) -> None:
         return send_from_directory(app.config['STATIC_FOLDER'], path)
 
 
-def create_app(env_config: str) -> Flask:
+def create_app(env_config: t.Union[str, t.Type['Config']]) -> Flask:
     """Builds an application based on environment configuration.
 
     Parameters
     ----------
-    env_config
+    env_config : str or Config
         Environment configuration. Posible values::
 
             config.ProdConfig
@@ -96,7 +100,11 @@ def create_app(env_config: str) -> Flask:
         A `flask.flask` instance.
 
     """
-    config = import_string(env_config)
+    config = env_config
+
+    if isinstance(env_config, str):
+        config = import_string(env_config)
+
     app = flask.Flask(
         __name__,
         static_url_path=config.STATIC_FOLDER,
@@ -105,7 +113,7 @@ def create_app(env_config: str) -> Flask:
     app.config.from_object(env_config)
 
     _init_logging(app)
-    cli.init_app(app)
+    cli_register.init_app(app)
     extensions.init_app(app)
     _register_blueprints(app)
     _register_static_routes(app)

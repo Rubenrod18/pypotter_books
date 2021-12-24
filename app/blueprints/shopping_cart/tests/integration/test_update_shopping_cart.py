@@ -1,24 +1,25 @@
 from ._base_integration_test import _ShoppingCartBaseIntegrationTest
+from app.blueprints.book.tests.factories import BookFactory
+from app.blueprints.user import User
 
 
 class TestUpdateShoppingCart(_ShoppingCartBaseIntegrationTest):
     def test_is_shopping_cart_updated_shopping_cart_exist_previously_returns_shopping_cart(  # noqa
         self,
     ):
-        def create_shopping_cart():
+        def create_shopping_cart(user: User):
             response = self.client.post(
                 self.base_path,
                 json={'units': [3, 2, 1, 4, 2], 'book_ids': [1, 2, 3, 4, 5]},
-                headers=self.build_auth_header(
-                    self.get_rand_admin_user().email
-                ),
+                headers=self.build_auth_header(user.email),
             )
             return response.get_json().get('data')['id']
 
-        shopping_cart_id = create_shopping_cart()
+        admin_user = self.get_active_admin_user()
+        [BookFactory() for _ in range(5)]
+        shopping_cart_id = create_shopping_cart(admin_user)
         data = {'units': [3], 'book_ids': [1]}
 
-        admin_user = self.get_rand_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.put(
             f'{self.base_path}/{shopping_cart_id}',
@@ -54,7 +55,7 @@ class TestUpdateShoppingCart(_ShoppingCartBaseIntegrationTest):
         data = {'units': [3], 'book_ids': [1]}
         shopping_cart_id = 999
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.put(
             f'{self.base_path}/{shopping_cart_id}',

@@ -1,7 +1,8 @@
 import factory
 
 from ._base_integration_test import _ShoppingCartBaseIntegrationTest
-from app.blueprints.shopping_cart_book.tests.factory import (
+from app.blueprints.book.tests.factories import BookFactory
+from app.blueprints.shopping_cart_book.tests.factories import (
     ShoppingCartBookInputFactory,
 )
 
@@ -10,9 +11,10 @@ class TestSaveShoppingCart(_ShoppingCartBaseIntegrationTest):
     def test_is_shopping_cart_created_shopping_cart_does_not_exist_returns_shopping_cart(  # noqa
         self,
     ):
+        [BookFactory() for _ in range(5)]
         data = {'units': [3, 2, 1, 4, 2], 'book_ids': [1, 2, 3, 4, 5]}
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.post(
             self.base_path, json=data, headers=auth_header
@@ -49,7 +51,7 @@ class TestSaveShoppingCart(_ShoppingCartBaseIntegrationTest):
             **{'units': [1, 2, 3, 4, 5, 6]}
         )
 
-        admin_user = self.get_rand_admin_user()
+        admin_user = self.get_active_admin_user()
         auth_header = self.build_auth_header(admin_user.email)
         response = self.client.post(
             self.base_path, json=data, headers=auth_header
