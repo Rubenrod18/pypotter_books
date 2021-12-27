@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/Rubenrod18/pypotter_books/compare/v0.3.0...v1.0.0) (2021-12-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **pip:** Flask package version has been updated from 1.1.2 to 2.0.1 version
+
+### Features
+
+* **swagger:** update Swagger UI and add persist authorization when reload the brow ([6af1607](https://github.com/Rubenrod18/pypotter_books/commit/6af160701d51c3aee760ed4e530a104543b240ec))
+* add Flask-Caching integration ([96c934b](https://github.com/Rubenrod18/pypotter_books/commit/96c934bd29394cfb37f7e09a088ec69d758a8eea))
+* add support for running tests in parallel ([3104332](https://github.com/Rubenrod18/pypotter_books/commit/31043325f3e6ca1b4f82d3a599063c771a489900))
+* **book-prices:** add new price field ([59fb176](https://github.com/Rubenrod18/pypotter_books/commit/59fb1766d6af7748df13d566b9203b10d96c18ec))
+* **books:** add smart hyperlinks to serializer ([ab93477](https://github.com/Rubenrod18/pypotter_books/commit/ab93477445be503bb0349fa68aa21f330d5a68f4))
+* **pip:** upgrade Python packages version ([5ea1a4e](https://github.com/Rubenrod18/pypotter_books/commit/5ea1a4ed147d3a3432c59d122bafc740a34ed6fd))
+
+
+### Bug Fixes
+
+* **swagger:** add custom Swagger UI ([981e83a](https://github.com/Rubenrod18/pypotter_books/commit/981e83a21090f20149ee761a34a7649caa073b67))
+
+
+### Build System
+
+* **cli:** add new migration command ([fb50c91](https://github.com/Rubenrod18/pypotter_books/commit/fb50c916220ed24153a9ea3cca091c52914a9d7d))
+* **docker:** add Docker integration ([6d189df](https://github.com/Rubenrod18/pypotter_books/commit/6d189df651c8fa97a797d01e19aeb7b9f25a4be7))
+* **npm:** upgrade standard-version package version ([0fe1082](https://github.com/Rubenrod18/pypotter_books/commit/0fe1082461f189e17639583e82697d00bdd6b763))
+* **pip:** update packages version ([85694f9](https://github.com/Rubenrod18/pypotter_books/commit/85694f9bda161e09613cb29610bc3d1b56c7eca2))
+* **pre-commit:** update hook versions ([0c5b58b](https://github.com/Rubenrod18/pypotter_books/commit/0c5b58bfaf6386d6842e2178aa2891aea92694c9))
+* **pre-commit:** update package versions ([12e829f](https://github.com/Rubenrod18/pypotter_books/commit/12e829f10fef2ffd466f6b234efb9d11943d1134))
+* add new way to run options from Makefile based on FLASK_CONFIG argument ([fa10325](https://github.com/Rubenrod18/pypotter_books/commit/fa10325ded9230aad2d826dbf24bd7c0e6b6dfde))
+
 ## [0.3.0](https://github.com/Rubenrod18/flask_api_alchemy/compare/v0.2.0...v0.3.0) (2021-07-22)
 
 
