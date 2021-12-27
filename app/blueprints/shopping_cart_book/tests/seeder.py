@@ -1,4 +1,4 @@
-from app.blueprints.shopping_cart_book.tests.factory import (
+from app.blueprints.shopping_cart_book.tests.factories import (
     ShoppingCartBookFactory,
 )
 from app.decorators import seed_actions

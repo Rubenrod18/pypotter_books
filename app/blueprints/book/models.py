@@ -36,7 +36,7 @@ class BookPrice(db.Model, BaseMixin):
         ),
         nullable=False,
     )
-    vat = Column(Float, nullable=False)
+    price = Column(Float, nullable=False)
 
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
@@ -66,8 +66,7 @@ class BookStock(db.Model, BaseMixin):
         ),
         nullable=False,
     )
-
-    quantity = Column(Integer, nullable=False)
+    stock = Column(Integer, nullable=False)
 
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),
@@ -91,10 +90,11 @@ class Book(db.Model, BaseMixin):
     published_date = Column(Date, nullable=False)
     language = Column(String(255), nullable=False)
     dimensions = Column(String(255), nullable=False)
+    # TODO: https://docs.sqlalchemy.org/en/14/orm/loading_columns.html
     image = Column(LONGBLOB, nullable=True)
 
-    book_stocks = relationship('BookStock', backref=__tablename__)
-    book_prices = relationship('BookPrice', backref=__tablename__)
+    book_stocks = relationship('BookStock', backref='book')
+    book_prices = relationship('BookPrice', backref='book')
 
     __table_args__ = (
         PrimaryKeyConstraint('id', name=BaseMixin.pk(__tablename__)),

@@ -24,7 +24,7 @@ class UserService(BaseService):
         deserialized_data = self.user_serializer.load(user_data)
 
         try:
-            role = self.role_manager.find(deserialized_data['role_id'])
+            role = self.role_manager.find_by_id(deserialized_data['role_id'])
             deserialized_data.pop('role_id')
 
             user = self.manager.get_last_record()
@@ -47,19 +47,21 @@ class UserService(BaseService):
 
         return user
 
-    def find(self, user_id: int, *args):
+    def find_by_id(self, user_id: int, *args):
         self.user_serializer.load({'id': user_id}, partial=True)
-        return self.manager.find(user_id, *args)
+        return self.manager.find_by_id(user_id, *args)
 
     def save(self, user_id: int, **kwargs):
         kwargs['id'] = user_id
         deserialized_data = self.user_serializer.load(kwargs, unknown=EXCLUDE)
 
-        user = self.manager.find(user_id)
+        user = self.manager.find_by_id(user_id)
         try:
             if 'role_id' in deserialized_data:
                 user_datastore.remove_role_from_user(user, user.roles[0])
-                role = self.role_manager.find(deserialized_data['role_id'])
+                role = self.role_manager.find_by_id(
+                    deserialized_data['role_id']
+                )
                 user_datastore.add_role_to_user(user, role)
                 deserialized_data.pop('role_id')
 

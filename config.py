@@ -3,26 +3,12 @@
 The extension and custom configurations are defined here.
 
 """
+import logging
 import os
 
 from dotenv import load_dotenv
 
 load_dotenv()
-
-
-def _build_test_sqlalchemy_database_uri(config: 'Config') -> str:
-    database_uri_lst = config.SQLALCHEMY_DATABASE_URI.split('/')
-    database_uri_lst[1] = '//'
-    tmp = ''.join(database_uri_lst[0:-1])
-
-    dbname = _build_database_name(config)
-    test_db_uri = f'{tmp}/{dbname}'
-    return test_db_uri
-
-
-def _build_database_name(config: 'Config') -> str:
-    dbname = config.SQLALCHEMY_DATABASE_URI.split('/')[-1:][0]
-    return f'test_{dbname}'
 
 
 class Config:
@@ -35,12 +21,20 @@ class Config:
     SERVER_NAME = os.getenv('SERVER_NAME')
     LOGIN_DISABLED = False
 
+    # Flask-Caching
+    CACHE_TYPE = 'RedisCache'
+    CACHE_DEFAULT_TIMEOUT = os.getenv('CACHE_DEFAULT_TIMEOUT', 300)  # 5 min
+    CACHE_REDIS_HOST = os.getenv('CACHE_REDIS_HOST')
+    CACHE_REDIS_PORT = os.getenv('CACHE_REDIS_PORT')
+    CACHE_REDIS_PASSWORD = os.getenv('CACHE_REDIS_PASSWORD')
+    CACHE_REDIS_DB = os.getenv('CACHE_REDIS_DB', 0)
+
     # Flask-Security-Too
     SECRET_KEY = os.getenv('SECRET_KEY')
     SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT')
     SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
     SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Authorization'
-    SECURITY_TOKEN_MAX_AGE = None
+    SECURITY_LOGIN_WITHIN = '1 days'
     SECURITY_PASSWORD_LENGTH_MIN = 8
 
     # Flask-Mail
@@ -57,7 +51,7 @@ class Config:
         'SWAGGER_API_URL', f'http://{SERVER_NAME}/static/swagger.yaml'
     )
 
-    # Flask Restful
+    # Flask Restx
     RESTX_ERROR_404_HELP = False
     FLASK_RESTFUL_PREFIX = '/api'
     RESTX_MASK_SWAGGER = False
@@ -65,10 +59,15 @@ class Config:
     # Flask SQLAlchemy
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = False
 
     # Mr Developer
     ROOT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
     LOG_DIRECTORY = '%s/log' % ROOT_DIRECTORY
+    BLUEPRINTS_DIRECTORY = '%s/app/blueprints' % ROOT_DIRECTORY
+    STATIC_FOLDER = '%s/static' % ROOT_DIRECTORY
+    TEMPLATES_FOLDER = '%s/templates' % ROOT_DIRECTORY
+    LOGGING_LEVEL = logging.INFO
 
 
 class ProdConfig(Config):
@@ -84,6 +83,9 @@ class DevConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
 
+    # Mr Developer
+    LOGGING_LEVEL = logging.DEBUG
+
 
 class TestConfig(Config):
     """Testing configuration options."""
@@ -94,4 +96,4 @@ class TestConfig(Config):
     TESTING = True
 
     # Flask SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = _build_test_sqlalchemy_database_uri(Config)
+    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_SQLALCHEMY_DATABASE_URI')

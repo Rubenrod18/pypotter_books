@@ -10,7 +10,7 @@ book_stock_sw_model = api.clone(
     {
         'book_id': fields.Integer(required=True),
         'country_id': fields.Integer(required=True),
-        'quantity': fields.Integer(required=True),
+        'stock': fields.Integer(required=True),
     },
 )
 

@@ -31,7 +31,7 @@ class RoleSerializer(ma.SQLAlchemySchema):
     @validates('id')
     def validate_id(self, role_id):
         kwargs = {'deleted_at': None}
-        role = role_manager.find(role_id, **kwargs)
+        role = role_manager.find_by_id(role_id, **kwargs)
 
         if role is None:
             logger.debug(f'Role "{role_id}" not found.')

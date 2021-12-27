@@ -1,19 +1,19 @@
 from flask import Blueprint
-from flask import request
 
-from .service import AuthService
+from . import auth_user_login_serializer
 from .swagger import auth_login_sw_model
 from .swagger import auth_token_sw_model
 from app.blueprints.base import BaseResource
 from app.decorators import token_required
 from app.extensions import api as root_api
+from app.wrappers import SecurityWrapper
 
 blueprint = Blueprint('auth', __name__)
 api = root_api.namespace('auth', description='Authentication endpoints.')
 
 
 class AuthBaseResource(BaseResource):
-    auth_service = AuthService()
+    pass
 
 
 @api.route('/login')
@@ -21,15 +21,17 @@ class AuthUserLoginResource(AuthBaseResource):
     @api.doc(
         responses={
             401: 'Unauthorized',
-            403: 'Forbidden',
-            404: 'Not found',
             422: 'Unprocessable Entity',
         },
     )
     @api.expect(auth_login_sw_model)
     @api.marshal_with(auth_token_sw_model)
     def post(self) -> tuple:
-        token = self.auth_service.login_user(**request.get_json())
+        user = auth_user_login_serializer.load(self._request_payload())
+        # TODO: Pending to testing whats happen if add a new field in user
+        # model when a user is logged
+        SecurityWrapper.login_user(user)
+        token = SecurityWrapper.create_token(user)
         return {'token': f'Bearer {token}'}, 200
 
 
@@ -37,12 +39,13 @@ class AuthUserLoginResource(AuthBaseResource):
 class AuthUserLogoutResource(AuthBaseResource):
     @api.doc(
         responses={
-            200: 'Success',
+            204: 'No Content',
+            403: 'Forbidden',
             401: 'Unauthorized',
         },
         security='auth_token',
     )
     @token_required
     def post(self) -> tuple:
-        self.auth_service.logout_user()
+        SecurityWrapper.logout_user()
         return {}, 204

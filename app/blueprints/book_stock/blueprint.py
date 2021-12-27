@@ -11,16 +11,18 @@ from app.extensions import api as root_api
 
 
 blueprint = Blueprint('book_stocks', __name__)
-api = root_api.namespace('book_stocks', description='Book Stocks endpoints.')
+_api = root_api.namespace('book_stocks', description='Book Stocks endpoints.')
 
 
 class _BookStockResource(BaseResource):
-    book_stock_service = BookStockService()
+    def __init__(self, *args, **kwargs):
+        super(_BookStockResource, self).__init__(*args, **kwargs)
+        self._book_stock_service = BookStockService()
 
 
-@api.route('')
+@_api.route('')
 class NewBookStockResource(_BookStockResource):
-    @api.doc(
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -28,17 +30,17 @@ class NewBookStockResource(_BookStockResource):
         },
         security='auth_token',
     )
-    @api.expect(book_stock_sw_model)
-    @api.marshal_with(book_stock_sw_model, envelope='data', code=201)
+    @_api.expect(book_stock_sw_model)
+    @_api.marshal_with(book_stock_sw_model, envelope='data', code=201)
     @token_required
     def post(self) -> tuple:
-        book = self.book_stock_service.create(**self.request_payload())
+        book = self._book_stock_service.create(**self._request_payload())
         return book_stock_serializer.dump(book), 201
 
 
-@api.route('/<int:book_stock_id>')
+@_api.route('/<int:book_stock_id>')
 class BookStockResource(_BookStockResource):
-    @api.doc(
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -46,13 +48,13 @@ class BookStockResource(_BookStockResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(book_stock_sw_model, envelope='data')
+    @_api.marshal_with(book_stock_sw_model, envelope='data')
     @token_required
     def get(self, book_stock_id: int) -> tuple:
-        book_stock = self.book_stock_service.find(book_stock_id)
+        book_stock = self._book_stock_service.find_by_id(book_stock_id)
         return book_stock_serializer.dump(book_stock), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -61,16 +63,16 @@ class BookStockResource(_BookStockResource):
         },
         security='auth_token',
     )
-    @api.expect(book_stock_sw_model)
-    @api.marshal_with(book_stock_sw_model, envelope='data')
+    @_api.expect(book_stock_sw_model)
+    @_api.marshal_with(book_stock_sw_model, envelope='data')
     @token_required
     def put(self, book_stock_id: int) -> tuple:
-        book_stock = self.book_stock_service.save(
-            book_stock_id, **self.request_payload()
+        book_stock = self._book_stock_service.save(
+            book_stock_id, **self._request_payload()
         )
         return book_stock_serializer.dump(book_stock), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -79,16 +81,16 @@ class BookStockResource(_BookStockResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(book_stock_sw_model, envelope='data')
+    @_api.marshal_with(book_stock_sw_model, envelope='data')
     @token_required
     def delete(self, book_stock_id: int) -> tuple:
-        book = self.book_stock_service.delete(book_stock_id)
+        book = self._book_stock_service.delete(book_stock_id)
         return book_stock_serializer.dump(book), 200
 
 
-@api.route('/search')
+@_api.route('/search')
 class BookStocksSearchResource(_BookStockResource):
-    @api.doc(
+    @_api.doc(
         responses={
             200: 'Success',
             401: 'Unauthorized',
@@ -97,10 +99,12 @@ class BookStocksSearchResource(_BookStockResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(book_stock_search_output_sw_model)
+    @_api.marshal_with(book_stock_search_output_sw_model)
     @token_required
     def post(self) -> tuple:
-        book_stock_data = self.book_stock_service.get(**self.request_payload())
+        book_stock_data = self._book_stock_service.get(
+            **self._request_payload()
+        )
         book_stock_data_lst = list(book_stock_data['query'].items)
         return {
             'data': book_stocks_serializer.dump(book_stock_data_lst),

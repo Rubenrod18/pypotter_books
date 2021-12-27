@@ -1,4 +1,4 @@
-from app.blueprints.bill.tests.factory import BillFactory
+from app.blueprints.bill.tests.factories import BillSeedFactory
 from app.decorators import seed_actions
 
 
@@ -8,4 +8,4 @@ class Seeder:
 
     @seed_actions
     def __init__(self):
-        BillFactory.create_batch(5)
+        BillSeedFactory.create_batch(5)

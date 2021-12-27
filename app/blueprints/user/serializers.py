@@ -1,11 +1,11 @@
 import logging
 
-from flask_security import hash_password
 from marshmallow import fields
 from marshmallow import post_dump
 from marshmallow import post_load
 from marshmallow import validate
 from marshmallow import validates
+from marshmallow import ValidationError
 from werkzeug.exceptions import BadRequest
 from werkzeug.exceptions import NotFound
 
@@ -15,6 +15,7 @@ from .models import Genre
 from app.blueprints.role import RoleManager
 from app.blueprints.role.serializers import RoleSerializer
 from app.extensions import ma
+from app.wrappers import SecurityWrapper
 from config import Config
 
 logger = logging.getLogger(__name__)
@@ -24,12 +25,14 @@ role_manager = RoleManager()
 
 class _VerifyRoleId(fields.Field):
     def _deserialize(self, value, *args, **kwargs):
-        role = role_manager.find(value)
+        role = role_manager.find_or_none(**{'id': value})
         if role is None:
-            raise NotFound(f'Role "{value}" not found')
+            raise ValidationError(field_name='role', message=['Not found'])
 
         if role.deleted_at is not None:
-            raise BadRequest(f'Role "{value}" deleted')
+            raise ValidationError(
+                field_name='role', message=['Already deleted']
+            )
         return value
 
 
@@ -67,7 +70,7 @@ class UserSerializer(ma.SQLAlchemySchema):
     @validates('id')
     def validate_id(self, user_id: int):
         kwargs = {'deleted_at': None}
-        user = user_manager.find(user_id, **kwargs)
+        user = user_manager.find_by_id(user_id, **kwargs)
 
         if user is None:
             logger.debug(f'User "{user_id}" not found')
@@ -85,7 +88,9 @@ class UserSerializer(ma.SQLAlchemySchema):
     @post_load
     def post_load_process(self, data, **kwargs):
         if 'password' in data:
-            data['password'] = hash_password(data['password'])
+            data['password'] = SecurityWrapper.ensure_password(
+                data['password']
+            )
 
         if 'genre' in data:
             data['genre'] = Genre.deserialization(data['genre'])

@@ -1,13 +1,10 @@
 import collections
 from abc import ABC
 
-from flask import current_app
-
 from app.blueprints import get_blueprint_modules
+from app.blueprints.base import BaseSeedFactory
 from app.cli._base_cli import _BaseCli
-from app.extensions import db
-from app.utils import exists_attr_in_module
-from app.utils import get_attr_from_module
+from app.helpers import ModuleHelper
 
 
 class SeederCli(_BaseCli, ABC):
@@ -16,8 +13,10 @@ class SeederCli(_BaseCli, ABC):
         """Get Seeder instances."""
         seeders = {}
         for item in modules:
-            if exists_attr_in_module(item, 'Seeder'):
-                seeder_instance = get_attr_from_module(item, 'Seeder')
+            if ModuleHelper.exists_attr_in_module(item, 'Seeder'):
+                seeder_instance = ModuleHelper.get_attr_from_module(
+                    item, 'Seeder'
+                )
                 seeders[seeder_instance.priority] = seeder_instance
         return seeders
 
@@ -29,17 +28,16 @@ class SeederCli(_BaseCli, ABC):
         return self.__get_seeder_instances(seeder_modules)
 
     def run_command(self):
-        session = db.Session()
+        session = BaseSeedFactory.get_db_session()
         try:
             seeders = self.__get_seeders()
             ordered_seeders = collections.OrderedDict(sorted(seeders.items()))
             for seed in ordered_seeders.values():
                 seed()
             session.commit()
+            print(' Database seeding completed successfully.')
         except Exception:
             session.rollback()
             raise
         finally:
             session.close()
-            if current_app.config['TESTING'] is False:
-                print(' Database seeding completed successfully.')

@@ -31,7 +31,7 @@ class CountrySerializer(ma.SQLAlchemySchema):
     currency_id = ma.auto_field(load_only=True)
 
     # Output fields
-    currency = fields.Nested(CurrencySerializer, dump_only=True)
+    currency = fields.Nested(lambda: CurrencySerializer(), dump_only=True)
     created_at = TimestampField(dump_only=True)
     updated_at = TimestampField(dump_only=True)
     deleted_at = TimestampField(dump_only=True)
@@ -39,7 +39,7 @@ class CountrySerializer(ma.SQLAlchemySchema):
     @validates('currency_id')
     def validate_currency_id(self, currency_id: int):
         kwargs = {'deleted_at': None}
-        currency = currency_manager.find(currency_id, **kwargs)
+        currency = currency_manager.find_by_id(currency_id, **kwargs)
 
         if currency is None:
             logger.debug(f'Currency "{currency_id}" not found')

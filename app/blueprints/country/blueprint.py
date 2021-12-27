@@ -11,16 +11,21 @@ from app.decorators import token_required
 from app.extensions import api as root_api
 
 blueprint = Blueprint('countries', __name__)
-api = root_api.namespace('countries', description='Countries endpoints.')
+_api = root_api.namespace('countries', description='Countries endpoints.')
 
 
 class _CountryBaseResource(BaseResource):
-    country_service = CountryService()
+    def __init__(self, *args, **kwargs):
+        super(
+            _CountryBaseResource,
+            self,
+        ).__init__(*args, **kwargs)
+        self._country_service = CountryService()
 
 
-@api.route('')
+@_api.route('')
 class NewCountryResource(_CountryBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -28,17 +33,17 @@ class NewCountryResource(_CountryBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(country_input_sw_model)
-    @api.marshal_with(country_sw_model, envelope='data', code=201)
+    @_api.expect(country_input_sw_model)
+    @_api.marshal_with(country_sw_model, envelope='data', code=201)
     @token_required
     def post(self) -> tuple:
-        country = self.country_service.create(**self.request_payload())
+        country = self._country_service.create(**self._request_payload())
         return country_serializer.dump(country), 201
 
 
-@api.route('/<int:country_id>')
+@_api.route('/<int:country_id>')
 class CountryResource(_CountryBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             401: 'Unauthorized',
             403: 'Forbidden',
@@ -46,13 +51,13 @@ class CountryResource(_CountryBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(country_sw_model, envelope='data')
+    @_api.marshal_with(country_sw_model, envelope='data')
     @token_required
     def get(self, country_id: int) -> tuple:
-        country = self.country_service.find(country_id)
+        country = self._country_service.find_by_id(country_id)
         return country_serializer.dump(country), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -61,16 +66,16 @@ class CountryResource(_CountryBaseResource):
         },
         security='auth_token',
     )
-    @api.expect(country_input_sw_model)
-    @api.marshal_with(country_sw_model, envelope='data')
+    @_api.expect(country_input_sw_model)
+    @_api.marshal_with(country_sw_model, envelope='data')
     @token_required
     def put(self, country_id: int) -> tuple:
-        country = self.country_service.save(
-            country_id, **self.request_payload()
+        country = self._country_service.save(
+            country_id, **self._request_payload()
         )
         return country_serializer.dump(country), 200
 
-    @api.doc(
+    @_api.doc(
         responses={
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -79,16 +84,16 @@ class CountryResource(_CountryBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(country_sw_model, envelope='data')
+    @_api.marshal_with(country_sw_model, envelope='data')
     @token_required
     def delete(self, country_id: int) -> tuple:
-        country = self.country_service.delete(country_id)
+        country = self._country_service.delete(country_id)
         return country_serializer.dump(country), 200
 
 
-@api.route('/search')
+@_api.route('/search')
 class CountrysSearchResource(_CountryBaseResource):
-    @api.doc(
+    @_api.doc(
         responses={
             200: 'Success',
             401: 'Unauthorized',
@@ -97,10 +102,10 @@ class CountrysSearchResource(_CountryBaseResource):
         },
         security='auth_token',
     )
-    @api.marshal_with(country_search_output_sw_model)
+    @_api.marshal_with(country_search_output_sw_model)
     @token_required
     def post(self) -> tuple:
-        country_data = self.country_service.get(**self.request_payload())
+        country_data = self._country_service.get(**self._request_payload())
         country_data_lst = list(country_data['query'].items)
         return {
             'data': countries_serializer.dump(country_data_lst),

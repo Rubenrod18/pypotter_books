@@ -33,5 +33,6 @@ supervisord.conf
 
 .idea
 coverage_html_report
+log
 node_modules
 venv

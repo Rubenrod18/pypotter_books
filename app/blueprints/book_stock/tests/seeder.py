@@ -1,5 +1,5 @@
 from app.blueprints.book import Book
-from app.blueprints.book_stock.tests.factory import BookStockFactory
+from app.blueprints.book_stock.tests.factories import BookStockSeedFactory
 from app.blueprints.country import Country
 from app.decorators import seed_actions
 
@@ -26,4 +26,4 @@ class Seeder:
             total_books * total_countries - total_diff_relations
         )
 
-        BookStockFactory.create_batch(total_book_stocks)
+        BookStockSeedFactory.create_batch(total_book_stocks)

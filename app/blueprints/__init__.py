@@ -1,7 +1,6 @@
 import os
 
-from app.utils import exists_attr_in_module
-from app.utils import get_attr_from_module
+from app.helpers.module_helper import ModuleHelper
 
 
 def _get_blueprint_packages():
@@ -17,11 +16,11 @@ def _get_blueprint_packages():
     ['auth', 'base', 'role', 'user']
 
     """
+    ignore = ('__pycache__', os.path.basename(__file__), 'shopping_cart_book')
+
     abs_path = os.path.abspath(__file__)
     path = os.path.dirname(abs_path)
-    dirs = os.listdir(path)
-    dirs.remove(os.path.basename(__file__))
-    dirs.remove('__pycache__')
+    dirs = [dir for dir in os.listdir(path) if dir not in ignore]
     dirs.sort()
     return dirs
 
@@ -45,8 +44,10 @@ def _get_bp_instances(modules: list) -> list:
     bp_instances = []
 
     for module in modules:
-        if exists_attr_in_module(module, 'blueprint'):
-            bp_instance = get_attr_from_module(module, 'blueprint')
+        if ModuleHelper.exists_attr_in_module(module, 'blueprint'):
+            bp_instance = ModuleHelper.get_attr_from_module(
+                module, 'blueprint'
+            )
             bp_instances.append(bp_instance)
 
     return bp_instances

@@ -1,8 +1,8 @@
-from app.blueprints.shopping_cart.tests.factory import (
-    UserWithoutShoppingCartFactory,
+from app.blueprints.shopping_cart.tests.factories import (
+    UserWithoutShoppingCartSeedFactory,
 )
-from app.blueprints.shopping_cart.tests.factory import (
-    UserWithShoppingCartFactory,
+from app.blueprints.shopping_cart.tests.factories import (
+    UserWithShoppingCartSeedFactory,
 )
 from app.decorators import seed_actions
 
@@ -17,5 +17,5 @@ class Seeder:
 
     @staticmethod
     def __create_shopping_carts():
-        UserWithoutShoppingCartFactory.create_batch(2)
-        UserWithShoppingCartFactory.create_batch(5)
+        UserWithoutShoppingCartSeedFactory.create_batch(2)
+        UserWithShoppingCartSeedFactory.create_batch(5)

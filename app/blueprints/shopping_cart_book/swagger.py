@@ -10,7 +10,16 @@ shopping_cart_book_sw_model = api.clone(
     {
         'shopping_cart_id': fields.Integer(required=True),
         'book_id': fields.Integer(required=True),
-        'discount': fields.Float(required=True),
+        'units': fields.Integer(required=True),
+    },
+)
+
+shopping_cart_book_input_sw_model = api.model(
+    'ShoppingCartBookInput',
+    {
+        'shopping_cart_id': fields.Integer(required=True),
+        'book_ids': fields.List(fields.Integer(required=True), required=True),
+        'units': fields.List(fields.Integer(required=True), required=True),
     },
 )
 

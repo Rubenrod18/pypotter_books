@@ -1,7 +1,18 @@
+import logging
+import typing
 from datetime import datetime
 
+from app.exceptions import DoesNotExist
+from app.helpers import StrHelper
 
-class BaseManager(object):
+if typing.TYPE_CHECKING:
+    from flask_sqlalchemy import BaseQuery
+
+
+logger = logging.getLogger(__name__)
+
+
+class BaseManager:
     def __init__(self, *args, **kwargs):
         self.model = None
 
@@ -69,15 +80,40 @@ class BaseManager(object):
         }
 
     def delete(self, record_id: int):
-        record = self.find(record_id)
+        record = self.find_by_id(record_id)
         record.deleted_at = datetime.utcnow()
         return record
 
-    def find(self, record_id: int, **kwargs):
+    def find(self, *args, **kwargs) -> 'BaseQuery':
+        base_query = self.find_or_none(*args, **kwargs)
+
+        if base_query is None:
+            logger.exception(
+                f'Model "{self.model.__name__}" not found. '
+                f'Params: {args} - {kwargs}'
+            )
+            model_name = StrHelper.pascal_case_to_normal_case(
+                self.model.__name__
+            ).title()
+            raise DoesNotExist(description=f'{model_name} not found')
+
+        return base_query
+
+    def find_by_id(self, record_id: int, **kwargs) -> 'BaseQuery':
         query = {'id': record_id}
+
         if kwargs:
             query.update(kwargs)
-        return self.model.query.filter_by(**query).first()
+
+        return self.find(**query)
+
+    def find_or_none(self, *args, **kwargs) -> 'BaseQuery':
+        base_query = self.model.query.filter()
+
+        if args:
+            base_query = base_query.filter(*args)
+
+        return base_query.filter_by(**kwargs).first()
 
     def raw(self, query: str):
         return self.model.raw(query)

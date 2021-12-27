@@ -2,6 +2,30 @@ from flask_restx import fields
 
 from app.extensions import api
 
+
+class DictArbitrarySchema(fields.Raw):
+    """
+
+    TODO: fields.Raw doesn't allow show "readOnly: true" in Swagger UI.
+
+    """
+
+    def __init__(self, **kwargs):
+        super(DictArbitrarySchema, self).__init__(**kwargs)
+        self.description = 'Structure with arbitrary schema'
+
+    def output(self, key, obj, *args, **kwargs):
+        dct = {}
+
+        try:
+            if isinstance(obj, dict):
+                dct = obj.get(key)
+        except AttributeError:
+            dct = {}
+
+        return dct or {}
+
+
 creator_sw_model = api.model(
     'Creator',
     {
@@ -21,6 +45,10 @@ record_monitoring_sw_model = api.model(
         ),
         'deleted_at': fields.String(
             readonly=True, example='2000-01-01 00:00:00'
+        ),
+        '_links': DictArbitrarySchema(
+            readonly=True,
+            example='{"link1": "/api/records", "link2": "/api/record/1"}',  # noqa
         ),
     },
 )
