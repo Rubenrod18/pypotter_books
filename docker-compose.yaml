@@ -4,12 +4,18 @@ services:
   app:
     build: .
     links:
+      - redis
       - sql
       - test_sql
     ports:
       - "5000:5000"
     volumes:
       - .:/pypotter-books-docker-dir
+
+  redis:
+    image: redis:6.2.6-alpine
+    ports:
+      - "6479:6379"
 
   sql:
     image: mariadb:10.6.4

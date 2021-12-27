@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_caching import Cache
 from flask_mail import Mail
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
@@ -12,11 +13,6 @@ from app import __version__
 from app.wrappers.custom_api import CustomApi
 from config import Config
 
-db = SQLAlchemy()
-migrate = Migrate()
-security = Security()
-mail = Mail()
-ma = Marshmallow()
 api = CustomApi(
     prefix='/api',
     author=__author__,
@@ -31,15 +27,22 @@ api = CustomApi(
     title=__project__,
     description=__description__,
 )
+cache = Cache()
+db = SQLAlchemy()
+ma = Marshmallow()
+mail = Mail()
+migrate = Migrate()
+security = Security()
 
 
 def init_app(app: Flask):
+    api.init_app(app)
+    cache.init_app(app)
     # Order matters: Initialize SQLAlchemy before Marshmallow
     db.init_app(app)
-    migrate.init_app(app, db, compare_type=True)
     ma.init_app(app)
     mail.init_app(app)
-    api.init_app(app)
+    migrate.init_app(app, db, compare_type=True)
     _init_flask_security_too_app(app)
 
     @app.teardown_request

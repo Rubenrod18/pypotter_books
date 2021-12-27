@@ -21,6 +21,14 @@ class Config:
     SERVER_NAME = os.getenv('SERVER_NAME')
     LOGIN_DISABLED = False
 
+    # Flask-Caching
+    CACHE_TYPE = 'RedisCache'
+    CACHE_DEFAULT_TIMEOUT = os.getenv('CACHE_DEFAULT_TIMEOUT', 300)  # 5 min
+    CACHE_REDIS_HOST = os.getenv('CACHE_REDIS_HOST')
+    CACHE_REDIS_PORT = os.getenv('CACHE_REDIS_PORT')
+    CACHE_REDIS_PASSWORD = os.getenv('CACHE_REDIS_PASSWORD')
+    CACHE_REDIS_DB = os.getenv('CACHE_REDIS_DB', 0)
+
     # Flask-Security-Too
     SECRET_KEY = os.getenv('SECRET_KEY')
     SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT')

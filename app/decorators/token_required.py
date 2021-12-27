@@ -12,6 +12,12 @@ from app.wrappers import SecurityWrapper
 def token_required(fnc):
     @functools.wraps(fnc)
     def decorator(*args, **kwargs):
+        if (
+            current_app.config.get('DEVELOPMENT') is True
+            and current_app.config.get('TESTING') is False
+        ):
+            return fnc(*args, **kwargs)
+
         key = current_app.config.get('SECURITY_TOKEN_AUTHENTICATION_HEADER')
         token = request.headers.get(key, '')
         match_data = re.match(r'^Bearer\s(\S+)$', token)
