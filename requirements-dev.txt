@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements-dev.in
 #
-alembic==1.7.4
+alembic==1.7.5
     # via
     #   -r requirements.txt
     #   flask-migrate
@@ -16,7 +16,7 @@ attrs==21.2.0
     # via
     #   -r requirements.txt
     #   jsonschema
-backports.entry-points-selectable==1.1.0
+backports.entry-points-selectable==1.1.1
     # via virtualenv
 blinker==1.4
     # via
@@ -31,13 +31,13 @@ click==8.0.3
     #   -r requirements.txt
     #   flask
     #   pip-tools
-coverage==6.0.2
+coverage==6.2
     # via -r requirements-dev.in
 deprecated==1.2.13
     # via
     #   -r requirements.txt
     #   redis
-distlib==0.3.3
+distlib==0.3.4
     # via virtualenv
 dnspython==2.1.0
     # via
@@ -49,11 +49,11 @@ email-validator==1.1.3
     #   flask-security-too
 factory-boy==3.2.1
     # via -r requirements.txt
-faker==9.6.0
+faker==11.0.0
     # via
     #   -r requirements.txt
     #   factory-boy
-filelock==3.3.1
+filelock==3.4.2
     # via virtualenv
 flask==2.0.2
     # via
@@ -92,7 +92,7 @@ flask-sqlalchemy==2.5.1
     # via
     #   -r requirements.txt
     #   flask-migrate
-flask-wtf==0.15.1
+flask-wtf==1.0.0
     # via
     #   -r requirements.txt
     #   flask-security-too
@@ -100,35 +100,36 @@ greenlet==1.1.2
     # via
     #   -r requirements.txt
     #   sqlalchemy
-identify==2.3.1
+identify==2.4.0
     # via pre-commit
 idna==3.3
     # via
     #   -r requirements.txt
     #   email-validator
-importlib-metadata==4.8.1
+importlib-metadata==4.10.0
     # via
     #   -r requirements.txt
     #   alembic
-importlib-resources==5.3.0
+importlib-resources==5.4.0
     # via
     #   -r requirements.txt
     #   alembic
+    #   jsonschema
 itsdangerous==2.0.1
     # via
     #   -r requirements.txt
     #   flask
     #   flask-security-too
     #   flask-wtf
-jinja2==3.0.2
+jinja2==3.0.3
     # via
     #   -r requirements.txt
     #   flask
-jsonschema==4.1.2
+jsonschema==4.3.2
     # via
     #   -r requirements.txt
     #   flask-restx
-mako==1.1.5
+mako==1.1.6
     # via
     #   -r requirements.txt
     #   alembic
@@ -138,21 +139,25 @@ markupsafe==2.0.1
     #   jinja2
     #   mako
     #   wtforms
-marshmallow==3.14.0
+marshmallow==3.14.1
     # via
     #   -r requirements.txt
     #   flask-marshmallow
     #   marshmallow-sqlalchemy
-marshmallow-sqlalchemy==0.26.1
+marshmallow-sqlalchemy==0.27.0
     # via -r requirements.txt
 mysql-connector-python==8.0.27
     # via -r requirements.txt
-mysqlclient==2.0.3
+mysqlclient==2.1.0
     # via -r requirements.txt
 nodeenv==1.6.0
     # via pre-commit
 nose==1.3.7
     # via -r requirements-dev.in
+packaging==21.3
+    # via
+    #   -r requirements.txt
+    #   redis
 passlib==1.7.4
     # via
     #   -r requirements.txt
@@ -161,14 +166,18 @@ pep517==0.12.0
     # via pip-tools
 pip-tools==6.4.0
     # via -r requirements-dev.in
-platformdirs==2.4.0
+platformdirs==2.4.1
     # via virtualenv
-pre-commit==2.15.0
+pre-commit==2.16.0
     # via -r requirements-dev.in
-protobuf==3.19.0
+protobuf==3.19.1
     # via
     #   -r requirements.txt
     #   mysql-connector-python
+pyparsing==3.0.6
+    # via
+    #   -r requirements.txt
+    #   packaging
 pyrsistent==0.18.0
     # via
     #   -r requirements.txt
@@ -177,7 +186,7 @@ python-dateutil==2.8.2
     # via
     #   -r requirements.txt
     #   faker
-python-dotenv==0.19.1
+python-dotenv==0.19.2
     # via -r requirements.txt
 pytz==2021.3
     # via
@@ -185,7 +194,7 @@ pytz==2021.3
     #   flask-restx
 pyyaml==6.0
     # via pre-commit
-redis==4.0.2
+redis==4.1.0
     # via -r requirements.txt
 six==1.16.0
     # via
@@ -195,7 +204,7 @@ six==1.16.0
     #   python-dateutil
     #   sqlalchemy-utils
     #   virtualenv
-sqlalchemy==1.4.26
+sqlalchemy==1.4.29
     # via
     #   -r requirements.txt
     #   alembic
@@ -210,22 +219,22 @@ text-unidecode==1.3
     #   faker
 toml==0.10.2
     # via pre-commit
-tomli==1.2.2
+tomli==2.0.0
     # via pep517
-virtualenv==20.9.0
+virtualenv==20.10.0
     # via pre-commit
 werkzeug==2.0.2
     # via
     #   -r requirements.txt
     #   flask
     #   flask-restx
-wheel==0.37.0
+wheel==0.37.1
     # via pip-tools
 wrapt==1.13.3
     # via
     #   -r requirements.txt
     #   deprecated
-wtforms==2.3.3
+wtforms==3.0.1
     # via
     #   -r requirements.txt
     #   flask-wtf
