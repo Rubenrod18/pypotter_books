@@ -1,6 +1,6 @@
 {
   "name": "pypotter-books",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "scripts": {
     "first-release": "npm run release -- --first-release",
     "patch": "npm run release -- --release-as patch",
