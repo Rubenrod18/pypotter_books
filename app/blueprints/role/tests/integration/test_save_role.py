@@ -21,7 +21,7 @@ class TestSaveRole(_RoleBaseIntegrationTest):
         json_response = response.get_json()
         json_data = json_response.get('data')
 
-        self.assertEqual(201, response.status_code)
+        self.assertEqual(201, response.status_code, msg=json_response)
         self.assertEqual(data['label'], json_data.get('label'))
         self.assertEqual(
             data['label'].lower().replace(' ', ROLE_NAME_DELIMITER),

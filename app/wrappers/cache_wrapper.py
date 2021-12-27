@@ -33,7 +33,7 @@ class CacheWrapper:
         for cache_name in args:
             deleted_caches.append(cache.delete(cache_name))
 
-        if sum(deleted_caches) != sum(args):
+        if sum(deleted_caches) != len(args):
             logger.error(f'The next cache names {args} haven\'t been deleted.')
 
         return deleted_caches

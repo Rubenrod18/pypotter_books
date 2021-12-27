@@ -11,7 +11,7 @@ class TestDeleteRole(_RoleBaseIntegrationTest):
         json_response = response.get_json()
         json_data = json_response.get('data')
 
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(200, response.status_code, msg=json_response)
         self.assertEqual(self.role.id, json_data.get('id'))
         self.assertIsNotNone(json_data.get('deleted_at'))
         self.assertEqual(
